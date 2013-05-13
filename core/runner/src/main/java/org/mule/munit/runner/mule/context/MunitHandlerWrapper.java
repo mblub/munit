@@ -39,7 +39,9 @@ public class MunitHandlerWrapper implements NamespaceHandler {
 
         try {
             Class<?> beanType = Class.forName(beanDefinition.getBeanClassName());
-            if (isMessageProcessor(beanType) && AbstractBeanDefinition.class.isAssignableFrom(beanDefinition.getClass())){
+            if (isMessageProcessor(beanType)
+                && AbstractBeanDefinition.class.isAssignableFrom(beanDefinition.getClass())
+                && StringUtils.isEmpty(beanDefinition.getFactoryMethodName())){
                 String tagName = element.getTagName();
                 
                 if ( !StringUtils.isEmpty(tagName) ){
