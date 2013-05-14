@@ -11,7 +11,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     <jira:config name="Jira" doc:name="Jira">
         <jira:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
     </jira:config>
-    <google-tasks:config-with-oauth name="Google_Tasks_Connector" consumerKey="any" consumerSecret="any" doc:name="Google Tasks Connector"/>
+
+    <google-tasks:config-with-oauth name="Google_Tasks_Connector" consumerKey="any" consumerSecret="any" doc:name="Google Tasks Connector">
+        <google-tasks:oauth-callback-config/>
+            </google-tasks:config-with-oauth>
+
     <flow name="jira-mock-exampleFlow" doc:name="jira-mock-exampleFlow">
         <poll frequency="1000" doc:name="Poll">
             <google-tasks:update-task-list config-ref="Google_Tasks_Connector" doc:name="Google Tasks Connector"/>

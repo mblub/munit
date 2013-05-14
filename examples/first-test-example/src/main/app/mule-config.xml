@@ -2,7 +2,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:spring="http://www.springframework.org/schema/beans"
       xsi:schemaLocation=
-              "http://www.mulesoft.org/schema/mule/corehttp://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+              "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 
     <flow name="echoFlow ">
         <echo-component/>

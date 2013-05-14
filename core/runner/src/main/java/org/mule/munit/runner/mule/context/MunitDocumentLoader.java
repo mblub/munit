@@ -38,10 +38,7 @@ public class MunitDocumentLoader extends DefaultDocumentLoader {
         xmlReader.setFeature("http://xml.org/sax/features/validation", Boolean.TRUE);
         xmlReader.setFeature("http://xml.org/sax/features/namespaces", Boolean.TRUE);
         xmlReader.setFeature("http://apache.org/xml/features/validation/schema", Boolean.TRUE);
-        xmlReader.setFeature("http://apache.org/xml/features/dom/include-ignorable-whitespace", Boolean.TRUE);
-        xmlReader.setFeature("http://apache.org/xml/features/xinclude", Boolean.TRUE);
-        xmlReader.setFeature("http://apache.org/xml/features/create-cdata-nodes", Boolean.TRUE);
-        xmlReader.setFeature("http://apache.org/xml/features/include-comments", Boolean.FALSE);
+        xmlReader.setFeature("http://apache.org/xml/features/xinclude", Boolean.FALSE);
         xmlReader.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
 
         xmlReader.setEntityResolver(entityResolver);

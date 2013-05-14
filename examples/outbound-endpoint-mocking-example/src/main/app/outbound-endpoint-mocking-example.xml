@@ -8,7 +8,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd ">
     <jms:activemq-connector name="Active_MQ" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
-    <google-tasks:config-with-oauth name="Google_Tasks_Connector" consumerKey="key" consumerSecret="secret" doc:name="Google Tasks Connector"/>
+    <google-tasks:config-with-oauth name="Google_Tasks_Connector" consumerKey="any" consumerSecret="any" doc:name="Google Tasks Connector">
+        <google-tasks:oauth-callback-config/>
+    </google-tasks:config-with-oauth>
     <flow name="pingService" doc:name="pingService">
         <jms:inbound-endpoint address="address" connector-ref="Active_MQ" doc:name="JMS"/>
         <google-tasks:get-task-by-id config-ref="Google_Tasks_Connector" taskId="#[payload]" doc:name="Google Tasks Connector"/>

@@ -237,7 +237,7 @@
         <dependency>
             <groupId>org.mule.munit</groupId>
             <artifactId>runner</artifactId>
-            <version>3.4-M3-SNAPSHOT</version>
+            <version>${munit.version}</version>
         </dependency>
 		<!-- Xml configuration -->
 		<dependency>
