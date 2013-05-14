@@ -4,6 +4,7 @@
       xmlns:script="http://www.mulesoft.org/schema/mule/scripting"
       xmlns:jdbc="http://www.mulesoft.org/schema/mule/ee/jdbc"
       xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:jira="http://www.mulesoft.org/schema/mule/jira"
       xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
       xsi:schemaLocation="
@@ -96,6 +97,26 @@
 
     <flow name="callingJira">
         <jira:create-group groupName="someGroupName" userName="someUserName"/>
+    </flow>
+
+    <flow name="FinishDataLoadJobsFlow" doc:name="FinishDataLoadJobsFlow">
+        <poll frequency="1000" doc:name="Poll">
+            <processor-chain doc:name="Processor Chain">
+                <jira:create-group groupName="someGroupName" userName="someUserName"/>
+            </processor-chain>
+        </poll>
+
+        <foreach doc:name="For Each">
+            <async>
+                <flow-ref name="loggerTestFlow" />
+            </async>
+        </foreach>
+
+    </flow>
+
+
+    <flow name="loggerTestFlow">
+        <logger level="ERROR" message="Information"/>
     </flow>
 
 </mule>

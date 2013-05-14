@@ -1,6 +1,9 @@
 package org.mule.munit.runner.mule.context;
 
 import org.mule.munit.common.MunitCore;
+import org.mule.munit.runner.mule.context.MunitDomParser;
+
+import org.apache.xerces.parsers.DOMParser;
 import org.springframework.beans.factory.xml.DefaultDocumentLoader;
 import org.w3c.dom.Document;
 import org.xml.sax.*;
@@ -23,47 +26,30 @@ import javax.xml.transform.sax.SAXSource;
  */
 public class MunitDocumentLoader extends DefaultDocumentLoader {
 
+    static final String JAXP_SCHEMA_LANGUAGE =
+            "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+    static final String W3C_XML_SCHEMA =
+            "http://www.w3.org/2001/XMLSchema";
+
     public Document loadDocument(InputSource inputSource, EntityResolver entityResolver,
                                  ErrorHandler errorHandler, int validationMode, boolean namespaceAware) throws Exception {
 
-        XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-        LocationFilter locationFilter = new LocationFilter(xmlReader);
-        SAXSource saxSource = new SAXSource(locationFilter, inputSource);
+        DOMParser xmlReader = new MunitDomParser();
+        xmlReader.setFeature("http://xml.org/sax/features/validation", Boolean.TRUE);
+        xmlReader.setFeature("http://xml.org/sax/features/namespaces", Boolean.TRUE);
+        xmlReader.setFeature("http://apache.org/xml/features/validation/schema", Boolean.TRUE);
+        xmlReader.setFeature("http://apache.org/xml/features/dom/include-ignorable-whitespace", Boolean.TRUE);
+        xmlReader.setFeature("http://apache.org/xml/features/xinclude", Boolean.TRUE);
+        xmlReader.setFeature("http://apache.org/xml/features/create-cdata-nodes", Boolean.TRUE);
+        xmlReader.setFeature("http://apache.org/xml/features/include-comments", Boolean.FALSE);
+        xmlReader.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMResult domResult = new DOMResult();
-        transformer.transform(saxSource, domResult);
+        xmlReader.setEntityResolver(entityResolver);
+        xmlReader.setErrorHandler(errorHandler);
 
-        return (Document)domResult.getNode();
-    }
+        xmlReader.parse(inputSource);
 
-    class LocationFilter extends XMLFilterImpl {
-
-        public static final String NAMESPACE = "http://www.mule.org/munit";
-
-        LocationFilter(XMLReader xmlReader) {
-            super(xmlReader);
-        }
-
-        private Locator locator = null;
-
-        @Override
-        public void setDocumentLocator(Locator locator) {
-            super.setDocumentLocator(locator);
-            this.locator = locator;
-        }
-
-        @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-
-            // Add extra attribute to elements to hold location
-            String location = String.valueOf(locator.getLineNumber());
-            Attributes2Impl attrs = new Attributes2Impl(attributes);
-
-            attrs.addAttribute(NAMESPACE, MunitCore.LINE_NUMBER_ELEMENT_ATTRIBUTE, MunitCore.LINE_NUMBER_ELEMENT_ATTRIBUTE, "CDATA", location);
-            super.startElement(uri, localName, qName, attrs);
-        }
+        return xmlReader.getDocument();
     }
 
 }

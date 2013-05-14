@@ -42,9 +42,6 @@ public class MunitBeanDefinitionParserDelegate extends MuleHierarchicalBeanDefin
                 ParserContext parserContext = new ParserContext(getReaderContext(), this, parent);
                 finalChild = new MunitHandlerWrapper(handler).parse(element, parserContext);
                 registerBean(element, finalChild);
-                if ( finalChild != null && finalChild.getPropertyValues().getPropertyValue("realMp") != null ){
-                    registerBean(element, (BeanDefinition) finalChild.getPropertyValues().getPropertyValue("realMp").getValue());
-                }
                 noRecurse = noRecurse || testFlag(finalChild, MULE_NO_RECURSE);
                 forceRecurse = forceRecurse || testFlag(finalChild, MULE_FORCE_RECURSE);
             } while (null != finalChild && testFlag(finalChild, MULE_REPEAT_PARSE));

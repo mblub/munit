@@ -7,6 +7,7 @@ import org.mule.config.spring.MuleApplicationContext;
 import org.mule.modules.interceptor.connectors.ConnectorMethodInterceptorFactory;
 import org.mule.munit.common.endpoint.MunitSpringFactoryPostProcessor;
 import org.mule.munit.common.mp.MunitMessageProcessorInterceptorFactory;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -17,21 +18,26 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 
 
-public class MunitApplicationContext extends MuleApplicationContext{
+public class MunitApplicationContext extends MuleApplicationContext
+{
+
     private MockingConfiguration configuration;
 
-    public MunitApplicationContext(MuleContext muleContext, ConfigResource[] configResources, MockingConfiguration configuration) throws BeansException {
+    public MunitApplicationContext(MuleContext muleContext, ConfigResource[] configResources, MockingConfiguration configuration) throws BeansException
+    {
         super(muleContext, configResources);
         this.configuration = configuration;
     }
 
-    public MunitApplicationContext(MuleContext muleContext, Resource[] springResources, MockingConfiguration configuration) throws BeansException {
+    public MunitApplicationContext(MuleContext muleContext, Resource[] springResources, MockingConfiguration configuration) throws BeansException
+    {
         super(muleContext, springResources);
         this.configuration = configuration;
     }
 
     @Override
-    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException {
+    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException
+    {
         XmlBeanDefinitionReader beanDefinitionReader = new MunitXmlBeanDefinitionReader(beanFactory);
         //hook in our custom hierarchical reader
         beanDefinitionReader.setDocumentReaderClass(MunitBeanDefinitionDocumentReader.class);
@@ -41,7 +47,8 @@ public class MunitApplicationContext extends MuleApplicationContext{
         beanFactory.registerBeanDefinition(ConnectorMethodInterceptorFactory.ID, new RootBeanDefinition(ConnectorMethodInterceptorFactory.class));
         beanDefinitionReader.setProblemReporter(new MissingParserProblemReporter());
 
-        if ( configuration != null ){
+        if (configuration != null)
+        {
             RootBeanDefinition beanDefinition = new RootBeanDefinition();
             beanDefinition.setBeanClass(MunitSpringFactoryPostProcessor.class);
             MutablePropertyValues propertyValues = new MutablePropertyValues();
@@ -52,19 +59,16 @@ public class MunitApplicationContext extends MuleApplicationContext{
             beanFactory.registerBeanDefinition("___MunitSpringFactoryPostProcessor", beanDefinition);
         }
         // Communicate mule context to parsers
-        try
-        {
-            getCurrentMuleContext().set(this.getMuleContext());
-            beanDefinitionReader.loadBeanDefinitions(getConfigResources());
-        }
-        finally
-        {
-            MunitSpringFactoryPostProcessor bean = beanFactory.getBean(MunitSpringFactoryPostProcessor.class);
-            bean.setMuleContext(this.getMuleContext());
-            bean.postProcessBeanFactory(beanFactory);
 
-            getCurrentMuleContext().remove();
-        }
+        getCurrentMuleContext().set(this.getMuleContext());
+        beanDefinitionReader.loadBeanDefinitions(getConfigResources());
+
+
+        MunitSpringFactoryPostProcessor bean = beanFactory.getBean(MunitSpringFactoryPostProcessor.class);
+        bean.setMuleContext(this.getMuleContext());
+        bean.postProcessBeanFactory(beanFactory);
+
+        getCurrentMuleContext().remove();
     }
 
 

@@ -5,6 +5,10 @@ import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
 import static junit.framework.Assert.assertEquals;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
 
 public class JavaMunitTest extends FunctionalMunitSuite{
 
