@@ -119,4 +119,7 @@
         <logger level="ERROR" message="Information"/>
     </flow>
 
+    <flow name="setMuleAppHomeFlow">
+        <set-payload value="${app.home}"/>
+    </flow>
 </mule>

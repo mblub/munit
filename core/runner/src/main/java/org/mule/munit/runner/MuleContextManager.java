@@ -19,6 +19,7 @@ import org.mule.munit.runner.output.DefaultOutputHandler;
 import org.mule.tck.TestingWorkListener;
 import org.mule.util.ClassUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class MuleContextManager {
         if ( properties == null ){
             properties = new Properties();
         }
-        properties.setProperty(MuleProperties.APP_HOME_DIRECTORY_PROPERTY, getClass().getResource("/").getPath());
+        properties.setProperty(MuleProperties.APP_HOME_DIRECTORY_PROPERTY, new File(getClass().getResource("/").getPath()).getAbsolutePath());
         return properties;
     }
 
