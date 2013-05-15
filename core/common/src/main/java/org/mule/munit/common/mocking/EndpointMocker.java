@@ -24,7 +24,7 @@ import java.util.List;
  * <p>Usage:</p>
  *
  * <code>
- *     new EndpointMocker(muleContext).expectEndpointWithAddress("http://localhost:8080").thenReturn(muleMessage);
+ *     new EndpointMocker(muleContext).whenEndpointWithAddress("http://localhost:8080").thenReturn(muleMessage);
  * </code>
  *
  * @author Federico, Fernando
@@ -72,7 +72,7 @@ public class EndpointMocker {
      *          The EndpointMocker object
      *      </p>
      */
-    public EndpointMocker expectEndpointWithAddress(String address){
+    public EndpointMocker whenEndpointWithAddress(String address){
         this.address = address;
         return this;
     }
@@ -107,7 +107,7 @@ public class EndpointMocker {
      *          The {@link MuleMessage} to return
      *      </p>
      */
-    public void toReturn(MuleMessage message){
+    public void thenReturn(MuleMessage message){
         OutboundBehavior behavior = new OutboundBehavior(message, createMessageProcessorFromSpy(process));
 
         MockEndpointManager factory = (MockEndpointManager) muleContext.getRegistry().lookupObject(MuleProperties.OBJECT_MULE_ENDPOINT_FACTORY);

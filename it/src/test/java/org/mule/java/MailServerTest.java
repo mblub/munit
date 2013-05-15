@@ -28,12 +28,12 @@ public class MailServerTest extends FunctionalMunitSuite{
     }
 
     @Override
-    protected boolean mockConnectors() {
+    protected boolean haveToMockMuleConnectors() {
         return false;
     }
 
     @Override
-    protected boolean mockInboundEndpoints() {
+    protected boolean haveToDisableInboundEndpoints() {
         return false;
     }
 

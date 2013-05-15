@@ -50,9 +50,9 @@ public class EndpointMockerTest {
 
         SpyProcessImpl spyProcess = (SpyProcessImpl) spyProcess();
         EndpointMocker endpointMocker = new MockEndpointMocker(muleContext);
-        endpointMocker.expectEndpointWithAddress(ADDRESS)
+        endpointMocker.whenEndpointWithAddress(ADDRESS)
                 .withIncomingMessageSatisfying(createSpyProcess(spyProcess))
-        .toReturn(muleMessage);
+        .thenReturn(muleMessage);
 
 
         verify(endpointManager).addBehavior(eq(ADDRESS), any(OutboundBehavior.class));

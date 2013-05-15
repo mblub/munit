@@ -119,9 +119,9 @@ public class MockModuleTest {
 
         module().outboundEndpoint(ADDRESS, null,null,null,null,null,null);
 
-        verify(endpointMocker,times(1)).expectEndpointWithAddress(ADDRESS);
+        verify(endpointMocker,times(1)).whenEndpointWithAddress(ADDRESS);
         verify(endpointMocker, times(1)).withIncomingMessageSatisfying((List<SpyProcess>) notNull());
-        verify(endpointMocker, times(1)).toReturn((MuleMessage) notNull());
+        verify(endpointMocker, times(1)).thenReturn((MuleMessage) notNull());
     }
 
 
@@ -136,9 +136,9 @@ public class MockModuleTest {
                 props(entry(OUTBOUND_KEY,OUTBOUND_VALUE)),
                 createAssertions());
 
-        verify(endpointMocker,times(1)).expectEndpointWithAddress(ADDRESS);
+        verify(endpointMocker,times(1)).whenEndpointWithAddress(ADDRESS);
         verify(endpointMocker, times(1)).withIncomingMessageSatisfying((List<SpyProcess>) notNull());
-        verify(endpointMocker, times(1)).toReturn((MuleMessage) notNull());
+        verify(endpointMocker, times(1)).thenReturn((MuleMessage) notNull());
     }
 
     @Test
@@ -240,7 +240,7 @@ public class MockModuleTest {
     }
 
     private void endpointMockerBehavior() {
-        when(endpointMocker.expectEndpointWithAddress(anyString())).thenReturn(endpointMocker);
+        when(endpointMocker.whenEndpointWithAddress(anyString())).thenReturn(endpointMocker);
         when(endpointMocker.withIncomingMessageSatisfying(anyList())).thenReturn(endpointMocker);
     }
 }

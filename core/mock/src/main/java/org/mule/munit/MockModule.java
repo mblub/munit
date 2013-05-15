@@ -186,13 +186,13 @@ public class MockModule implements MuleContextAware
                                  @Optional Map<String, Object> returnOutboundProperties,
                                  @Optional List<NestedProcessor> assertions) {
 
-        endpointMocker().expectEndpointWithAddress(address)
+        endpointMocker().whenEndpointWithAddress(address)
                 .withIncomingMessageSatisfying(createSpyAssertion(createMessageProcessorsFrom(assertions)))
-                .toReturn(createMuleMessageFrom(returnPayload, 
-                        returnInboundProperties, 
-                        returnOutboundProperties,
-                        returnSessionProperties,
-                        returnInvocationProperties));
+                .thenReturn(createMuleMessageFrom(returnPayload,
+                                                  returnInboundProperties,
+                                                  returnOutboundProperties,
+                                                  returnSessionProperties,
+                                                  returnInvocationProperties));
     }
 
 

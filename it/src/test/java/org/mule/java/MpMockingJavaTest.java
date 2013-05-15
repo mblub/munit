@@ -59,8 +59,8 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
     
     @Test
     public void demoTest() throws Exception {
-        expectOutboundEndpointWithAddress("jdbc://lookupJob")
-                .toReturn(muleMessageWithPayload(jdbcPayload()));
+        whenEndpointWithAddress("jdbc://lookupJob")
+                .thenReturn(muleMessageWithPayload(jdbcPayload()));
 
 
         whenMessageProcessor("create-group")
