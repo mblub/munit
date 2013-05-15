@@ -32,7 +32,6 @@ public class MongoTest extends FunctionalMunitSuite{
 	}
 
 	private List<SpyProcess> assertNotNull() {
-		// TODO Auto-generated method stub
 		ArrayList<SpyProcess> process = new ArrayList<SpyProcess>();
 		
 		process.add(new SpyProcess() {
