@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
 import org.mule.api.MuleContext;
 import org.mule.api.config.ConfigurationBuilder;
+import org.mule.api.config.MuleProperties;
 import org.mule.api.context.MuleContextBuilder;
 import org.mule.config.DefaultMuleConfiguration;
 import org.mule.config.builders.SimpleConfigurationBuilder;
@@ -21,6 +22,7 @@ import org.mule.util.ClassUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 
 /**
@@ -71,7 +73,7 @@ public class MuleContextManager {
         org.mule.api.context.MuleContextFactory muleContextFactory = new DefaultMuleContextFactory();
 
         List<ConfigurationBuilder> builders = new ArrayList<ConfigurationBuilder>();
-        builders.add(new SimpleConfigurationBuilder(configuration == null ? null : configuration.getStartUpProperties()));
+        builders.add(new SimpleConfigurationBuilder(properties()));
         if (ClassUtils.isClassOnPath(CLASSNAME_ANNOTATIONS_CONFIG_BUILDER,
                 getClass())) {
             builders.add((ConfigurationBuilder) ClassUtils.instanciateClass(
@@ -87,6 +89,16 @@ public class MuleContextManager {
                 .setShutdownTimeout(0);
 
         return context;
+    }
+
+    private Properties properties()
+    {
+        Properties properties = configuration == null ? null : configuration.getStartUpProperties();
+        if ( properties == null ){
+            properties = new Properties();
+        }
+        properties.setProperty(MuleProperties.APP_HOME_DIRECTORY_PROPERTY, getClass().getResource("/").getPath());
+        return properties;
     }
 
     private void defineLogOutput(String resources) throws IOException {
