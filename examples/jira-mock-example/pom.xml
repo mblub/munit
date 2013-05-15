@@ -353,6 +353,13 @@
           </execution>
         </executions>
       </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <configuration>
+                <skip>true</skip>
+            </configuration>
+        </plugin>
       <plugin>
         <groupId>org.mule.munit.tools</groupId>
         <artifactId>munit-plugin</artifactId>
