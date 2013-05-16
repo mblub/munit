@@ -10,6 +10,7 @@ import org.mule.munit.common.mp.MunitMessageProcessorInterceptorFactory;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -63,13 +64,16 @@ public class MunitApplicationContext extends MuleApplicationContext
         getCurrentMuleContext().set(this.getMuleContext());
         beanDefinitionReader.loadBeanDefinitions(getConfigResources());
 
-
-        MunitSpringFactoryPostProcessor bean = beanFactory.getBean(MunitSpringFactoryPostProcessor.class);
-        bean.setMuleContext(this.getMuleContext());
-        bean.postProcessBeanFactory(beanFactory);
-
         getCurrentMuleContext().remove();
     }
 
+
+    @Override
+    protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+        super.prepareBeanFactory(beanFactory);
+        MunitSpringFactoryPostProcessor bean = beanFactory.getBean(MunitSpringFactoryPostProcessor.class);
+        bean.setMuleContext(this.getMuleContext());
+        bean.postProcessBeanFactory(beanFactory);
+    }
 
 }
