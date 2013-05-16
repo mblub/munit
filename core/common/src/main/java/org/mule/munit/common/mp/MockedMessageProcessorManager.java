@@ -13,7 +13,7 @@ import java.util.*;
  * </p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class MockedMessageProcessorManager  extends MessageProcessorManager{
     public static String ID = "_muleMockMpManager";

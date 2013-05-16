@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * <p>Prints the description using different printers</p>
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class DefaultOutputHandler implements TestOutputHandler{
     

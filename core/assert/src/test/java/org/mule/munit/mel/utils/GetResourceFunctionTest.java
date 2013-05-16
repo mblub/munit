@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 
 /**
  * @author Javier Casal
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class GetResourceFunctionTest {
 	/*

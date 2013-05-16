@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
  * <p>Junit Runner to run Munit from Junit (Java)</p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 @RunWith(MuleSuiteRunner.class)
 public abstract class AbstractMuleSuite extends TestSuite

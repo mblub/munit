@@ -22,7 +22,7 @@ import javax.xml.transform.sax.SAXSource;
  * </p>
  *
  * @author Federico, Fernando
- * @version since 3.4
+ * @since 3.4
  */
 public class MunitDocumentLoader extends DefaultDocumentLoader {
 

@@ -15,7 +15,7 @@ import org.mule.munit.runner.output.TestOutputHandler;
  * </p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class MunitSuiteRunner  {
 

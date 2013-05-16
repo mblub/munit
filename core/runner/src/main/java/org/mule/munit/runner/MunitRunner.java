@@ -21,7 +21,7 @@ import java.util.List;
  *  <p>T is the expected result from the suite run</p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public abstract class MunitRunner<T> {
 

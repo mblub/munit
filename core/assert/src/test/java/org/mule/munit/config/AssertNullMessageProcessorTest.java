@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class AssertNullMessageProcessorTest extends AbstractMessageProcessorTest{
 

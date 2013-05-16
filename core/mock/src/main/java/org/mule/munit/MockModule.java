@@ -29,7 +29,7 @@ import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
  * </p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 @Module(name="mock", schemaVersion="3.4")
 public class MockModule implements MuleContextAware

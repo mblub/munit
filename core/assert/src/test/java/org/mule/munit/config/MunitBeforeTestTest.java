@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 
 /**
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class MunitBeforeTestTest {
 

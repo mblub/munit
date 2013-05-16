@@ -8,7 +8,7 @@ import java.util.List;
  * <p>Is the representation of the Suite result.</p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class SuiteResult implements MunitResult {
 

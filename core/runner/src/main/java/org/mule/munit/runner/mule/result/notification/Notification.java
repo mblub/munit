@@ -3,7 +3,7 @@ package org.mule.munit.runner.mule.result.notification;
 /**
  * <p>The representation of the test notification</p>
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class Notification {
 

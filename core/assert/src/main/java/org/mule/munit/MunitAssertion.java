@@ -6,7 +6,7 @@ import org.mule.api.MuleEvent;
  * <p>Interface that all the custom assertions must implement</p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public interface MunitAssertion {
 

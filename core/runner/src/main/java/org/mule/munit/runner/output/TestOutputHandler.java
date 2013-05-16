@@ -4,7 +4,7 @@ package org.mule.munit.runner.output;
 /**
  * <p>Defines how the stage notification of the test will be handled </p>
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public interface TestOutputHandler {
 

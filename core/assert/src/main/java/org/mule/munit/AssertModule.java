@@ -27,7 +27,7 @@ import static junit.framework.Assert.assertEquals;
  * <p>Module to assert payload's results</p>
  *
  * @author Federico, Fernando
- * @version since 3.3.2
+ * @since 3.3.2
  */
 public class AssertModule extends MunitSpringFactoryPostProcessor implements ExpressionLanguageExtension
 {
