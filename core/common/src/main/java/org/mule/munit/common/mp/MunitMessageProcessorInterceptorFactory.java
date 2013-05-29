@@ -25,7 +25,7 @@ public class MunitMessageProcessorInterceptorFactory  extends MethodInterceptorF
      *     The Id in the spring registry of Mule
      * </p>
      */
-    public static String ID = "__messageProcessorEnhancerFactory";
+    public static final String ID = "__messageProcessorEnhancerFactory";
 
     /**
      * <p>
