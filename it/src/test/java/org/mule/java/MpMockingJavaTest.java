@@ -84,7 +84,8 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
 
         spyMessageProcessor("create-group")
                 .ofNamespace("jira")
-                .running(beforeCallSpy(), afterCallSpy());
+                .before(beforeCallSpy())
+                .after(afterCallSpy());
 
 
         MuleEvent eventResult = runFlow("callingJira", testEvent("anotherString"));

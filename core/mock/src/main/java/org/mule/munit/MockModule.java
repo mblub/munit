@@ -89,9 +89,9 @@ public class MockModule implements MuleContextAware
 
         try {
             spy().spyMessageProcessor(getName(messageProcessor))
-                    .ofNamespace(getNamespace(messageProcessor))
-                    .running(createSpyAssertion(createMessageProcessorsFrom(assertionsBeforeCall)),
-                            createSpyAssertion(createMessageProcessorsFrom(assertionsAfterCall)));
+                .ofNamespace(getNamespace(messageProcessor))
+                .before(createSpyAssertion(createMessageProcessorsFrom(assertionsBeforeCall)))
+                .after(createSpyAssertion(createMessageProcessorsFrom(assertionsAfterCall)));
         } catch (AssertionError error) {
             AssertionError exception = new AssertionError(getMessage(error, "Spy Message Processor Failed"));
             exception.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[]{}));
@@ -247,8 +247,7 @@ public class MockModule implements MuleContextAware
             return null;
         }
 
-
-        List<MessageProcessor> mps = new ArrayList<MessageProcessor>();
+        final List<MessageProcessor> mps = new ArrayList<MessageProcessor>();
         for (NestedProcessor nestedProcessor : assertions) {
             mps.add(new NestedMessageProcessor(nestedProcessor));
         }
@@ -271,8 +270,10 @@ public class MockModule implements MuleContextAware
 
 
     private List<SpyProcess> createSpyAssertion(final List<MessageProcessor> messageProcessorsFrom) {
-        List<SpyProcess> mps = new ArrayList<SpyProcess>();
-        mps.add(createSpy(messageProcessorsFrom));
+        List<SpyProcess> mps = new ArrayList<SpyProcess>(1);
+        if (messageProcessorsFrom != null) {
+            mps.add(createSpy(messageProcessorsFrom));
+        }
         return mps;
     }
 

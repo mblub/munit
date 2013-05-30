@@ -12,6 +12,8 @@ import org.mule.munit.common.mp.MockedMessageProcessorManager;
 import org.mule.munit.common.mp.SpyAssertion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -37,14 +39,39 @@ public class MunitSpyTest {
         when(muleRegistry.lookupObject(MockedMessageProcessorManager.ID)).thenReturn(manager);
 
     }
-    
+
     @Test
-    public void testAddSpy(){
+    public void testAddSpyIsNotCalledWhenThereIsNothingToSpy(){
         new MunitSpy(muleContext).spyMessageProcessor("test")
                 .ofNamespace("testNamespace")
-                .running(new ArrayList<SpyProcess>(), new ArrayList<SpyProcess>());
-        
-        verify(manager).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+                .before(Collections.<SpyProcess>emptyList());
+        verify(manager, times(0)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+    }
+
+    @Test
+    public void testAddSpyIsCalledWhenThereIsASpyProcessBefore(){
+        new MunitSpy(muleContext).spyMessageProcessor("test")
+                .ofNamespace("testNamespace")
+                .before(Arrays.asList(mock(SpyProcess.class)));
+        verify(manager, times(1)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+    }
+
+    @Test
+    public void testAddSpyIsCalledWhenThereIsASpyProcessAfter(){
+        new MunitSpy(muleContext).spyMessageProcessor("test")
+                .ofNamespace("testNamespace")
+                .after(Arrays.asList(mock(SpyProcess.class)));
+        verify(manager, times(1)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+    }
+
+
+    @Test
+    public void testAddSpyIsCalledWhenThereAreSpyProcessesBeforeAndAfter(){
+        new MunitSpy(muleContext).spyMessageProcessor("test")
+                .ofNamespace("testNamespace")
+                .before(Arrays.asList(mock(SpyProcess.class)))
+                .after(Arrays.asList(mock(SpyProcess.class)));
+        verify(manager, times(2)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
     }
 
     @Test
@@ -65,7 +92,6 @@ public class MunitSpyTest {
         }
 
         assertEquals(2, spy.timesCalled);
-
     }
     
     private class Spy implements SpyProcess{
