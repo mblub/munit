@@ -9,6 +9,7 @@ import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.mp.SpyAssertion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,6 +80,16 @@ public class MunitSpy extends MunitMockingTool {
     }
 
     /**
+     * The {@link SpyProcess}es to run before the message processor
+     * 
+     * @param withSpies Processeses to run before the message processor call
+     * 
+     */
+    public MunitSpy before(final SpyProcess... withSpy) {
+        return before(Arrays.asList(withSpy));
+    }
+
+    /**
      * The {@link SpyProcess} to run after the message processor
      * 
      * @param withSpies Processes to run after the message processor call
@@ -90,6 +101,16 @@ public class MunitSpy extends MunitMockingTool {
                 createSpyAssertion(Collections.<SpyProcess>emptyList(), withSpies));
         }
         return this;
+    }
+
+    /**
+     * The {@link SpyProcess}es to run after the message processor
+     * 
+     * @param withSpies Processeses to run after the message processor call
+     * 
+     */
+    public MunitSpy after(final SpyProcess... withSpy) {
+        return after(Arrays.asList(withSpy));
     }
 
     protected SpyAssertion createSpyAssertion(List<SpyProcess> beforeCall, List<SpyProcess> afterCall) {
