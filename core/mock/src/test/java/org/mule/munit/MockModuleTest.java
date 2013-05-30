@@ -1,7 +1,20 @@
 package org.mule.munit;
 
-import org.junit.Test;
-import org.mule.api.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mule.api.MuleContext;
+import org.mule.api.MuleEvent;
+import org.mule.api.MuleException;
+import org.mule.api.MuleMessage;
+import org.mule.api.NestedProcessor;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.munit.common.mocking.EndpointMocker;
 import org.mule.munit.common.mocking.MessageProcessorMocker;
@@ -13,14 +26,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.*;
+import org.junit.Test;
 
 /**
  * @author Federico, Fernando
  * @since 3.3.2
  */
+@SuppressWarnings("unchecked")
 public class MockModuleTest {
 
     public static final String NAMESPACE = "namespace";
@@ -145,11 +157,12 @@ public class MockModuleTest {
     public void spyMustSupportNullOptionals(){
         spyBehavior();
 
-        module().spy(FULL_NAME, null,null);
+        module().spy(FULL_NAME, null, null);
 
         verify(spy, times(1)).spyMessageProcessor(MESSAGE_PROCESSOR);
         verify(spy, times(1)).ofNamespace(NAMESPACE);
-        verify(spy, times(1)).running((List<SpyProcess>) notNull(), (List<SpyProcess>) notNull());
+        verify(spy, times(1)).before((List<SpyProcess>) notNull());
+        verify(spy, times(1)).after((List<SpyProcess>) notNull());
     }
 
     @Test
@@ -160,7 +173,8 @@ public class MockModuleTest {
 
         verify(spy, times(1)).spyMessageProcessor(MESSAGE_PROCESSOR);
         verify(spy, times(1)).ofNamespace(NAMESPACE);
-        verify(spy, times(1)).running((List<SpyProcess>) notNull(), (List<SpyProcess>) notNull());
+        verify(spy, times(1)).before((List<SpyProcess>) notNull());
+        verify(spy, times(1)).before((List<SpyProcess>) notNull());
     }
 
     @Test
@@ -183,6 +197,8 @@ public class MockModuleTest {
     private void spyBehavior() {
         when(spy.ofNamespace(NAMESPACE)).thenReturn(spy);
         when(spy.spyMessageProcessor(MESSAGE_PROCESSOR)).thenReturn(spy);
+        when(spy.before(anyList())).thenReturn(spy);
+        when(spy.after(anyList())).thenReturn(spy);
     }
 
     private List<NestedProcessor> createAssertions() {

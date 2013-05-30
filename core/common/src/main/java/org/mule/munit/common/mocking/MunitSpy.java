@@ -9,6 +9,8 @@ import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.mp.SpyAssertion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -64,22 +66,51 @@ public class MunitSpy extends MunitMockingTool {
     }
 
     /**
-     * <p>
-     *     The process to run before and after the message processor
-     * </p>
-     * @param beforeCall
-     *      <p>
-     *          Processes to run before the message processor call
-     *      </p>
-     * @param afterCall
-     *      <p>
-     *          Processes to run after the message processor call
-     *      </p>
-     *
+     * The {@link SpyProcess} to run before the message processor
+     * 
+     * @param withSpies Processes to run before the message processor call
+     * 
      */
-    public void running(List<SpyProcess> beforeCall, List<SpyProcess> afterCall){
-        getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
-                createSpyAssertion(beforeCall, afterCall));
+    public MunitSpy before(final List<SpyProcess> withSpies) {
+        if (withSpies != null && !withSpies.isEmpty()) {
+            getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
+                createSpyAssertion(withSpies, Collections.<SpyProcess>emptyList()));
+        }
+        return this;
+    }
+
+    /**
+     * The {@link SpyProcess}es to run before the message processor
+     * 
+     * @param withSpies Processeses to run before the message processor call
+     * 
+     */
+    public MunitSpy before(final SpyProcess... withSpy) {
+        return before(Arrays.asList(withSpy));
+    }
+
+    /**
+     * The {@link SpyProcess} to run after the message processor
+     * 
+     * @param withSpies Processes to run after the message processor call
+     * 
+     */
+    public MunitSpy after(final List<SpyProcess> withSpies) {
+        if (withSpies != null && !withSpies.isEmpty()) {
+            getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
+                createSpyAssertion(Collections.<SpyProcess>emptyList(), withSpies));
+        }
+        return this;
+    }
+
+    /**
+     * The {@link SpyProcess}es to run after the message processor
+     * 
+     * @param withSpies Processeses to run after the message processor call
+     * 
+     */
+    public MunitSpy after(final SpyProcess... withSpy) {
+        return after(Arrays.asList(withSpy));
     }
 
     protected SpyAssertion createSpyAssertion(List<SpyProcess> beforeCall, List<SpyProcess> afterCall) {
