@@ -1,5 +1,6 @@
 package org.mule.munit.runner.mule;
 
+import static junit.framework.Assert.fail;
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
@@ -14,6 +15,8 @@ import org.mule.tck.MuleTestUtils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
 
@@ -82,18 +85,20 @@ public class MunitTest {
         try {
             run(event, before);
             showDescription();
-
             test.process(event);
-        } catch (AssertionError t) {
+            if (StringUtils.isNotBlank(test.getExpectExceptionThatSatisfies())) {
+                fail("Exception matching '" + test.getExpectExceptionThatSatisfies() + "', but wasn't thrown");
+            }
+        } catch (final AssertionError t) {
             result.setFailure(buildNotifcationFrom(t));
-        } catch (MuleException e) {
+        } catch (final MuleException e) {
             try {
-                if ( !test.expectException(e,event) ){
-                    e.setStackTrace( buildMuleStackTrace(event.getMuleContext())
+                if ( !test.expectException(e, event) ) {
+                    e.setStackTrace(buildMuleStackTrace(event.getMuleContext())
                             .toArray(new StackTraceElement[]{}));
                     result.setError(buildNotifcationFrom(e));
                 }
-            }catch (AssertionError t) {
+            } catch (final AssertionError t) {
                 t.setStackTrace(buildMuleStackTrace(event.getMuleContext())
                         .toArray(new StackTraceElement[]{}));
                 result.setFailure(buildNotifcationFrom(t));
