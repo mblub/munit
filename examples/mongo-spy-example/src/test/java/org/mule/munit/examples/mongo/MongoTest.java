@@ -24,7 +24,7 @@ public class MongoTest extends FunctionalMunitSuite{
 	@Test
 	public void testMongoCall() throws MuleException, Exception{
 		whenMessageProcessor("add-user").ofNamespace("mongo").thenReturnSameEvent();
-		spyMessageProcessor("add-user").ofNamespace("mongo").running(assertNotNull(), assertNotNull());
+		spyMessageProcessor("add-user").ofNamespace("mongo").before(assertNotNull()).after(assertNotNull());
 		
 		runFlow("mongo-storage", testEvent(getClass().getResourceAsStream("/users.xml")));
 		
