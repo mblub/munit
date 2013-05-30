@@ -1,14 +1,20 @@
 package org.mule.munit.runner.mule;
 
 
-import org.junit.Before;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mule.api.DefaultMuleException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.config.MuleProperties;
 import org.mule.api.registry.MuleRegistry;
-import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.endpoint.MockEndpointManager;
 import org.mule.munit.common.mp.MockedMessageProcessorManager;
@@ -22,8 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
 
 public class MunitTestTest {
     private MunitFlow before = mock(MunitFlow.class);

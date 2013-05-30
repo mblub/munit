@@ -20,23 +20,10 @@
  */
 package org.mule.munit;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import org.apache.log4j.Logger;
-import org.h2.tools.RunScript;
 import org.mule.api.annotations.Configurable;
 import org.mule.api.annotations.Module;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.param.Optional;
-
-import java.io.*;
-import java.net.URISyntaxException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static junit.framework.Assert.assertEquals;
 
 /**
  * <p>Module to test database connections</p>

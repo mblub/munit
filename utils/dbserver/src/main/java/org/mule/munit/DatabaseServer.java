@@ -101,7 +101,6 @@ public class DatabaseServer {
      */
     public Object executeQuery(String sql)
     {
-        Statement statement = null;
         try
         {
             return getMap(sql);

@@ -1,14 +1,12 @@
 package org.mule.java;
 
-import org.junit.Test;
-import org.mule.munit.runner.functional.FunctionalMunitSuite;
-
 import static junit.framework.Assert.assertEquals;
 
+import org.mule.munit.runner.functional.FunctionalMunitSuite;
+
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+
+import org.junit.Test;
 
 
 public class JavaMunitTest extends FunctionalMunitSuite{

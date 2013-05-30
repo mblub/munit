@@ -1,20 +1,11 @@
 package org.mule.munit.runner.mule.context;
 
-import org.mule.munit.common.MunitCore;
-import org.mule.munit.runner.mule.context.MunitDomParser;
-
 import org.apache.xerces.parsers.DOMParser;
 import org.springframework.beans.factory.xml.DefaultDocumentLoader;
 import org.w3c.dom.Document;
-import org.xml.sax.*;
-import org.xml.sax.ext.Attributes2Impl;
-import org.xml.sax.helpers.XMLFilterImpl;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXSource;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 
 /**
  * <p>

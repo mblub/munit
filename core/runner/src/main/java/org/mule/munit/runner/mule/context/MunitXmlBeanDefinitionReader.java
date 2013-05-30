@@ -1,7 +1,6 @@
 package org.mule.munit.runner.mule.context;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.xml.DefaultDocumentLoader;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 public class MunitXmlBeanDefinitionReader extends XmlBeanDefinitionReader{
