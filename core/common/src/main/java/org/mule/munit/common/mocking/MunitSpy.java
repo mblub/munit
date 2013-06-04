@@ -82,7 +82,7 @@ public class MunitSpy extends MunitMockingTool {
     /**
      * The {@link SpyProcess}es to run before the message processor
      * 
-     * @param withSpies Processeses to run before the message processor call
+     * @param withSpy Processeses to run before the message processor call
      * 
      */
     public MunitSpy before(final SpyProcess... withSpy) {
@@ -106,7 +106,7 @@ public class MunitSpy extends MunitMockingTool {
     /**
      * The {@link SpyProcess}es to run after the message processor
      * 
-     * @param withSpies Processeses to run after the message processor call
+     * @param withSpy Processeses to run after the message processor call
      * 
      */
     public MunitSpy after(final SpyProcess... withSpy) {
