@@ -99,13 +99,13 @@
     <distributionManagement>
         <repository>
             <id>mulesoft-releases</id>
-            <name>MuleForge Snapshot Repository</name>
+            <name>MuleSoft Repository</name>
             <url>http://repository.mulesoft.org/releases/</url>
         </repository>
         <snapshotRepository>
             <id>mulesoft-snapshots</id>
-            <name>MuleForge Repository</name>
-            <url>https://repository.mulesoft.org/nexus/content/repositories/snapshots</url>
+            <name>MuleSoft Snapshots Repository</name>
+            <url>https://repository.mulesoft.org/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -119,7 +119,7 @@
         <repository>
             <id>mulesoft-snapshots</id>
             <name>MuleSoft Snapshots Repository</name>
-            <url>https://repository.mulesoft.org/nexus/content/repositories/snapshots/</url>
+            <url>https://repository.mulesoft.org/snapshots/</url>
             <layout>default</layout>
         </repository>
     </repositories>
