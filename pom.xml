@@ -24,10 +24,10 @@
     </properties>
 
     <modules>
-        <module>core</module>
-        <module>utils</module>
-        <module>maven</module>
-        <module>it</module>
+        <module>munit-core</module>
+        <module>munit-utils</module>
+        <module>munit-maven-tools</module>
+        <module>munit-integration-tests</module>
         <module>examples</module>
 
     </modules>

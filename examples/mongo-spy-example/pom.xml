@@ -62,7 +62,7 @@
     </dependency>
     <dependency>
       <groupId>org.mule.munit</groupId>
-      <artifactId>runner</artifactId>
+      <artifactId>munit-runner</artifactId>
       <version>${munit.version}</version>
       <scope>test</scope>
     </dependency>
@@ -388,7 +388,7 @@
       </plugin>
       <plugin>
         <groupId>org.mule.munit.tools</groupId>
-        <artifactId>munit-plugin</artifactId>
+        <artifactId>munit-maven-plugin</artifactId>
         <version>${munit.version}</version>
         <executions>
           <execution>
