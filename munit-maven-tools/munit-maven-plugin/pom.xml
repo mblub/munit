@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <artifactId>tools</artifactId>
+        <artifactId>munit-maven-tools</artifactId>
         <groupId>org.mule.munit</groupId>
         <version>3.4-M4-SNAPSHOT</version>
     </parent>
