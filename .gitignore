@@ -17,8 +17,8 @@ munit-ftpserver-module/target
 munit-ftpserver-module/.settings
 munit-core/munit-mock/target
 munit-core/munit-mock/.settings
-munit-maven/munit-maven-plugin/target
-munit-maven/mule-app-archetype/target
+munit-maven-tools/munit-maven-plugin/target/
+munit-maven-tools/mule-app-archetype/target
 munit-utils/target
 munit-utils/.idea
 munit-utils/.settings
