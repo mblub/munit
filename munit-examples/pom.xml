@@ -7,16 +7,16 @@
         <version>3.4-M4-SNAPSHOT</version>
     </parent>
     <groupId>org.mule.munit.examples</groupId>
-    <artifactId>demo-examples</artifactId>
+    <artifactId>munit-examples</artifactId>
     <packaging>pom</packaging>
     <name>Examples for documentation</name>
 
 
     <modules>
-        <module>first-test-example</module>
-        <module>jira-mock-example</module>
-        <module>mongo-spy-example</module>
-        <module>outbound-endpoint-mocking-example</module>
+        <module>munit-first-test-example</module>
+        <module>munit-jira-mock-example</module>
+        <module>munit-mongo-spy-example</module>
+        <module>munit-outbound-endpoint-mocking-example</module>
     </modules>
 
     <build>
