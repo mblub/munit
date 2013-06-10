@@ -45,6 +45,7 @@ MAVEN_OPTS="-Xmx1G -XX:MaxPermSize=512m"
 * [munit-integration-tests] (https://github.com/mulesoft/munit/tree/master/munit-integration-tests) The integration suite for the munit project (good place for examples)
 * [munit-maven-tools] (https://github.com/mulesoft/munit/tree/master/munit-maven-tools) Munit maven plugin/archetype
 * [munit-utils] (https://github.com/mulesoft/munit/tree/master/munit-utils) Utilities for mule integration testing
+* [munit-examples] (https://github.com/mulesoft/munit/tree/master/munit-examples)
 * [tooling] (https://github.com/mulesoft/munit/tree/master/tooling) Not included in the build. Eclipse plugin
 
 
