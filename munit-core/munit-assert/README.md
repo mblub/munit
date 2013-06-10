@@ -1,11 +1,7 @@
 Mule Module for Munit assertion
 ===============================
 
-This is a mule module not devkit generated, that provides the assertions message processors for Munit
+This is a mule module not devkit generated, that provides the assertions message processors for Munit and test definition
+through xml. This is a core module that covers basic munit functionality
 
-Packages
---------
 
-* config: BeanDefinition parsers, namespace handlers, etc (all for mule specific)
-the db server mule connector
-* munit: Contains the module that does the magic
