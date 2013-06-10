@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mule</groupId>
-	<artifactId>first-test-example</artifactId>
+	<artifactId>munit-first-test-example</artifactId>
 	<packaging>mule</packaging>
 	<name>The first munit example</name>
 	<version>1.0</version>

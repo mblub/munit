@@ -7,23 +7,19 @@
 
     <files>
         <file>
-            <source>first-test-example/target/first-test-example-1.0.zip</source>
+            <source>munit-first-test-example/target/munit-first-test-example-1.0.zip</source>
             <outputDirectory></outputDirectory>
         </file>
         <file>
-            <source>first-test-example/target/first-test-example-1.0.zip</source>
+            <source>munit-jira-mock-example/target/munit-jira-mock-example-1.0.zip</source>
             <outputDirectory></outputDirectory>
         </file>
         <file>
-            <source>jira-mock-example/target/jira-mock-example-1.0.zip</source>
+            <source>munit-mongo-spy-example/target/munit-mongo-spy-example-1.0.zip</source>
             <outputDirectory></outputDirectory>
         </file>
         <file>
-            <source>mongo-spy-example/target/mongo-spy-example-1.0.zip</source>
-            <outputDirectory></outputDirectory>
-        </file>
-        <file>
-            <source>outbound-endpoint-mocking-example/target/outbound-endpoint-mocking-example-1.0.zip</source>
+            <source>munit-outbound-endpoint-mocking-example/target/munit-outbound-endpoint-mocking-example-1.0.zip</source>
             <outputDirectory></outputDirectory>
         </file>
     </files>
