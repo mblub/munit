@@ -8,7 +8,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mule.munit</groupId>
-	<artifactId>it</artifactId>
+	<artifactId>munit-integration-tests</artifactId>
 	<packaging>mule</packaging>
 	<name>Integration Tests</name>
 	<description>Integration Test for Munit Project</description>

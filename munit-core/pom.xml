@@ -7,7 +7,7 @@
     <version>3.4-M4-SNAPSHOT</version>
   </parent>
     <groupId>org.mule.munit</groupId>
-    <artifactId>core</artifactId>
+    <artifactId>munit-core</artifactId>
     <packaging>pom</packaging>
     <name>Munit core</name>
 
