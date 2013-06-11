@@ -9,7 +9,8 @@ import static org.mockito.Mockito.when;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorTest{
+public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorTest
+{
 
     public static final String TEST_MESSAGE = "testMessage";
     public static final String RETURN_VALUE1 = "r1";
@@ -19,7 +20,8 @@ public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorT
 
 
     @Test
-    public void callModuleCorrectly(){
+    public void callModuleCorrectly()
+    {
         AssertNotSameMessageProcessor mp = (AssertNotSameMessageProcessor) buildMp();
 
         mp.setExpected(EXPECTED);
@@ -29,20 +31,22 @@ public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorT
         when(expressionManager.evaluate(VALUE, muleMessage)).thenReturn(RETURN_VALUE2);
 
 
-        mp.doProcess(muleMessage,module);
+        mp.doProcess(muleMessage, module);
 
         verify(module).assertNotSame(TEST_MESSAGE, RETURN_VALUE1, RETURN_VALUE2);
     }
 
     @Override
-    protected MunitMessageProcessor doBuildMp() {
+    protected MunitMessageProcessor doBuildMp()
+    {
         AssertNotSameMessageProcessor mp = new AssertNotSameMessageProcessor();
         mp.setMessage(TEST_MESSAGE);
         return mp;
     }
 
     @Override
-    protected String getExpectedName() {
+    protected String getExpectedName()
+    {
         return "assertNotSame";
     }
 }

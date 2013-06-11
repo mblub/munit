@@ -9,18 +9,20 @@ import static org.mockito.Mockito.when;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class AssertTrueMessageProcessorTest extends AbstractMessageProcessorTest{
+public class AssertTrueMessageProcessorTest extends AbstractMessageProcessorTest
+{
 
     public static final String TEST_MESSAGE = "testMessage";
     public static final String EXP = "#[exp]";
 
 
     @Test
-    public void calledCorrectly(){
+    public void calledCorrectly()
+    {
         AssertTrueMessageProcessor mp = (AssertTrueMessageProcessor) buildMp();
         mp.setCondition(EXP);
 
-        when(expressionManager.evaluate(EXP,muleMessage)).thenReturn(true);
+        when(expressionManager.evaluate(EXP, muleMessage)).thenReturn(true);
 
         mp.doProcess(muleMessage, module);
 
@@ -29,14 +31,16 @@ public class AssertTrueMessageProcessorTest extends AbstractMessageProcessorTest
 
 
     @Override
-    protected MunitMessageProcessor doBuildMp() {
+    protected MunitMessageProcessor doBuildMp()
+    {
         AssertTrueMessageProcessor mp = new AssertTrueMessageProcessor();
         mp.setMessage(TEST_MESSAGE);
         return mp;
     }
 
     @Override
-    protected String getExpectedName() {
+    protected String getExpectedName()
+    {
         return "assertTrue";
     }
 }

@@ -14,52 +14,63 @@ import java.util.List;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitSuite {
+public class MunitSuite
+{
 
-	private String name;
-	private List<MunitTest> munitTests = new ArrayList<MunitTest>();
-	private NotificationListener notificationListener = new DummyNotificationListener();
-	
-	public MunitSuite(String name) {
-		this.name = name;
-	}
+    private String name;
+    private List<MunitTest> munitTests = new ArrayList<MunitTest>();
+    private NotificationListener notificationListener = new DummyNotificationListener();
 
-	public void add(MunitTest test) {
-		munitTests.add(test);
-	}
+    public MunitSuite(String name)
+    {
+        this.name = name;
+    }
+
+    public void add(MunitTest test)
+    {
+        munitTests.add(test);
+    }
 
     /**
      * <p>Runs all the tests of the suite </p>
+     *
      * @return The Result of the suite execution
      * @throws Exception If the suite failed for one reason.
      */
-	public SuiteResult run() throws Exception {
-		SuiteResult result = new SuiteResult(name);
+    public SuiteResult run() throws Exception
+    {
+        SuiteResult result = new SuiteResult(name);
 
-		for (MunitTest test : munitTests) {
-			notificationListener.notifyStartOf(test);
-			TestResult testResult = test.run();
-			result.add(testResult);
-			notificationListener.notify(testResult);
-		}
+        for (MunitTest test : munitTests)
+        {
+            notificationListener.notifyStartOf(test);
+            TestResult testResult = test.run();
+            result.add(testResult);
+            notificationListener.notify(testResult);
+        }
 
         notificationListener.notifyEnd(result);
-		return result;
-	}
+        return result;
+    }
 
-	public void setNotificationListener(NotificationListener notificationListener) {
-		if (notificationListener == null )
-			throw new IllegalArgumentException();
-		
-		this.notificationListener = notificationListener;
-	}
+    public void setNotificationListener(NotificationListener notificationListener)
+    {
+        if (notificationListener == null)
+        {
+            throw new IllegalArgumentException();
+        }
 
-	public int getNumberOfTests() {
-		
-		return munitTests.size();
-	}
+        this.notificationListener = notificationListener;
+    }
 
-    public String getName() {
+    public int getNumberOfTests()
+    {
+
+        return munitTests.size();
+    }
+
+    public String getName()
+    {
         return name;
     }
 }

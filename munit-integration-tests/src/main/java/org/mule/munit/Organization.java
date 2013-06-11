@@ -1,15 +1,18 @@
 package org.mule.munit;
 
 
-public class Organization {
-    
+public class Organization
+{
+
     private String database;
 
-    public String getDatabase() {
+    public String getDatabase()
+    {
         return database;
     }
 
-    public void setDatabase(String database) {
+    public void setDatabase(String database)
+    {
         this.database = database;
     }
 }

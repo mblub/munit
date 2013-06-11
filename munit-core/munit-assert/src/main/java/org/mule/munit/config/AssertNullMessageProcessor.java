@@ -7,7 +7,7 @@ import org.mule.munit.AssertModule;
 
 /**
  * <p>
- *     Assert Null message processor
+ * Assert Null message processor
  * </p>
  *
  * @author Federico, Fernando
@@ -15,6 +15,7 @@ import org.mule.munit.AssertModule;
  */
 public class AssertNullMessageProcessor extends MunitMessageProcessor
 {
+
     /**
      * @see AssertModule#assertNull(String, Object)
      */
@@ -24,19 +25,22 @@ public class AssertNullMessageProcessor extends MunitMessageProcessor
      * @see MunitMessageProcessor#doProcess(org.mule.api.MuleMessage, org.mule.munit.AssertModule)
      */
     @Override
-    protected void doProcess(MuleMessage mulemessage, AssertModule module) {
-       module.assertNull(message, mulemessage.getPayload());
+    protected void doProcess(MuleMessage mulemessage, AssertModule module)
+    {
+        module.assertNull(message, mulemessage.getPayload());
     }
 
     /**
      * @see org.mule.munit.config.MunitMessageProcessor#getProcessor()
      */
     @Override
-    protected String getProcessor() {
+    protected String getProcessor()
+    {
         return "assertNull";
     }
 
-    public void setMessage(String value) {
+    public void setMessage(String value)
+    {
         this.message = value;
     }
 

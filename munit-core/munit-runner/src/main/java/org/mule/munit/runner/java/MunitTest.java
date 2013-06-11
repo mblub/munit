@@ -1,6 +1,7 @@
 package org.mule.munit.runner.java;
 
 import junit.framework.TestCase;
+
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -19,12 +20,12 @@ import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
 
 /**
  * <p>
- *     This is the java representation of a Munit test written with mule code.
+ * This is the java representation of a Munit test written with mule code.
  * </p>
  * <p>
- *     The Munit tests can be converted into Junit tests by extending the class {@link AbstractMuleSuite}. When user do
- *     that instead of creating a {@link org.mule.munit.runner.mule.MunitTest} Munit core creates this class which
- *     extends from {@link TestCase}
+ * The Munit tests can be converted into Junit tests by extending the class {@link AbstractMuleSuite}. When user do
+ * that instead of creating a {@link org.mule.munit.runner.mule.MunitTest} Munit core creates this class which
+ * extends from {@link TestCase}
  * </p>
  *
  * @author Federico, Fernando
@@ -59,7 +60,8 @@ public class MunitTest extends TestCase
     private TestOutputHandler outputHandler = new DefaultOutputHandler();
 
 
-    public MunitTest(List<MunitFlow> before, MunitTestFlow flow, List<MunitFlow> after) {
+    public MunitTest(List<MunitFlow> before, MunitTestFlow flow, List<MunitFlow> after)
+    {
         this.before = before;
         this.flow = flow;
         this.after = after;
@@ -72,20 +74,24 @@ public class MunitTest extends TestCase
     }
 
     @Override
-    public int countTestCases() {
+    public int countTestCases()
+    {
         return 1;
     }
 
     /**
      * <p>
-     *     Runs the munit flow and handles the result. In case of failure it changes the java stack trace to the mule
-     *     stack trace.
+     * Runs the munit flow and handles the result. In case of failure it changes the java stack trace to the mule
+     * stack trace.
      * </p>
+     *
      * @throws Throwable
      */
     @Override
-    protected void runTest() throws Throwable {
-        if ( flow.isIgnore() ){
+    protected void runTest() throws Throwable
+    {
+        if (flow.isIgnore())
+        {
             return;
         }
 
@@ -94,28 +100,32 @@ public class MunitTest extends TestCase
 
         showDescription();
 
-        try{
+        try
+        {
             flow.process(event);
         }
-        catch(Throwable t)
+        catch (Throwable t)
         {
-            if ( !flow.expectException(t,event) ){
+            if (!flow.expectException(t, event))
+            {
                 t.setStackTrace(buildMuleStackTrace(event.getMuleContext())
-                        .toArray(new StackTraceElement[]{}));
+                                        .toArray(new StackTraceElement[] {}));
                 throw t;
             }
 
         }
-        finally {
+        finally
+        {
             MunitCore.reset(muleContext);
             run(event, after);
         }
     }
 
-    private void run(MuleEvent event, List<MunitFlow> flows) throws MuleException {
+    private void run(MuleEvent event, List<MunitFlow> flows) throws MuleException
+    {
         if (flows != null)
         {
-            for ( MunitFlow flow : flows )
+            for (MunitFlow flow : flows)
             {
                 outputHandler.printDescription(flow.getName(), flow.getDescription());
                 flow.process(event);
@@ -123,17 +133,22 @@ public class MunitTest extends TestCase
         }
     }
 
-    private void showDescription() {
+    private void showDescription()
+    {
         outputHandler.printDescription(flow.getName(), flow.getDescription().replaceAll("\\.", "\\.%n"));
     }
 
 
-    protected MuleEvent muleEvent() {
-        try {
+    protected MuleEvent muleEvent()
+    {
+        try
+        {
             return MuleTestUtils.getTestEvent(null,
-                    MessageExchangePattern.REQUEST_RESPONSE,
-                    muleContext);
-        } catch (Exception e) {
+                                              MessageExchangePattern.REQUEST_RESPONSE,
+                                              muleContext);
+        }
+        catch (Exception e)
+        {
             return null;
         }
     }

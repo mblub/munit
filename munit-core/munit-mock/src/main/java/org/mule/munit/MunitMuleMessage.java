@@ -5,7 +5,9 @@ import org.mule.api.annotations.param.Optional;
 
 import java.util.Map;
 
-public class MunitMuleMessage {
+public class MunitMuleMessage
+{
+
     /**
      * <p>The Mule Payload</p>
      */
@@ -40,43 +42,53 @@ public class MunitMuleMessage {
     @Optional
     private Map<String, Object> outboundProperties;
 
-    public Object getPayload() {
+    public Object getPayload()
+    {
         return payload;
     }
 
-    public void setPayload(Object payload) {
+    public void setPayload(Object payload)
+    {
         this.payload = payload;
     }
 
-    public Map<String, Object> getInvocationProperties() {
+    public Map<String, Object> getInvocationProperties()
+    {
         return invocationProperties;
     }
 
-    public void setInvocationProperties(Map<String, Object> invocationProperties) {
+    public void setInvocationProperties(Map<String, Object> invocationProperties)
+    {
         this.invocationProperties = invocationProperties;
     }
 
-    public Map<String, Object> getInboundProperties() {
+    public Map<String, Object> getInboundProperties()
+    {
         return inboundProperties;
     }
 
-    public void setInboundProperties(Map<String, Object> inboundProperties) {
+    public void setInboundProperties(Map<String, Object> inboundProperties)
+    {
         this.inboundProperties = inboundProperties;
     }
 
-    public Map<String, Object> getSessionProperties() {
+    public Map<String, Object> getSessionProperties()
+    {
         return sessionProperties;
     }
 
-    public void setSessionProperties(Map<String, Object> sessionProperties) {
+    public void setSessionProperties(Map<String, Object> sessionProperties)
+    {
         this.sessionProperties = sessionProperties;
     }
 
-    public Map<String, Object> getOutboundProperties() {
+    public Map<String, Object> getOutboundProperties()
+    {
         return outboundProperties;
     }
 
-    public void setOutboundProperties(Map<String, Object> outboundProperties) {
+    public void setOutboundProperties(Map<String, Object> outboundProperties)
+    {
         this.outboundProperties = outboundProperties;
     }
 }

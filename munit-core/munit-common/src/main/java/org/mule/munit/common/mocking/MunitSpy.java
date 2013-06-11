@@ -15,121 +15,131 @@ import java.util.List;
 
 /**
  * <p>
- *     This class is a Munit Tool to create Message processor spiers
+ * This class is a Munit Tool to create Message processor spiers
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitSpy extends MunitMockingTool {
+public class MunitSpy extends MunitMockingTool
+{
 
-    public MunitSpy(MuleContext muleContext) {
+    public MunitSpy(MuleContext muleContext)
+    {
         super(muleContext);
     }
 
     /**
      * <p>
-     *     Defines the name of the message processor to spy
+     * Defines the name of the message processor to spy
      * </p>
      *
-     * @param name
-     *      <p>
-     *          The name of the message processor to spy
-     *      </p>
-     * @return
-     *      <p>
-     *          Itself
-     *      </p>
+     * @param name <p>
+     *             The name of the message processor to spy
+     *             </p>
+     * @return <p>
+     *         Itself
+     *         </p>
      */
-    public MunitSpy spyMessageProcessor(String name) {
+    public MunitSpy spyMessageProcessor(String name)
+    {
         this.messageProcessorName = name;
         return this;
     }
 
     /**
      * <p>
-     *     Defines the namespace of the message processor to spy
+     * Defines the namespace of the message processor to spy
      * </p>
      *
-     * @param namespace
-     *      <p>
-     *          The namespace of the message processor to spy
-     *      </p>
-     * @return
-     *      <p>
-     *          Itself
-     *      </p>
+     * @param namespace <p>
+     *                  The namespace of the message processor to spy
+     *                  </p>
+     * @return <p>
+     *         Itself
+     *         </p>
      */
-    public MunitSpy ofNamespace(String namespace) {
+    public MunitSpy ofNamespace(String namespace)
+    {
         this.messageProcessorNamespace = namespace;
         return this;
     }
 
     /**
      * The {@link SpyProcess} to run before the message processor
-     * 
+     *
      * @param withSpies Processes to run before the message processor call
-     * 
      */
-    public MunitSpy before(final List<SpyProcess> withSpies) {
-        if (withSpies != null && !withSpies.isEmpty()) {
+    public MunitSpy before(final List<SpyProcess> withSpies)
+    {
+        if (withSpies != null && !withSpies.isEmpty())
+        {
             getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
-                createSpyAssertion(withSpies, Collections.<SpyProcess>emptyList()));
+                                         createSpyAssertion(withSpies, Collections.<SpyProcess>emptyList()));
         }
         return this;
     }
 
     /**
      * The {@link SpyProcess}es to run before the message processor
-     * 
+     *
      * @param withSpy Processeses to run before the message processor call
-     * 
      */
-    public MunitSpy before(final SpyProcess... withSpy) {
+    public MunitSpy before(final SpyProcess... withSpy)
+    {
         return before(Arrays.asList(withSpy));
     }
 
     /**
      * The {@link SpyProcess} to run after the message processor
-     * 
+     *
      * @param withSpies Processes to run after the message processor call
-     * 
      */
-    public MunitSpy after(final List<SpyProcess> withSpies) {
-        if (withSpies != null && !withSpies.isEmpty()) {
+    public MunitSpy after(final List<SpyProcess> withSpies)
+    {
+        if (withSpies != null && !withSpies.isEmpty())
+        {
             getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
-                createSpyAssertion(Collections.<SpyProcess>emptyList(), withSpies));
+                                         createSpyAssertion(Collections.<SpyProcess>emptyList(), withSpies));
         }
         return this;
     }
 
     /**
      * The {@link SpyProcess}es to run after the message processor
-     * 
+     *
      * @param withSpy Processeses to run after the message processor call
-     * 
      */
-    public MunitSpy after(final SpyProcess... withSpy) {
+    public MunitSpy after(final SpyProcess... withSpy)
+    {
         return after(Arrays.asList(withSpy));
     }
 
-    protected SpyAssertion createSpyAssertion(List<SpyProcess> beforeCall, List<SpyProcess> afterCall) {
-        return new SpyAssertion(createMessageProcessors(beforeCall),createMessageProcessors(afterCall));
+    protected SpyAssertion createSpyAssertion(List<SpyProcess> beforeCall, List<SpyProcess> afterCall)
+    {
+        return new SpyAssertion(createMessageProcessors(beforeCall), createMessageProcessors(afterCall));
     }
 
-    private ArrayList<MessageProcessor> createMessageProcessors(List<SpyProcess> beforeCall) {
+    private ArrayList<MessageProcessor> createMessageProcessors(List<SpyProcess> beforeCall)
+    {
         ArrayList<MessageProcessor> beforeMessageProcessors = new ArrayList<MessageProcessor>();
         beforeMessageProcessors.add(createMessageProcessorFromSpy(beforeCall));
         return beforeMessageProcessors;
     }
 
-    private MessageProcessor createMessageProcessorFromSpy(final List<SpyProcess> beforeCall) {
-        return new MessageProcessor() {
+    private MessageProcessor createMessageProcessorFromSpy(final List<SpyProcess> beforeCall)
+    {
+        return new MessageProcessor()
+        {
             @Override
-            public MuleEvent process(MuleEvent event) throws MuleException {
-                if (beforeCall != null )
-                for ( SpyProcess process : beforeCall ){
-                    process.spy(event);
+            public MuleEvent process(MuleEvent event) throws MuleException
+            {
+                if (beforeCall != null)
+                {
+                    for (SpyProcess process : beforeCall)
+                    {
+                        process.spy(event);
+                    }
                 }
                 return event;
             }

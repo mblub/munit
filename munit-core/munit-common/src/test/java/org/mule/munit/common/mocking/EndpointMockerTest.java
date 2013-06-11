@@ -2,6 +2,7 @@ package org.mule.munit.common.mocking;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
@@ -24,7 +25,8 @@ import static org.mockito.Mockito.*;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class EndpointMockerTest {
+public class EndpointMockerTest
+{
 
     public static final String ADDRESS = "address";
     private MuleContext muleContext;
@@ -34,25 +36,27 @@ public class EndpointMockerTest {
     private MuleEvent mockEvent;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleContext = mock(MuleContext.class);
         muleMessage = mock(MuleMessage.class);
         muleRegistry = mock(MuleRegistry.class);
         endpointManager = mock(MockEndpointManager.class);
         mockEvent = mock(MuleEvent.class);
-        
+
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
         when(muleRegistry.lookupObject(MuleProperties.OBJECT_MULE_ENDPOINT_FACTORY)).thenReturn(endpointManager);
     }
 
     @Test
-    public void testAddressIsSetCorrectly(){
+    public void testAddressIsSetCorrectly()
+    {
 
         SpyProcessImpl spyProcess = (SpyProcessImpl) spyProcess();
         EndpointMocker endpointMocker = new MockEndpointMocker(muleContext);
         endpointMocker.whenEndpointWithAddress(ADDRESS)
                 .withIncomingMessageSatisfying(createSpyProcess(spyProcess))
-        .thenReturn(muleMessage);
+                .thenReturn(muleMessage);
 
 
         verify(endpointManager).addBehavior(eq(ADDRESS), any(OutboundBehavior.class));
@@ -60,31 +64,39 @@ public class EndpointMockerTest {
 
     }
 
-    private ArrayList<SpyProcess> createSpyProcess(SpyProcess spy) {
+    private ArrayList<SpyProcess> createSpyProcess(SpyProcess spy)
+    {
         ArrayList<SpyProcess> spyProcesses = new ArrayList<SpyProcess>();
         spyProcesses.add(spy);
         return spyProcesses;
     }
 
-    private SpyProcess spyProcess() {
+    private SpyProcess spyProcess()
+    {
         return new SpyProcessImpl();
     }
 
-    private class MockEndpointMocker extends EndpointMocker{
+    private class MockEndpointMocker extends EndpointMocker
+    {
 
 
-
-        public MockEndpointMocker(MuleContext muleContext) {
+        public MockEndpointMocker(MuleContext muleContext)
+        {
             super(muleContext);
         }
 
         @Override
-        protected List<MessageProcessor> createMessageProcessorFromSpy(List<SpyProcess> process) {
+        protected List<MessageProcessor> createMessageProcessorFromSpy(List<SpyProcess> process)
+        {
             List<MessageProcessor> messageProcessorFromSpy = super.createMessageProcessorFromSpy(process);
-            for ( MessageProcessor mp : messageProcessorFromSpy ){
-                try {
+            for (MessageProcessor mp : messageProcessorFromSpy)
+            {
+                try
+                {
                     mp.process(mockEvent);
-                } catch (MuleException e) {
+                }
+                catch (MuleException e)
+                {
 
                 }
             }
@@ -92,10 +104,14 @@ public class EndpointMockerTest {
         }
     }
 
-    private class SpyProcessImpl implements SpyProcess{
+    private class SpyProcessImpl implements SpyProcess
+    {
+
         boolean called;
+
         @Override
-        public void spy(MuleEvent event) throws MuleException {
+        public void spy(MuleEvent event) throws MuleException
+        {
             called = true;
         }
     }

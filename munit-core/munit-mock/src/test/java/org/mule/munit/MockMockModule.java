@@ -6,36 +6,41 @@ import org.mule.munit.common.mocking.MunitSpy;
 
 /**
  * <p>
- *     This name might sound incorrect but it is a mock of the mock module.
+ * This name might sound incorrect but it is a mock of the mock module.
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MockMockModule  extends MockModule{
+public class MockMockModule extends MockModule
+{
 
     private MessageProcessorMocker mocker;
     private EndpointMocker endpointMocker;
     private MunitSpy spy;
 
-    public MockMockModule(MessageProcessorMocker mocker, EndpointMocker endpointMocker, MunitSpy spy) {
+    public MockMockModule(MessageProcessorMocker mocker, EndpointMocker endpointMocker, MunitSpy spy)
+    {
         this.mocker = mocker;
         this.endpointMocker = endpointMocker;
         this.spy = spy;
     }
 
     @Override
-    protected MessageProcessorMocker mocker() {
+    protected MessageProcessorMocker mocker()
+    {
         return mocker;
     }
 
     @Override
-    protected EndpointMocker endpointMocker() {
+    protected EndpointMocker endpointMocker()
+    {
         return endpointMocker;
     }
 
     @Override
-    protected MunitSpy spy() {
+    protected MunitSpy spy()
+    {
         return spy;
     }
 }

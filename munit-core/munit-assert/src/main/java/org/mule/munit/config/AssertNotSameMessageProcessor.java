@@ -7,7 +7,7 @@ import org.mule.munit.AssertModule;
 
 /**
  * <p>
- *     Assert not Same message processor
+ * Assert not Same message processor
  * </p>
  *
  * @author Federico, Fernando
@@ -15,6 +15,7 @@ import org.mule.munit.AssertModule;
  */
 public class AssertNotSameMessageProcessor extends MunitMessageProcessor
 {
+
     /**
      * @see AssertModule#assertNotSame(String, Object, Object)
      */
@@ -34,7 +35,8 @@ public class AssertNotSameMessageProcessor extends MunitMessageProcessor
      * @see MunitMessageProcessor#doProcess(org.mule.api.MuleMessage, org.mule.munit.AssertModule)
      */
     @Override
-    protected void doProcess(MuleMessage mulemessage, AssertModule module) {
+    protected void doProcess(MuleMessage mulemessage, AssertModule module)
+    {
         module.assertNotSame(message, evaluate(mulemessage, expected), evaluate(mulemessage, value));
     }
 
@@ -42,19 +44,23 @@ public class AssertNotSameMessageProcessor extends MunitMessageProcessor
      * @see org.mule.munit.config.MunitMessageProcessor#getProcessor()
      */
     @Override
-    protected String getProcessor() {
+    protected String getProcessor()
+    {
         return "assertNotSame";
     }
 
-    public void setMessage(String value) {
+    public void setMessage(String value)
+    {
         this.message = value;
     }
 
-    public void setExpected(Object value) {
+    public void setExpected(Object value)
+    {
         this.expected = value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(Object value)
+    {
         this.value = value;
     }
 

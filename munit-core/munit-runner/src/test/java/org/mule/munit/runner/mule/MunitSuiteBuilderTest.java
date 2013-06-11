@@ -3,18 +3,21 @@ package org.mule.munit.runner.mule;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 import org.mule.munit.runner.output.DefaultOutputHandler;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 
-public class MunitSuiteBuilderTest {
+public class MunitSuiteBuilderTest
+{
 
     MuleContext muleContext;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleContext = mock(MuleContext.class);
 
     }
@@ -23,7 +26,8 @@ public class MunitSuiteBuilderTest {
      * Do not accept null handlers
      */
     @Test(expected = IllegalArgumentException.class)
-    public void handlerMustNotBeNull(){
+    public void handlerMustNotBeNull()
+    {
         new MunitSuiteBuilder(muleContext, null);
     }
 
@@ -31,7 +35,8 @@ public class MunitSuiteBuilderTest {
      * Never return null on test
      */
     @Test
-    public void createTestMustNotBeNull(){
+    public void createTestMustNotBeNull()
+    {
         assertNotNull(new MunitSuiteBuilder(muleContext, new DefaultOutputHandler()).test(null, null, null));
     }
 
@@ -40,7 +45,8 @@ public class MunitSuiteBuilderTest {
      * Never return null when creating a suite.
      */
     @Test
-    public void createSuiteMustNotBeNull(){
+    public void createSuiteMustNotBeNull()
+    {
         assertNotNull(new MunitSuiteBuilder(muleContext, new DefaultOutputHandler()).createSuite("test"));
     }
 

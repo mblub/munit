@@ -1,6 +1,7 @@
 package org.mule.java;
 
 import org.junit.Test;
+
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.munit.common.mocking.SpyProcess;
@@ -13,14 +14,18 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 
-public class MpMockingJavaTest extends FunctionalMunitSuite {
+public class MpMockingJavaTest extends FunctionalMunitSuite
+{
+
     @Override
-    protected String getConfigResources() {
+    protected String getConfigResources()
+    {
         return "mule-config.xml";
     }
-    
+
     @Test
-    public void testMockMp() throws Exception {
+    public void testMockMp() throws Exception
+    {
         whenMessageProcessor("echo-component").thenReturn(muleMessageWithPayload("expectedPayload"));
 
         MuleEvent eventResult = runFlow("echoFlow", testEvent("anotherString"));
@@ -28,9 +33,10 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
         assertEquals("expectedPayload", eventResult.getMessage().getPayload());
 
     }
-    
+
     @Test
-    public void testMockWithoutChangingPayload() throws Exception {
+    public void testMockWithoutChangingPayload() throws Exception
+    {
         whenMessageProcessor("create-group").ofNamespace("jira").thenReturnSameEvent();
 
         MuleEvent eventResult = runFlow("callingJira", testEvent(" Hello world!"));
@@ -39,7 +45,8 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
     }
 
     @Test
-    public void testMpWithParameters() throws Exception {
+    public void testMpWithParameters() throws Exception
+    {
         whenMessageProcessor("create-group")
                 .ofNamespace("jira")
                 .withAttributes(attributes())
@@ -56,9 +63,10 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
         assertEquals("expectedPayload", eventResult.getMessage().getPayload());
 
     }
-    
+
     @Test
-    public void demoTest() throws Exception {
+    public void demoTest() throws Exception
+    {
         whenEndpointWithAddress("jdbc://lookupJob")
                 .thenReturn(muleMessageWithPayload(jdbcPayload()));
 
@@ -70,13 +78,14 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
 
         MuleEvent eventResult = runFlow("main", testEvent(" Hello world!]"));
 
-         assertEquals("createGroupResult", eventResult.getMessage().getPayload());
-         assertEquals("someGroup", eventResult.getMessage().getInvocationProperty("job"));
+        assertEquals("createGroupResult", eventResult.getMessage().getPayload());
+        assertEquals("someGroup", eventResult.getMessage().getInvocationProperty("job"));
     }
 
 
     @Test
-    public void testWithSpy() throws Exception {
+    public void testWithSpy() throws Exception
+    {
         whenMessageProcessor("create-group")
                 .ofNamespace("jira")
                 .withAttributes(attributes())
@@ -102,7 +111,8 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
 
 
     @Test(expected = Exception.class)
-    public void testingMockTrowsException() throws Exception {
+    public void testingMockTrowsException() throws Exception
+    {
         whenMessageProcessor("create-group")
                 .ofNamespace("jira")
                 .thenThrow(new Exception());
@@ -110,51 +120,61 @@ public class MpMockingJavaTest extends FunctionalMunitSuite {
         runFlow("callingJira", testEvent("anotherString"));
     }
 
-    private List<Map<String, String>> jdbcPayload() {
-        List<Map<String,String>> resultOfJdbc = new ArrayList<Map<String,String>>();
-        Map<String,String> r = new HashMap<String,String>();
+    private List<Map<String, String>> jdbcPayload()
+    {
+        List<Map<String, String>> resultOfJdbc = new ArrayList<Map<String, String>>();
+        Map<String, String> r = new HashMap<String, String>();
         r.put("jobtitle", "someGroup");
         resultOfJdbc.add(r);
         return resultOfJdbc;
     }
 
-    private HashMap<String, Object> attributes() {
+    private HashMap<String, Object> attributes()
+    {
         HashMap<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("groupName", "someGroupName");
         attributes.put("userName", anyString());
         return attributes;
     }
 
-    private HashMap<String, Object> anyAttributes() {
+    private HashMap<String, Object> anyAttributes()
+    {
         HashMap<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("groupName", anyString());
         attributes.put("userName", anyString());
         return attributes;
     }
 
-    private ArrayList<SpyProcess> afterCallSpy() {
+    private ArrayList<SpyProcess> afterCallSpy()
+    {
         ArrayList<SpyProcess> spyProcesses = new ArrayList<SpyProcess>();
         spyProcesses.add(new AfterSpy());
         return spyProcesses;
     }
 
-    private ArrayList<SpyProcess> beforeCallSpy() {
+    private ArrayList<SpyProcess> beforeCallSpy()
+    {
         ArrayList<SpyProcess> spyProcesses = new ArrayList<SpyProcess>();
         spyProcesses.add(new BeforeSpy());
         return spyProcesses;
     }
 
-    private class BeforeSpy implements SpyProcess{
+    private class BeforeSpy implements SpyProcess
+    {
+
         @Override
-        public void spy(MuleEvent event) throws MuleException {
+        public void spy(MuleEvent event) throws MuleException
+        {
             assertEquals("anotherString", event.getMessage().getPayload());
         }
     }
 
-    private class AfterSpy implements SpyProcess{
+    private class AfterSpy implements SpyProcess
+    {
 
         @Override
-        public void spy(MuleEvent event) throws MuleException {
+        public void spy(MuleEvent event) throws MuleException
+        {
             assertEquals("expectedPayload", event.getMessage().getPayload());
         }
     }

@@ -3,6 +3,7 @@ package org.mule.munit.common.mp;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.apache.commons.lang.StringUtils;
+
 import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -21,19 +22,21 @@ import java.util.Map;
 
 /**
  * <p>
- *     It intercepts the {@link MessageProcessor#process(org.mule.api.MuleEvent)}  calls
+ * It intercepts the {@link MessageProcessor#process(org.mule.api.MuleEvent)}  calls
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorInterceptor {
+public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorInterceptor
+{
 
     private String fileName;
     private String lineNumber;
 
 
-    public Object process(Object obj,Object[] args, MethodProxy proxy) throws Throwable {
+    public Object process(Object obj, Object[] args, MethodProxy proxy) throws Throwable
+    {
         MuleEvent event = (MuleEvent) args[0];
 
         MockedMessageProcessorManager manager = getMockedMessageProcessorManager();
@@ -43,8 +46,10 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
 
         registerCall(manager, messageProcessorCall);
         MessageProcessorBehavior behavior = manager.getBetterMatchingBehavior(messageProcessorCall);
-        if ( behavior != null ){
-            if (behavior.getExceptionToThrow() != null) {
+        if (behavior != null)
+        {
+            if (behavior.getExceptionToThrow() != null)
+            {
                 runSpyAfterAssertions(manager, event);
                 throw behavior.getExceptionToThrow();
             }
@@ -56,41 +61,54 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         }
 
         runSpyAfterAssertions(manager, event);
-        return proxy.invokeSuper(obj,args);
+        return proxy.invokeSuper(obj, args);
     }
 
 
-    private void registerCall(MockedMessageProcessorManager manager, MunitMessageProcessorCall messageProcessorCall) {
+    private void registerCall(MockedMessageProcessorManager manager, MunitMessageProcessorCall messageProcessorCall)
+    {
         manager.addCall(messageProcessorCall);
     }
 
-    private void runSpyAfterAssertions(MockedMessageProcessorManager manager, MuleEvent event) {
+    private void runSpyAfterAssertions(MockedMessageProcessorManager manager, MuleEvent event)
+    {
         SpyAssertion spyAssertion = getAssertionFrom(manager);
-        if (spyAssertion == null) return;
+        if (spyAssertion == null)
+        {
+            return;
+        }
 
         MunitUtils.verifyAssertions(event, spyAssertion.getAfterMessageProcessors());
     }
 
-    private void runSpyBeforeAssertions(MockedMessageProcessorManager manager, MuleEvent event) {
+    private void runSpyBeforeAssertions(MockedMessageProcessorManager manager, MuleEvent event)
+    {
         SpyAssertion spyAssertion = getAssertionFrom(manager);
-        if (spyAssertion == null) return;
+        if (spyAssertion == null)
+        {
+            return;
+        }
 
         MunitUtils.verifyAssertions(event, spyAssertion.getBeforeMessageProcessors());
     }
 
-    private SpyAssertion getAssertionFrom(MockedMessageProcessorManager manager) {
+    private SpyAssertion getAssertionFrom(MockedMessageProcessorManager manager)
+    {
         Map<MessageProcessorId, SpyAssertion> assertions = manager.getSpyAssertions();
-        if ( assertions.isEmpty() ){
+        if (assertions.isEmpty())
+        {
             return null;
         }
         SpyAssertion spyAssertion = assertions.get(id);
-        if ( spyAssertion == null ){
+        if (spyAssertion == null)
+        {
             return null;
         }
         return spyAssertion;
     }
 
-    private MunitMessageProcessorCall buildCall(MuleEvent event) {
+    private MunitMessageProcessorCall buildCall(MuleEvent event)
+    {
         MunitMessageProcessorCall call = new MunitMessageProcessorCall(id);
         call.setAttributes(getAttributes(event));
         call.setFlowConstruct(event.getFlowConstruct());
@@ -100,27 +118,28 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
     }
 
 
-
-
-
-
-    protected MockedMessageProcessorManager getMockedMessageProcessorManager() {
+    protected MockedMessageProcessorManager getMockedMessageProcessorManager()
+    {
         return ((MockedMessageProcessorManager) getMuleContext().getRegistry().lookupObject(MockedMessageProcessorManager.ID));
     }
 
-    public MuleContext getMuleContext() {
+    public MuleContext getMuleContext()
+    {
         return MunitCore.getMuleContext();
     }
 
-    public String getFileName() {
+    public String getFileName()
+    {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(String fileName)
+    {
         this.fileName = fileName;
     }
 
-    public void setLineNumber(String lineNumber) {
+    public void setLineNumber(String lineNumber)
+    {
         this.lineNumber = lineNumber;
     }
 }

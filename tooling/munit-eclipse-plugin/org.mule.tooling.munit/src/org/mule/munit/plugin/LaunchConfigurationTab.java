@@ -128,456 +128,565 @@ import org.eclipse.jdt.internal.ui.wizards.TypedViewerFilter;
  * <p>
  * This class may be instantiated but is not intended to be subclassed.
  * </p>
- * @since 3.3
  *
  * @noextend This class is not intended to be subclassed by clients.
+ * @since 3.3
  */
-public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
-
-	private Label fProjLabel;
-	private Text fProjText;
-
-
-	private Text fTestText;
-	private Label fTestLabel;
-
-	
-	/**
-	 * Creates a JUnit launch configuration tab.
-	 */
-	public LaunchConfigurationTab() {
-	}
-
-
-	public void createControl(Composite parent) {
-		Composite comp = new Composite(parent, SWT.NONE);
-		setControl(comp);
-
-		GridLayout topLayout = new GridLayout();
-		topLayout.numColumns= 2;
-		comp.setLayout(topLayout);
-
-		createSingleTestSection(comp);
-		createSpacer(comp);
-
-		Dialog.applyDialogFont(comp);
-		validatePage();
-	}
-
-	private void createSpacer(Composite comp) {
-		Label label= new Label(comp, SWT.NONE);
-		GridData gd= new GridData();
-		gd.horizontalSpan= 2;
-		label.setLayoutData(gd);
-	}
-
-	private void createSingleTestSection(Composite comp) {
-		GridData gd = new GridData();
-		gd.horizontalSpan = 2;
-
-		fProjLabel = new Label(comp, SWT.NONE);
-		fProjLabel.setText("Project");
-		gd= new GridData();
-		gd.horizontalIndent = 25;
-		fProjLabel.setLayoutData(gd);
-
-		fProjText= new Text(comp, SWT.SINGLE | SWT.BORDER);
-		fProjText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		fTestLabel = new Label(comp, SWT.NONE);
-		gd = new GridData();
-		gd.horizontalIndent = 25;
-		fTestLabel.setLayoutData(gd);
-		fTestLabel.setText("Test");
-		
-		fTestText= new Text(comp, SWT.SINGLE | SWT.BORDER);
-		fTestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		fProjText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent evt) {
-				validatePage();
-				updateLaunchConfigurationDialog();
-			}
-		});
-		
-		fTestText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent evt) {
-				validatePage();
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-	}
-
-
-	private static Image createImage(String path) {
-		return JUnitPlugin.getImageDescriptor(path).createImage();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
-	public void initializeFrom(ILaunchConfiguration config) {
-
-		updateProjectFromConfig(config);
-		updateTestFromConfig(config);
-		String containerHandle= ""; //$NON-NLS-1$
-		try {
-			containerHandle = config.getAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_CONTAINER, ""); //$NON-NLS-1$
-		} catch (CoreException ce) {
-		}
-
-		validatePage();
-	}
-
-
-	private void updateProjectFromConfig(ILaunchConfiguration config) {
-		String projectName= ""; //$NON-NLS-1$
-		try {
-			projectName = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""); //$NON-NLS-1$
-		} catch (CoreException ce) {
-		}
-		fProjText.setText(projectName);
-	}
-	
-	private void updateTestFromConfig(ILaunchConfiguration config) {
-		String testName= ""; //$NON-NLS-1$
-		try {
-			testName = config.getAttribute("resource", ""); //$NON-NLS-1$
-		} catch (CoreException ce) {
-		}
-		fTestText.setText(testName);
-	}
-
-	protected void updateLaunchConfigurationDialog() {
-		if (getLaunchConfigurationDialog() != null) {
-			//order is important here due to the call to 
-			//refresh the tab viewer in updateButtons()
-			//which ensures that the messages are up to date
-			getLaunchConfigurationDialog().updateButtons();
-			getLaunchConfigurationDialog().updateMessage();
-		}
-	}
-	public void performApply(ILaunchConfigurationWorkingCopy config) {
-			config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, fProjText.getText());
-			config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, fTestText.getText());
-			config.setAttribute("resource", fTestText.getText()); //$NON-NLS-1$
-			config.setAttribute("Mpath", "/"+fProjText.getText()+"/src/test/munit/" + fTestText.getText()); //$NON-NLS-1$
-		try {
-			mapResources(config);
-		} catch (CoreException e) {
-			JUnitPlugin.log(e.getStatus());
-		}
-	}
-
-	private void mapResources(ILaunchConfigurationWorkingCopy config)  throws CoreException {
-		JUnitMigrationDelegate.mapResources(config);
-	}
-
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#dispose()
-	 */
-	public void dispose() {
-		super.dispose();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#getImage()
-	 */
-	public Image getImage() {
-		return null;
-	}
-
-	/*
-	 * Return the IJavaProject corresponding to the project name in the project name
-	 * text field, or null if the text does not match a project name.
-	 */
-	private IJavaProject getJavaProject() {
-		String projectName = fProjText.getText().trim();
-		if (projectName.length() < 1) {
-			return null;
-		}
-		return getJavaModel().getJavaProject(projectName);
-	}
-
-	/*
-	 * Convenience method to get the workspace root.
-	 */
-	private IWorkspaceRoot getWorkspaceRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
-	}
-
-	/*
-	 * Convenience method to get access to the java model.
-	 */
-	private IJavaModel getJavaModel() {
-		return JavaCore.create(getWorkspaceRoot());
-	}
-
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#isValid(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
-	public boolean isValid(ILaunchConfiguration config) {
-		validatePage();
-		return true;
-	}
-
-	
-	/*
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#setErrorMessage(java.lang.String)
-	 * @since 3.6
-	 */
-	protected void setErrorMessage(String errorMessage) {
-		super.setErrorMessage(errorMessage);
-	}
-
-	private void validatePage() {
-
-		setErrorMessage(null);
-		setMessage(null);
-
-
-		String projectName= fProjText.getText().trim();
-		if (projectName.length() == 0) {
-			setErrorMessage("Project not specified");
-			return;
-		}
-
-		IStatus status= ResourcesPlugin.getWorkspace().validatePath(IPath.SEPARATOR + projectName, IResource.PROJECT);
-		if (!status.isOK() || !Path.ROOT.isValidSegment(projectName)) {
-			setErrorMessage("Invalid Prject name");
-			return;
-		}
-
-		IProject project= getWorkspaceRoot().getProject(projectName);
-		if (!project.exists()) {
-			setErrorMessage("Project does not Exists.");
-			return;
-		}
-		IJavaProject javaProject= JavaCore.create(project);
-
-		try {
-			String className= fTestText.getText().trim();
-			if (className.length() == 0) {
-				setErrorMessage("Test file is not specified. You must enter the name of the file in the munit folder that you want to run");
-				return;
-			}
-			IType type= javaProject.findType(className);
-			if (type == null) {
-				setErrorMessage("File not found in munit folder");
-				return;
-			}
-
-
-		} catch (CoreException e) {
-			JUnitPlugin.log(e);
-		}
-
-	}
-
-
-
-
-	private void setEnableSingleTestGroup(boolean enabled) {
-		fProjLabel.setEnabled(enabled);
-		fProjText.setEnabled(enabled);
-		fTestLabel.setEnabled(enabled);
-		fTestText.setEnabled(enabled);
-		boolean projectTextHasContents= fProjText.getText().length() > 0;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
-	 */
-	public void setDefaults(ILaunchConfigurationWorkingCopy config) {
-		IJavaElement javaElement = getContext();
-		if (javaElement != null) {
-			initializeJavaProject(javaElement, config);
-		} else {
-			// We set empty attributes for project & main type so that when one config is
-			// compared to another, the existence of empty attributes doesn't cause an
-			// incorrect result (the performApply() method can result in empty values
-			// for these attributes being set on a config if there is nothing in the
-			// corresponding text boxes)
-			config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""); //$NON-NLS-1$
-			config.setAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_CONTAINER, ""); //$NON-NLS-1$
-		}
-		initializeTestAttributes(javaElement, config);
-	}
-
-	private void initializeTestAttributes(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config) {
-		if (javaElement != null && javaElement.getElementType() < IJavaElement.COMPILATION_UNIT)
-			initializeTestContainer(javaElement, config);
-		else
-			initializeTestType(javaElement, config);
-	}
-
-	private void initializeTestContainer(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config) {
-		config.setAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_CONTAINER, javaElement.getHandleIdentifier());
-		initializeName(config, javaElement.getElementName());
-	}
-
-	private void initializeName(ILaunchConfigurationWorkingCopy config, String name) {
-		if (name == null) {
-			name= ""; //$NON-NLS-1$
-		}
-		if (name.length() > 0) {
-			int index = name.lastIndexOf('.');
-			if (index > 0) {
-				name = name.substring(index + 1);
-			}
-			name= getLaunchConfigurationDialog().generateName(name);
-			config.rename(name);
-		}
-	}
-
-	/*
-	 * Set the main type & name attributes on the working copy based on the IJavaElement
-	 */
-	private void initializeTestType(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config) {
-		String name= ""; //$NON-NLS-1$
-		String testKindId= null;
-		try {
-			// we only do a search for compilation units or class files or
-			// or source references
-			if (javaElement instanceof ISourceReference) {
-				ITestKind testKind= TestKindRegistry.getContainerTestKind(javaElement);
-				testKindId= testKind.getId();
-
-				IType[] types = TestSearchEngine.findTests(getLaunchConfigurationDialog(), javaElement, testKind);
-				if ((types == null) || (types.length < 1)) {
-					return;
-				}
-				// Simply grab the first main type found in the searched element
-				name= types[0].getFullyQualifiedName('.');
-
-			}
-		} catch (InterruptedException ie) {
-
-		} catch (InvocationTargetException ite) {
-		}
-		config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, name);
-		if (testKindId != null)
-			config.setAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_RUNNER_KIND, testKindId);
-		initializeName(config, name);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getName()
-	 */
-	public String getName() {
-		return JUnitMessages.JUnitLaunchConfigurationTab_tab_label;
-	}
-
-	private IJavaElement chooseContainer(IJavaElement initElement) {
-		Class[] acceptedClasses= new Class[] { IPackageFragmentRoot.class, IJavaProject.class, IPackageFragment.class };
-		TypedElementSelectionValidator validator= new TypedElementSelectionValidator(acceptedClasses, false) {
-			public boolean isSelectedValid(Object element) {
-				return true;
-			}
-		};
-
-		acceptedClasses= new Class[] { IJavaModel.class, IPackageFragmentRoot.class, IJavaProject.class, IPackageFragment.class };
-		ViewerFilter filter= new TypedViewerFilter(acceptedClasses) {
-			public boolean select(Viewer viewer, Object parent, Object element) {
-			    if (element instanceof IPackageFragmentRoot && ((IPackageFragmentRoot)element).isArchive())
-			        return false;
-			    try {
-					if (element instanceof IPackageFragment && !((IPackageFragment) element).hasChildren()) {
-						return false;
-					}
-				} catch (JavaModelException e) {
-					return false;
-				}
-				return super.select(viewer, parent, element);
-			}
-		};
-
-		StandardJavaElementContentProvider provider= new StandardJavaElementContentProvider();
-		ILabelProvider labelProvider= new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT);
-		ElementTreeSelectionDialog dialog= new ElementTreeSelectionDialog(getShell(), labelProvider, provider);
-		dialog.setValidator(validator);
-		dialog.setComparator(new JavaElementComparator());
-		dialog.setTitle(JUnitMessages.JUnitLaunchConfigurationTab_folderdialog_title);
-		dialog.setMessage(JUnitMessages.JUnitLaunchConfigurationTab_folderdialog_message);
-		dialog.addFilter(filter);
-		dialog.setInput(JavaCore.create(getWorkspaceRoot()));
-		dialog.setInitialSelection(initElement);
-		dialog.setAllowMultiple(false);
-
-		if (dialog.open() == Window.OK) {
-			Object element= dialog.getFirstResult();
-			return (IJavaElement)element;
-		}
-		return null;
-	}
-
-
-	/*
-	 * Returns the current Java element context from which to initialize
-	 * default settings, or <code>null</code> if none.
-	 *
-	 * @return Java element context.
-	 */
-	private IJavaElement getContext() {
-		IWorkbenchWindow activeWorkbenchWindow= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (activeWorkbenchWindow == null) {
-			return null;
-		}
-		IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
-		if (page != null) {
-			ISelection selection = page.getSelection();
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection ss = (IStructuredSelection)selection;
-				if (!ss.isEmpty()) {
-					Object obj = ss.getFirstElement();
-					if (obj instanceof IJavaElement) {
-						return (IJavaElement)obj;
-					}
-					if (obj instanceof IResource) {
-						IJavaElement je = JavaCore.create((IResource)obj);
-						if (je == null) {
-							IProject pro = ((IResource)obj).getProject();
-							je = JavaCore.create(pro);
-						}
-						if (je != null) {
-							return je;
-						}
-					}
-				}
-			}
-			IEditorPart part = page.getActiveEditor();
-			if (part != null) {
-				IEditorInput input = part.getEditorInput();
-				return (IJavaElement) input.getAdapter(IJavaElement.class);
-			}
-		}
-		return null;
-	}
-
-	private void initializeJavaProject(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config) {
-		IJavaProject javaProject = javaElement.getJavaProject();
-		String name = null;
-		if (javaProject != null && javaProject.exists()) {
-			name = javaProject.getElementName();
-		}
-		config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, name);
-	}
-
-	private void setButtonGridData(Button button) {
-		GridData gridData= new GridData();
-		button.setLayoutData(gridData);
-		LayoutUtil.setButtonDimensionHint(button);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#getId()
-	 */
-	public String getId() {
-		return "Munit Test"; //$NON-NLS-1$
-	}
+public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab
+{
+
+    private Label fProjLabel;
+    private Text fProjText;
+
+
+    private Text fTestText;
+    private Label fTestLabel;
+
+
+    /**
+     * Creates a JUnit launch configuration tab.
+     */
+    public LaunchConfigurationTab()
+    {
+    }
+
+
+    public void createControl(Composite parent)
+    {
+        Composite comp = new Composite(parent, SWT.NONE);
+        setControl(comp);
+
+        GridLayout topLayout = new GridLayout();
+        topLayout.numColumns = 2;
+        comp.setLayout(topLayout);
+
+        createSingleTestSection(comp);
+        createSpacer(comp);
+
+        Dialog.applyDialogFont(comp);
+        validatePage();
+    }
+
+    private void createSpacer(Composite comp)
+    {
+        Label label = new Label(comp, SWT.NONE);
+        GridData gd = new GridData();
+        gd.horizontalSpan = 2;
+        label.setLayoutData(gd);
+    }
+
+    private void createSingleTestSection(Composite comp)
+    {
+        GridData gd = new GridData();
+        gd.horizontalSpan = 2;
+
+        fProjLabel = new Label(comp, SWT.NONE);
+        fProjLabel.setText("Project");
+        gd = new GridData();
+        gd.horizontalIndent = 25;
+        fProjLabel.setLayoutData(gd);
+
+        fProjText = new Text(comp, SWT.SINGLE | SWT.BORDER);
+        fProjText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+        fTestLabel = new Label(comp, SWT.NONE);
+        gd = new GridData();
+        gd.horizontalIndent = 25;
+        fTestLabel.setLayoutData(gd);
+        fTestLabel.setText("Test");
+
+        fTestText = new Text(comp, SWT.SINGLE | SWT.BORDER);
+        fTestText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+        fProjText.addModifyListener(new ModifyListener()
+        {
+            public void modifyText(ModifyEvent evt)
+            {
+                validatePage();
+                updateLaunchConfigurationDialog();
+            }
+        });
+
+        fTestText.addModifyListener(new ModifyListener()
+        {
+            public void modifyText(ModifyEvent evt)
+            {
+                validatePage();
+                updateLaunchConfigurationDialog();
+            }
+        });
+
+    }
+
+
+    private static Image createImage(String path)
+    {
+        return JUnitPlugin.getImageDescriptor(path).createImage();
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(org.eclipse.debug.core.ILaunchConfiguration)
+     */
+    public void initializeFrom(ILaunchConfiguration config)
+    {
+
+        updateProjectFromConfig(config);
+        updateTestFromConfig(config);
+        String containerHandle = ""; //$NON-NLS-1$
+        try
+        {
+            containerHandle = config.getAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_CONTAINER, ""); //$NON-NLS-1$
+        }
+        catch (CoreException ce)
+        {
+        }
+
+        validatePage();
+    }
+
+
+    private void updateProjectFromConfig(ILaunchConfiguration config)
+    {
+        String projectName = ""; //$NON-NLS-1$
+        try
+        {
+            projectName = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""); //$NON-NLS-1$
+        }
+        catch (CoreException ce)
+        {
+        }
+        fProjText.setText(projectName);
+    }
+
+    private void updateTestFromConfig(ILaunchConfiguration config)
+    {
+        String testName = ""; //$NON-NLS-1$
+        try
+        {
+            testName = config.getAttribute("resource", ""); //$NON-NLS-1$
+        }
+        catch (CoreException ce)
+        {
+        }
+        fTestText.setText(testName);
+    }
+
+    protected void updateLaunchConfigurationDialog()
+    {
+        if (getLaunchConfigurationDialog() != null)
+        {
+            //order is important here due to the call to
+            //refresh the tab viewer in updateButtons()
+            //which ensures that the messages are up to date
+            getLaunchConfigurationDialog().updateButtons();
+            getLaunchConfigurationDialog().updateMessage();
+        }
+    }
+
+    public void performApply(ILaunchConfigurationWorkingCopy config)
+    {
+        config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, fProjText.getText());
+        config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, fTestText.getText());
+        config.setAttribute("resource", fTestText.getText()); //$NON-NLS-1$
+        config.setAttribute("Mpath", "/" + fProjText.getText() + "/src/test/munit/" + fTestText.getText()); //$NON-NLS-1$
+        try
+        {
+            mapResources(config);
+        }
+        catch (CoreException e)
+        {
+            JUnitPlugin.log(e.getStatus());
+        }
+    }
+
+    private void mapResources(ILaunchConfigurationWorkingCopy config) throws CoreException
+    {
+        JUnitMigrationDelegate.mapResources(config);
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#dispose()
+     */
+    public void dispose()
+    {
+        super.dispose();
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#getImage()
+     */
+    public Image getImage()
+    {
+        return null;
+    }
+
+    /*
+     * Return the IJavaProject corresponding to the project name in the project name
+     * text field, or null if the text does not match a project name.
+     */
+    private IJavaProject getJavaProject()
+    {
+        String projectName = fProjText.getText().trim();
+        if (projectName.length() < 1)
+        {
+            return null;
+        }
+        return getJavaModel().getJavaProject(projectName);
+    }
+
+    /*
+     * Convenience method to get the workspace root.
+     */
+    private IWorkspaceRoot getWorkspaceRoot()
+    {
+        return ResourcesPlugin.getWorkspace().getRoot();
+    }
+
+    /*
+     * Convenience method to get access to the java model.
+     */
+    private IJavaModel getJavaModel()
+    {
+        return JavaCore.create(getWorkspaceRoot());
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#isValid(org.eclipse.debug.core.ILaunchConfiguration)
+     */
+    public boolean isValid(ILaunchConfiguration config)
+    {
+        validatePage();
+        return true;
+    }
+
+
+    /*
+     * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#setErrorMessage(java.lang.String)
+     * @since 3.6
+     */
+    protected void setErrorMessage(String errorMessage)
+    {
+        super.setErrorMessage(errorMessage);
+    }
+
+    private void validatePage()
+    {
+
+        setErrorMessage(null);
+        setMessage(null);
+
+
+        String projectName = fProjText.getText().trim();
+        if (projectName.length() == 0)
+        {
+            setErrorMessage("Project not specified");
+            return;
+        }
+
+        IStatus status = ResourcesPlugin.getWorkspace().validatePath(IPath.SEPARATOR + projectName, IResource.PROJECT);
+        if (!status.isOK() || !Path.ROOT.isValidSegment(projectName))
+        {
+            setErrorMessage("Invalid Prject name");
+            return;
+        }
+
+        IProject project = getWorkspaceRoot().getProject(projectName);
+        if (!project.exists())
+        {
+            setErrorMessage("Project does not Exists.");
+            return;
+        }
+        IJavaProject javaProject = JavaCore.create(project);
+
+        try
+        {
+            String className = fTestText.getText().trim();
+            if (className.length() == 0)
+            {
+                setErrorMessage("Test file is not specified. You must enter the name of the file in the munit folder that you want to run");
+                return;
+            }
+            IType type = javaProject.findType(className);
+            if (type == null)
+            {
+                setErrorMessage("File not found in munit folder");
+                return;
+            }
+
+
+        }
+        catch (CoreException e)
+        {
+            JUnitPlugin.log(e);
+        }
+
+    }
+
+
+    private void setEnableSingleTestGroup(boolean enabled)
+    {
+        fProjLabel.setEnabled(enabled);
+        fProjText.setEnabled(enabled);
+        fTestLabel.setEnabled(enabled);
+        fTestText.setEnabled(enabled);
+        boolean projectTextHasContents = fProjText.getText().length() > 0;
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+     */
+    public void setDefaults(ILaunchConfigurationWorkingCopy config)
+    {
+        IJavaElement javaElement = getContext();
+        if (javaElement != null)
+        {
+            initializeJavaProject(javaElement, config);
+        }
+        else
+        {
+            // We set empty attributes for project & main type so that when one config is
+            // compared to another, the existence of empty attributes doesn't cause an
+            // incorrect result (the performApply() method can result in empty values
+            // for these attributes being set on a config if there is nothing in the
+            // corresponding text boxes)
+            config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""); //$NON-NLS-1$
+            config.setAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_CONTAINER, ""); //$NON-NLS-1$
+        }
+        initializeTestAttributes(javaElement, config);
+    }
+
+    private void initializeTestAttributes(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config)
+    {
+        if (javaElement != null && javaElement.getElementType() < IJavaElement.COMPILATION_UNIT)
+
+
+
+         nitializeTestContainer(javaElement,  onfig);
+
+
+        else
+
+
+
+         nitializeTestType(javaElement,  onfig);
+
+
+    }
+
+    private void initializeTestContainer(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config)
+    {
+        config.setAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_CONTAINER, javaElement.getHandleIdentifier());
+        initializeName(config, javaElement.getElementName());
+    }
+
+    private void initializeName(ILaunchConfigurationWorkingCopy config, String name)
+    {
+        if (name == null)
+        {
+            name = ""; //$NON-NLS-1$
+        }
+        if (name.length() > 0)
+        {
+            int index = name.lastIndexOf('.');
+            if (index > 0)
+            {
+                name = name.substring(index + 1);
+            }
+            name = getLaunchConfigurationDialog().generateName(name);
+            config.rename(name);
+        }
+    }
+
+    /*
+     * Set the main type & name attributes on the working copy based on the IJavaElement
+     */
+    private void initializeTestType(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config)
+    {
+        String name = ""; //$NON-NLS-1$
+        String testKindId = null;
+        try
+        {
+            // we only do a search for compilation units or class files or
+            // or source references
+            if (javaElement instanceof ISourceReference)
+            {
+                ITestKind testKind = TestKindRegistry.getContainerTestKind(javaElement);
+                testKindId = testKind.getId();
+
+                IType[] types = TestSearchEngine.findTests(getLaunchConfigurationDialog(), javaElement, testKind);
+                if ((types == null) || (types.length < 1))
+                {
+                    return;
+                }
+                // Simply grab the first main type found in the searched element
+                name = types[0].getFullyQualifiedName('.');
+
+            }
+        }
+        catch (InterruptedException ie)
+        {
+
+        }
+        catch (InvocationTargetException ite)
+        {
+        }
+        config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, name);
+        if (testKindId != null)
+
+
+
+         onfig.setAttribute(JUnitLaunchConfigurationConstants.ATTR_TEST_RUNNER_KIND,  estKindId);
+
+
+        initializeName(config, name);
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getName()
+     */
+    public String getName()
+    {
+        return JUnitMessages.JUnitLaunchConfigurationTab_tab_label;
+    }
+
+    private IJavaElement chooseContainer(IJavaElement initElement)
+    {
+        Class[] acceptedClasses = new Class[] {IPackageFragmentRoot.class, IJavaProject.class, IPackageFragment.class};
+        TypedElementSelectionValidator validator = new TypedElementSelectionValidator(acceptedClasses, false)
+        {
+            public boolean isSelectedValid(Object element)
+            {
+                return true;
+            }
+        };
+
+        acceptedClasses = new Class[] {IJavaModel.class, IPackageFragmentRoot.class, IJavaProject.class, IPackageFragment.class};
+        ViewerFilter filter = new TypedViewerFilter(acceptedClasses)
+        {
+            public boolean select(Viewer viewer, Object parent, Object element)
+            {
+                if (element instanceof IPackageFragmentRoot && ((IPackageFragmentRoot) element).isArchive())
+
+
+
+             eturn  alse;
+
+
+                try
+                {
+                    if (element instanceof IPackageFragment && !((IPackageFragment) element).hasChildren())
+                    {
+                        return false;
+                    }
+                }
+                catch (JavaModelException e)
+                {
+                    return false;
+                }
+                return super.select(viewer, parent, element);
+            }
+        };
+
+        StandardJavaElementContentProvider provider = new StandardJavaElementContentProvider();
+        ILabelProvider labelProvider = new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT);
+        ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), labelProvider, provider);
+        dialog.setValidator(validator);
+        dialog.setComparator(new JavaElementComparator());
+        dialog.setTitle(JUnitMessages.JUnitLaunchConfigurationTab_folderdialog_title);
+        dialog.setMessage(JUnitMessages.JUnitLaunchConfigurationTab_folderdialog_message);
+        dialog.addFilter(filter);
+        dialog.setInput(JavaCore.create(getWorkspaceRoot()));
+        dialog.setInitialSelection(initElement);
+        dialog.setAllowMultiple(false);
+
+        if (dialog.open() == Window.OK)
+        {
+            Object element = dialog.getFirstResult();
+            return (IJavaElement) element;
+        }
+        return null;
+    }
+
+
+    /*
+     * Returns the current Java element context from which to initialize
+     * default settings, or <code>null</code> if none.
+     *
+     * @return Java element context.
+     */
+    private IJavaElement getContext()
+    {
+        IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        if (activeWorkbenchWindow == null)
+        {
+            return null;
+        }
+        IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
+        if (page != null)
+        {
+            ISelection selection = page.getSelection();
+            if (selection instanceof IStructuredSelection)
+            {
+                IStructuredSelection ss = (IStructuredSelection) selection;
+                if (!ss.isEmpty())
+                {
+                    Object obj = ss.getFirstElement();
+                    if (obj instanceof IJavaElement)
+                    {
+                        return (IJavaElement) obj;
+                    }
+                    if (obj instanceof IResource)
+                    {
+                        IJavaElement je = JavaCore.create((IResource) obj);
+                        if (je == null)
+                        {
+                            IProject pro = ((IResource) obj).getProject();
+                            je = JavaCore.create(pro);
+                        }
+                        if (je != null)
+                        {
+                            return je;
+                        }
+                    }
+                }
+            }
+            IEditorPart part = page.getActiveEditor();
+            if (part != null)
+            {
+                IEditorInput input = part.getEditorInput();
+                return (IJavaElement) input.getAdapter(IJavaElement.class);
+            }
+        }
+        return null;
+    }
+
+    private void initializeJavaProject(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config)
+    {
+        IJavaProject javaProject = javaElement.getJavaProject();
+        String name = null;
+        if (javaProject != null && javaProject.exists())
+        {
+            name = javaProject.getElementName();
+        }
+        config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, name);
+    }
+
+    private void setButtonGridData(Button button)
+    {
+        GridData gridData = new GridData();
+        button.setLayoutData(gridData);
+        LayoutUtil.setButtonDimensionHint(button);
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#getId()
+     */
+    public String getId()
+    {
+        return "Munit Test"; //$NON-NLS-1$
+    }
 
 
 }

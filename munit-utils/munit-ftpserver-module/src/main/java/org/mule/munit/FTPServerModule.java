@@ -12,14 +12,15 @@ import javax.annotation.PostConstruct;
 
 /**
  * <p>FTP server for Integration tests.</p>
- *
+ * <p/>
  * <p>With this module you can start a FTP server on your local machine </p>
  *
  * @author Federico, Fernando
  */
-@Module(name="ftpserver", schemaVersion="1.0")
+@Module(name = "ftpserver", schemaVersion = "1.0")
 public class FTPServerModule
 {
+
     /**
      * <p>FTP/SFTP server port.</p>
      * <p>If is not defined, the default value is 22.</p>
@@ -43,9 +44,8 @@ public class FTPServerModule
 
     /**
      * <p>Starts the server</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/SFTPServer-connector.xml.sample sftpserver:startServer}
-     *
      */
     @Processor
     public void startServer()
@@ -55,43 +55,43 @@ public class FTPServerModule
 
     /**
      * <p>check if a file exists.</p
-     *
+     * <p/>
      * {@sample.xml ../../../doc/SFTPServer-connector.xml.sample sftpserver:containsFiles}
      *
      * @param file The file name that you want to check if is in the ftp.
      * @param path path where is going to be the file.
      */
     @Processor
-    public void containsFiles(String file, String path) {
+    public void containsFiles(String file, String path)
+    {
         server.containsFiles(file, path);
     }
 
     /**
      * <p>Stops the server</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/SFTPServer-connector.xml.sample sftpserver:stopServer}
-     *
      */
     @Processor
     public void stopServer()
     {
-       try
-       {
-        server.stop();
-       }catch(Throwable t)
-       {
+        try
+        {
+            server.stop();
+        }
+        catch (Throwable t)
+        {
 
-       }
+        }
     }
 
 
     /**
      * <p>Remove created files</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/SFTPServer-connector.xml.sample sftpserver:remove}
      *
      * @param path Path to be removed.
-     *
      */
     @Processor
     public void remove(String path)
@@ -99,31 +99,40 @@ public class FTPServerModule
         server.remove(path);
     }
 
-    public void setPort(int port) {
+    public void setPort(int port)
+    {
         this.port = port;
     }
 
-    public void setSecure(boolean secure) {
+    public void setSecure(boolean secure)
+    {
         this.secure = secure;
     }
 
     @PostConstruct
-    public void buildServer() throws InitialisationException {
-        if ( secure )
+    public void buildServer() throws InitialisationException
+    {
+        if (secure)
+        {
             server = new SFTPServer();
+        }
         else
+        {
             server = new FTPServer();
+        }
 
 
         server.initialize(port);
 
     }
 
-    public int getPort() {
+    public int getPort()
+    {
         return port;
     }
 
-    public boolean isSecure() {
+    public boolean isSecure()
+    {
         return secure;
     }
 }

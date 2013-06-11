@@ -8,13 +8,15 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mule.munit.runner.mule.result.MockTestFactory.*;
 
-public class SuiteResultTest {
+public class SuiteResultTest
+{
 
     /**
      * If none of the test succeed then the suite failed.
      */
     @Test
-    public void ifNoTestSucceedThenFail(){
+    public void ifNoTestSucceedThenFail()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(failingTest("test1"));
         testSuite.add(failingTest("test2"));
@@ -26,7 +28,8 @@ public class SuiteResultTest {
      * If one test failed then the suite failed.
      */
     @Test
-    public void ifOneTestFailedThenFail(){
+    public void ifOneTestFailedThenFail()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(failingTest("test1"));
         testSuite.add(succeedTest("test2"));
@@ -38,7 +41,8 @@ public class SuiteResultTest {
      * If All tests succeeded then Succeed
      */
     @Test
-    public void ifAllSucceededThenSucceed(){
+    public void ifAllSucceededThenSucceed()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(succeedTest("test1"));
         testSuite.add(succeedTest("test2"));
@@ -50,7 +54,8 @@ public class SuiteResultTest {
      * If no tests the succeed.
      */
     @Test
-    public void ifNoTestThenSucceed(){
+    public void ifNoTestThenSucceed()
+    {
         assertTrue(new SuiteResult("testSuite").hasSucceeded());
     }
 
@@ -58,7 +63,8 @@ public class SuiteResultTest {
      * It must return the number of tests that have failures.
      */
     @Test
-    public void retrieveTheNumberOfFailingTests(){
+    public void retrieveTheNumberOfFailingTests()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(failingTest("test0"));
         testSuite.add(failingTest("test1"));
@@ -74,7 +80,8 @@ public class SuiteResultTest {
      * It must return 0 if no failing tests
      */
     @Test
-    public void returnZeroIfNoFailingTestFound(){
+    public void returnZeroIfNoFailingTestFound()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(succeedTest("test2"));
         testSuite.add(errorTest("test3"));
@@ -88,7 +95,8 @@ public class SuiteResultTest {
      * It must return the number of error that have failures.
      */
     @Test
-    public void retrieveTheNumberOfErrorTests(){
+    public void retrieveTheNumberOfErrorTests()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(failingTest("test1"));
         testSuite.add(succeedTest("test2"));
@@ -103,7 +111,8 @@ public class SuiteResultTest {
      * If no error then return 0.
      */
     @Test
-    public void returnZeroIfNoErrorFound(){
+    public void returnZeroIfNoErrorFound()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(failingTest("test1"));
         testSuite.add(succeedTest("test2"));
@@ -117,7 +126,8 @@ public class SuiteResultTest {
      * Return all the tests that have error
      */
     @Test
-    public void returnTheCorrectNumberOfErrorTests(){
+    public void returnTheCorrectNumberOfErrorTests()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(failingTest("test1"));
         testSuite.add(succeedTest("test2"));
@@ -134,7 +144,8 @@ public class SuiteResultTest {
      * Return all the tests that have failures
      */
     @Test
-    public void returnTheCorrectNumberOfFailingTests(){
+    public void returnTheCorrectNumberOfFailingTests()
+    {
         SuiteResult testSuite = new SuiteResult("testSuite");
         testSuite.add(failingTest("test1"));
         testSuite.add(succeedTest("test2"));
@@ -145,7 +156,6 @@ public class SuiteResultTest {
         assertEquals(1, failingTests.size());
         assertEquals("test1", failingTests.get(0).getTestName());
     }
-
 
 
 }

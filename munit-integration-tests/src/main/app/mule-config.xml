@@ -17,10 +17,10 @@
 
     <spring:bean id="jdbcDataSource"
                  class="org.enhydra.jdbc.standard.StandardDataSource" destroy-method="shutdown">
-        <spring:property name="driverName" value="org.h2.Driver" />
-        <spring:property name="url" value="jdbc:h2:mem:test" />
-        <spring:property name="user" value="" />
-        <spring:property name="password" value="" />
+        <spring:property name="driverName" value="org.h2.Driver"/>
+        <spring:property name="url" value="jdbc:h2:mem:test"/>
+        <spring:property name="user" value=""/>
+        <spring:property name="password" value=""/>
 
     </spring:bean>
 
@@ -30,7 +30,7 @@
                     dataSource-ref="jdbcDataSource">
 
         <jdbc:query key="lookupJob"
-                    value="SELECT * FROM jobtitlelookup WHERE jobtitleid = #[variable:jobid]" />
+                    value="SELECT * FROM jobtitlelookup WHERE jobtitleid = #[variable:jobid]"/>
 
     </jdbc:connector>
 
@@ -46,28 +46,29 @@
         <transformer ref="exceptionTransformer"/>
     </sub-flow>
 
-    <custom-transformer name="httpToMapTransformer" class="org.mule.transport.http.transformers.HttpRequestBodyToParamMap" />
+    <custom-transformer name="httpToMapTransformer"
+                        class="org.mule.transport.http.transformers.HttpRequestBodyToParamMap"/>
 
 
     <sub-flow name="enrichMessageFlow">
         <enricher>
             <processor-chain>
                 <jdbc:outbound-endpoint connector-ref="jdbcConnectorInbound"
-                                        queryKey="lookupJob" exchange-pattern="request-response" />
+                                        queryKey="lookupJob" exchange-pattern="request-response"/>
 
                 <choice>
                     <when evaluator="groovy" expression="return ((ArrayList)payload).size > 0">
                         <expression-transformer evaluator="groovy"
-                                                expression="return payload[0].get('jobtitle')" />
+                                                expression="return payload[0].get('jobtitle')"/>
                     </when>
                     <otherwise>
                         <expression-transformer evaluator="string"
-                                                expression="HIR" />
+                                                expression="HIR"/>
                     </otherwise>
                 </choice>
             </processor-chain>
 
-            <enrich target="#[variable:job]" source="#[payload]" />
+            <enrich target="#[variable:job]" source="#[payload]"/>
         </enricher>
     </sub-flow>
 
@@ -83,7 +84,7 @@
     <flow name="outboundEndPointFlow">
         <http:outbound-endpoint method="GET"
                                 host="localhost" port="10443" path="test"
-                                exchange-pattern="request-response" />
+                                exchange-pattern="request-response"/>
 
     </flow>
 
@@ -91,7 +92,7 @@
 
         <http:outbound-endpoint method="GET"
                                 host="#[payload]" port="1033" path="one-way"
-                                exchange-pattern="one-way" />
+                                exchange-pattern="one-way"/>
 
     </flow>
 
@@ -108,7 +109,7 @@
 
         <foreach doc:name="For Each">
             <async>
-                <flow-ref name="loggerTestFlow" />
+                <flow-ref name="loggerTestFlow"/>
             </async>
         </foreach>
 

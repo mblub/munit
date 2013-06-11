@@ -4,10 +4,13 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias(value = "testcase")
-public class TestCase {
+public class TestCase
+{
 
-    @XStreamAsAttribute private float time;
-    @XStreamAsAttribute private String name;
+    @XStreamAsAttribute
+    private float time;
+    @XStreamAsAttribute
+    private String name;
     @XStreamAsAttribute
     @XStreamAlias(value = "classname")
     private String className;
@@ -17,41 +20,50 @@ public class TestCase {
     private Skipped skipped;
 
 
-    public TestCase(float time, String className,String name) {
+    public TestCase(float time, String className, String name)
+    {
         this.time = time;
         this.className = className;
         this.name = name;
     }
 
-    public float getTime() {
+    public float getTime()
+    {
         return time;
     }
 
-    public String getClassname() {
+    public String getClassname()
+    {
         return className;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public String getFailure() {
+    public String getFailure()
+    {
         return failure;
     }
 
-    public void setFailure(String failure) {
+    public void setFailure(String failure)
+    {
         this.failure = failure;
     }
 
-    public String getError() {
+    public String getError()
+    {
         return error;
     }
 
-    public void setError(String error) {
+    public void setError(String error)
+    {
         this.error = error;
     }
 
-    public void setSkipped(boolean skipped) {
-     this.skipped = skipped ? new Skipped() : null;
+    public void setSkipped(boolean skipped)
+    {
+        this.skipped = skipped ? new Skipped() : null;
     }
 }

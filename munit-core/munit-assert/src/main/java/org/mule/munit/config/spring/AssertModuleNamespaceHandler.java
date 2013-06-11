@@ -1,6 +1,7 @@
 package org.mule.munit.config.spring;
 
 import org.mule.munit.config.*;
+
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 import java.util.ArrayList;
@@ -10,17 +11,19 @@ import java.util.List;
 
 /**
  * <p>
- *     Assert Module Namespace Handler
+ * Assert Module Namespace Handler
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
 public class AssertModuleNamespaceHandler
-        extends NamespaceHandlerSupport {
+        extends NamespaceHandlerSupport
+{
 
 
-    public void init() {
+    public void init()
+    {
         registerBeanDefinitionParser("config", new AssertModuleConfigDefinitionParser());
         registerBeanDefinitionParser("assert-that", new MunitDefinitionParser(AssertThatMessageProcessor.class, asList("message"), asList("payloadIs")));
         registerBeanDefinitionParser("assert-true", new MunitDefinitionParser(AssertTrueMessageProcessor.class, asList("message", "condition")));
@@ -31,7 +34,7 @@ public class AssertModuleNamespaceHandler
         registerBeanDefinitionParser("assert-null", new MunitDefinitionParser(AssertNullMessageProcessor.class, asList("message")));
         registerBeanDefinitionParser("set", new SetDefinitionParser());
         registerBeanDefinitionParser("run-custom", new MunitDefinitionParser(RunAssertionMessageProcessor.class, new ArrayList<String>(), asList("assertion")));
-        registerBeanDefinitionParser("set-null-payload",  new MunitDefinitionParser(SetNullPayloadMessageProcessor.class));
+        registerBeanDefinitionParser("set-null-payload", new MunitDefinitionParser(SetNullPayloadMessageProcessor.class));
         registerBeanDefinitionParser("fail", new MunitDefinitionParser(FailMessageProcessor.class, asList("message")));
         registerBeanDefinitionParser("test", new MunitTestDefinitionParser(MunitTestFlow.class));
         registerBeanDefinitionParser("before-test", new MUnitFlowDefinitionParser(MunitBeforeTest.class));
@@ -40,10 +43,11 @@ public class AssertModuleNamespaceHandler
         registerBeanDefinitionParser("after-suite", new MUnitFlowDefinitionParser(MunitAfterSuite.class));
 
     }
-    
-    
-    private static List<String> asList(String ... attrs){
-       return Arrays.asList(attrs);
+
+
+    private static List<String> asList(String... attrs)
+    {
+        return Arrays.asList(attrs);
     }
 
 }

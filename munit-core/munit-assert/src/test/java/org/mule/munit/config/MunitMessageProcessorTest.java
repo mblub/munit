@@ -2,6 +2,7 @@ package org.mule.munit.config;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.*;
 import org.mule.api.expression.ExpressionManager;
 import org.mule.api.lifecycle.InitialisationException;
@@ -25,7 +26,8 @@ import static org.mockito.Mockito.*;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitMessageProcessorTest {
+public class MunitMessageProcessorTest
+{
 
     public static final String EXP = "#[exp]";
     MuleEvent event;
@@ -37,7 +39,8 @@ public class MunitMessageProcessorTest {
     private MockedMessageProcessorManager mpManager = mock(MockedMessageProcessorManager.class);
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         event = mock(MuleEvent.class);
         message = mock(MuleMessage.class);
         module = mock(AssertModule.class);
@@ -45,15 +48,16 @@ public class MunitMessageProcessorTest {
         muleContext = mock(MuleContext.class);
         muleRegistry = mock(MuleRegistry.class);
 
-        
+
         when(event.getMessage()).thenReturn(message);
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
-        
+
     }
 
 
     @Test
-    public void testInitializeWithNoModuleObject() throws InitialisationException, RegistrationException {
+    public void testInitializeWithNoModuleObject() throws InitialisationException, RegistrationException
+    {
         MockMunitMessageProcessor mp = processorForInitialize(null);
         when(muleRegistry.lookupObject(AssertModule.class)).thenReturn(module);
 
@@ -61,11 +65,12 @@ public class MunitMessageProcessorTest {
 
         assertEquals(manager, mp.expressionManager);
         assertNotNull(mp.patternInfo);
-        assertEquals(module,mp.moduleObject);
+        assertEquals(module, mp.moduleObject);
     }
 
     @Test(expected = InitialisationException.class)
-    public void testInitializeWithNoModuleObjectWhenObjectIsNotInRegistry() throws InitialisationException, RegistrationException {
+    public void testInitializeWithNoModuleObjectWhenObjectIsNotInRegistry() throws InitialisationException, RegistrationException
+    {
         MockMunitMessageProcessor mp = processorForInitialize(null);
         when(muleRegistry.lookupObject(AssertModule.class)).thenReturn(null);
 
@@ -73,15 +78,17 @@ public class MunitMessageProcessorTest {
     }
 
     @Test(expected = InitialisationException.class)
-    public void testInitializeWithNoModuleObjectWhenObjectFails() throws InitialisationException, RegistrationException {
+    public void testInitializeWithNoModuleObjectWhenObjectFails() throws InitialisationException, RegistrationException
+    {
         MockMunitMessageProcessor mp = processorForInitialize(null);
         when(muleRegistry.lookupObject(AssertModule.class)).thenThrow(new RegistrationException(new Exception()));
 
         mp.initialise();
     }
-    
+
     @Test
-    public void testEvaluateWithNoString(){
+    public void testEvaluateWithNoString()
+    {
         MockMunitMessageProcessor mp = new MockMunitMessageProcessor();
         Object o = new Object();
         Object result = mp.evaluate(message, o);
@@ -90,18 +97,20 @@ public class MunitMessageProcessorTest {
     }
 
     @Test
-    public void getModuleWithString() throws InitialisationException, RegistrationException, MessagingException {
+    public void getModuleWithString() throws InitialisationException, RegistrationException, MessagingException
+    {
         MockMunitMessageProcessor mp = processorForInitialize("myModule");
         when(muleRegistry.lookupObject("myModule")).thenReturn(module);
 
         AssertModule moduleObtained = mp.getModule(event, "methodName");
 
-        assertEquals(module,moduleObtained);
+        assertEquals(module, moduleObtained);
     }
 
 
     @Test(expected = MessagingException.class)
-    public void getModuleWithStringFail() throws InitialisationException, RegistrationException, MessagingException {
+    public void getModuleWithStringFail() throws InitialisationException, RegistrationException, MessagingException
+    {
         MockMunitMessageProcessor mp = processorForInitialize("myModule");
         when(muleRegistry.lookupObject("myModule")).thenReturn(null);
 
@@ -109,13 +118,15 @@ public class MunitMessageProcessorTest {
     }
 
     @Test
-    public void processSuccessfully() throws MuleException {
+    public void processSuccessfully() throws MuleException
+    {
         MockMunitMessageProcessor mp = new MockMunitMessageProcessor();
         mp.process(event);
     }
 
     @Test
-    public void evaluateExpressionSuccessfully() throws MuleException {
+    public void evaluateExpressionSuccessfully() throws MuleException
+    {
         MockMunitMessageProcessor mp = new MockMunitMessageProcessor();
         mp.evaluate(message, EXP);
 
@@ -123,7 +134,8 @@ public class MunitMessageProcessorTest {
     }
 
     @Test
-    public void evaluateNonExpressionSuccessfully() throws MuleException {
+    public void evaluateNonExpressionSuccessfully() throws MuleException
+    {
         MockMunitMessageProcessor mp = new MockMunitMessageProcessor();
         mp.evaluate(message, "any");
 
@@ -131,7 +143,8 @@ public class MunitMessageProcessorTest {
     }
 
     @Test
-    public void handleAssertionError() throws MuleException {
+    public void handleAssertionError() throws MuleException
+    {
         MockMunitMessageProcessor mp = new MockMunitMessageProcessor();
         mp.setFails(true);
         mp.setMuleContext(muleContext);
@@ -140,23 +153,27 @@ public class MunitMessageProcessorTest {
         when(muleRegistry.lookupObject(MockedMessageProcessorManager.ID)).thenReturn(mpManager);
         when(mpManager.getCalls()).thenReturn(createCallsForTest());
 
-        try {
+        try
+        {
             mp.process(event);
         }
-        catch (AssertionError e){
+        catch (AssertionError e)
+        {
             assertEquals(1, e.getStackTrace().length);
             assertEquals("nsp:mp{}", e.getStackTrace()[0].getMethodName());
         }
     }
 
-    private ArrayList<MunitMessageProcessorCall> createCallsForTest() {
+    private ArrayList<MunitMessageProcessorCall> createCallsForTest()
+    {
         ArrayList<MunitMessageProcessorCall> calls = new ArrayList<MunitMessageProcessorCall>();
         calls.add(new MunitMessageProcessorCall(new MessageProcessorId("mp", "nsp")));
 
         return calls;
     }
 
-    private MockMunitMessageProcessor processorForInitialize(Object module) throws RegistrationException {
+    private MockMunitMessageProcessor processorForInitialize(Object module) throws RegistrationException
+    {
         MockMunitMessageProcessor mp = new MockMunitMessageProcessor();
         mp.setMuleContext(muleContext);
         mp.moduleObject = module;
@@ -166,10 +183,13 @@ public class MunitMessageProcessorTest {
     }
 
 
-    private class MockMunitMessageProcessor extends MunitMessageProcessor{
+    private class MockMunitMessageProcessor extends MunitMessageProcessor
+    {
 
         boolean fails;
-        private MockMunitMessageProcessor() {
+
+        private MockMunitMessageProcessor()
+        {
             this.setModuleObject(module);
             this.setRetryMax(1);
             this.retryCount = new AtomicInteger();
@@ -178,8 +198,10 @@ public class MunitMessageProcessorTest {
         }
 
         @Override
-        protected void doProcess(MuleMessage mulemessage, AssertModule module) {
-            if ( fails ){
+        protected void doProcess(MuleMessage mulemessage, AssertModule module)
+        {
+            if (fails)
+            {
                 throw new AssertionError();
             }
             assertEquals(message, mulemessage);
@@ -187,11 +209,13 @@ public class MunitMessageProcessorTest {
         }
 
         @Override
-        protected String getProcessor() {
+        protected String getProcessor()
+        {
             return "processor";
         }
 
-        public void setFails(boolean fails) {
+        public void setFails(boolean fails)
+        {
             this.fails = fails;
         }
     }

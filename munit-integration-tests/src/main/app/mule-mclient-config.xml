@@ -15,33 +15,34 @@
         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
     <flow name="someSimpleFlow">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10443" path="inbound-up-test" >
-            <object-to-string-transformer />
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10443" path="inbound-up-test">
+            <object-to-string-transformer/>
         </http:inbound-endpoint>
 
-        <logger level="INFO" />
+        <logger level="INFO"/>
     </flow>
 
     <mule-xml:namespace-manager>
-        <mule-xml:namespace prefix="hrxml" uri="http://www.hr-xml.org/3" />
-        <mule-xml:namespace prefix="oagis" uri="http://www.openapplications.org/oagis/9" />
-        <mule-xml:namespace prefix="pm" uri="http://www.peoplematter.com/2011/01/userarea" />
+        <mule-xml:namespace prefix="hrxml" uri="http://www.hr-xml.org/3"/>
+        <mule-xml:namespace prefix="oagis" uri="http://www.openapplications.org/oagis/9"/>
+        <mule-xml:namespace prefix="pm" uri="http://www.peoplematter.com/2011/01/userarea"/>
     </mule-xml:namespace-manager>
 
     <flow name="someBiggerFlow">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10443" path="inbound-up-test2" >
-            <object-to-string-transformer />
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10443"
+                               path="inbound-up-test2">
+            <object-to-string-transformer/>
         </http:inbound-endpoint>
 
         <flow-ref name="readProperties"/>
 
         <choice>
             <when evaluator="groovy" expression="return message.getInvocationProperty('eventId') == '20'">
-                <flow-ref name="event20workflow" />
+                <flow-ref name="event20workflow"/>
             </when>
             <otherwise>
                 <logger level="ERROR"
-                        message="The integration was not expecting an event #[variable:eventId]." />
+                        message="The integration was not expecting an event #[variable:eventId]."/>
             </otherwise>
         </choice>
     </flow>
@@ -49,23 +50,23 @@
     <flow name="readProperties">
         <message-properties-transformer scope="invocation">
             <add-message-property key="eventId"
-                                  value="#[xpath://oagis:TaskID]" />
+                                  value="#[xpath://oagis:TaskID]"/>
             <add-message-property key="givenName"
-                                  value="#[xpath://hrxml:MasterPerson/hrxml:PersonName/oagis:GivenName]" />
+                                  value="#[xpath://hrxml:MasterPerson/hrxml:PersonName/oagis:GivenName]"/>
             <add-message-property key="familyName"
-                                  value="#[xpath://hrxml:MasterPerson/hrxml:PersonName/hrxml:FamilyName]" />
+                                  value="#[xpath://hrxml:MasterPerson/hrxml:PersonName/hrxml:FamilyName]"/>
             <add-message-property key="locationID"
-                                  value="#[xpath://hrxml:MasterDeployment/hrxml:WorkLocation/hrxml:LocationID]" />
+                                  value="#[xpath://hrxml:MasterDeployment/hrxml:WorkLocation/hrxml:LocationID]"/>
             <add-message-property key="hireDate"
-                                  value="#[xpath://hrxml:MasterEmployment/hrxml:EmploymentLifecycle/hrxml:Hire/hrxml:HireDate]" />
+                                  value="#[xpath://hrxml:MasterEmployment/hrxml:EmploymentLifecycle/hrxml:Hire/hrxml:HireDate]"/>
         </message-properties-transformer>
     </flow>
 
-    <flow name="event20workflow" >
+    <flow name="event20workflow">
         <logger level="INFO"
-                message="Received Event 20 for #[givenName] #[familyName]" />
+                message="Received Event 20 for #[givenName] #[familyName]"/>
 
-        <expression-transformer evaluator="groovy" expression="return message.getInvocationProperty('locationid');" />
+        <expression-transformer evaluator="groovy" expression="return message.getInvocationProperty('locationid');"/>
     </flow>
 
 </mule>

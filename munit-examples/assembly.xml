@@ -19,7 +19,8 @@
             <outputDirectory></outputDirectory>
         </file>
         <file>
-            <source>munit-outbound-endpoint-mocking-example/target/munit-outbound-endpoint-mocking-example-1.0.zip</source>
+            <source>munit-outbound-endpoint-mocking-example/target/munit-outbound-endpoint-mocking-example-1.0.zip
+            </source>
             <outputDirectory></outputDirectory>
         </file>
     </files>

@@ -25,171 +25,204 @@ import java.util.Map;
 
 /**
  * <p>
- *     Mocked outbound Endpoint
+ * Mocked outbound Endpoint
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MockOutboundEndpoint implements OutboundEndpoint{
+public class MockOutboundEndpoint implements OutboundEndpoint
+{
 
     private OutboundEndpoint realEndpoint;
 
-    public MockOutboundEndpoint(OutboundEndpoint realEndpoint) {
+    public MockOutboundEndpoint(OutboundEndpoint realEndpoint)
+    {
         this.realEndpoint = realEndpoint;
     }
 
     @Override
-    public List<String> getResponseProperties() {
+    public List<String> getResponseProperties()
+    {
         return null;
     }
 
     @Override
-    public EndpointURI getEndpointURI() {
+    public EndpointURI getEndpointURI()
+    {
         return null;
     }
 
     @Override
-    public String getAddress() {
+    public String getAddress()
+    {
         return null;
     }
 
     @Override
-    public String getEncoding() {
+    public String getEncoding()
+    {
         return null;
     }
 
     @Override
-    public Connector getConnector() {
+    public Connector getConnector()
+    {
         return null;
     }
 
     @Override
-    public List<Transformer> getTransformers() {
+    public List<Transformer> getTransformers()
+    {
         return null;
     }
 
     @Override
-    public List<Transformer> getResponseTransformers() {
+    public List<Transformer> getResponseTransformers()
+    {
         return null;
     }
 
     @Override
-    public Map getProperties() {
+    public Map getProperties()
+    {
         return null;
     }
 
     @Override
-    public Object getProperty(Object key) {
+    public Object getProperty(Object key)
+    {
         return null;
     }
 
     @Override
-    public String getProtocol() {
+    public String getProtocol()
+    {
         return null;
     }
 
     @Override
-    public boolean isReadOnly() {
+    public boolean isReadOnly()
+    {
         return false;
     }
 
     @Override
-    public TransactionConfig getTransactionConfig() {
+    public TransactionConfig getTransactionConfig()
+    {
         return null;
     }
 
     @Override
-    public Filter getFilter() {
+    public Filter getFilter()
+    {
         return null;
     }
 
     @Override
-    public boolean isDeleteUnacceptedMessages() {
+    public boolean isDeleteUnacceptedMessages()
+    {
         return false;
     }
 
     @Override
-    public EndpointSecurityFilter getSecurityFilter() {
+    public EndpointSecurityFilter getSecurityFilter()
+    {
         return null;
     }
 
     @Override
-    public EndpointMessageProcessorChainFactory getMessageProcessorsFactory() {
+    public EndpointMessageProcessorChainFactory getMessageProcessorsFactory()
+    {
         return null;
     }
 
     @Override
-    public List<MessageProcessor> getMessageProcessors() {
+    public List<MessageProcessor> getMessageProcessors()
+    {
         return null;
     }
 
     @Override
-    public List<MessageProcessor> getResponseMessageProcessors() {
+    public List<MessageProcessor> getResponseMessageProcessors()
+    {
         return null;
     }
 
     @Override
-    public MessageExchangePattern getExchangePattern() {
+    public MessageExchangePattern getExchangePattern()
+    {
         return realEndpoint.getExchangePattern();
     }
 
     @Override
-    public int getResponseTimeout() {
+    public int getResponseTimeout()
+    {
         return 0;
     }
 
     @Override
-    public String getInitialState() {
+    public String getInitialState()
+    {
         return null;
     }
 
     @Override
-    public MuleContext getMuleContext() {
+    public MuleContext getMuleContext()
+    {
         return null;
     }
 
     @Override
-    public RetryPolicyTemplate getRetryPolicyTemplate() {
+    public RetryPolicyTemplate getRetryPolicyTemplate()
+    {
         return null;
     }
 
     @Override
-    public String getEndpointBuilderName() {
+    public String getEndpointBuilderName()
+    {
         return null;
     }
 
     @Override
-    public boolean isProtocolSupported(String protocol) {
+    public boolean isProtocolSupported(String protocol)
+    {
         return false;
     }
 
     @Override
-    public String getMimeType() {
+    public String getMimeType()
+    {
         return null;
     }
 
     @Override
-    public AbstractRedeliveryPolicy getRedeliveryPolicy() {
+    public AbstractRedeliveryPolicy getRedeliveryPolicy()
+    {
         return null;
     }
 
     @Override
-    public boolean isDisableTransportTransformer() {
+    public boolean isDisableTransportTransformer()
+    {
         return false;
     }
 
     @Override
-    public MuleEvent process(MuleEvent event) throws MuleException {
+    public MuleEvent process(MuleEvent event) throws MuleException
+    {
         MockEndpointManager manager = (MockEndpointManager) getEndpointManager(event);
 
         String address = realAddressAsExpression();
         ExpressionManager expressionManager = event.getMuleContext().getExpressionManager();
-        if ( expressionManager.isValidExpression(address) ){
+        if (expressionManager.isValidExpression(address))
+        {
             String realAddress = (String) expressionManager.evaluate(address, event);
             OutboundBehavior behavior = manager.getBehaviorFor(realAddress);
 
-            if ( behavior == null ){
+            if (behavior == null)
+            {
                 return realEndpoint.process(event);
             }
 
@@ -200,16 +233,19 @@ public class MockOutboundEndpoint implements OutboundEndpoint{
         return event;
     }
 
-    private String realAddressAsExpression() {
+    private String realAddressAsExpression()
+    {
         return "#[string:" + realEndpoint.getAddress() + "]";
     }
 
-    private Object getEndpointManager(MuleEvent event) {
+    private Object getEndpointManager(MuleEvent event)
+    {
         return event.getMuleContext().getRegistry().lookupObject(MuleProperties.OBJECT_MULE_ENDPOINT_FACTORY);
     }
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         return "Mocked Endpoint";
     }
 }

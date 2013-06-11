@@ -3,6 +3,7 @@ package org.mule.munit.config;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleMessage;
 import org.mule.transport.NullPayload;
 
@@ -12,17 +13,20 @@ import static org.mockito.Mockito.*;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class SetNullPayloadMessageProcessorTest extends AbstractMessageProcessorTest{
+public class SetNullPayloadMessageProcessorTest extends AbstractMessageProcessorTest
+{
 
     MuleMessage muleMessage;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleMessage = mock(MuleMessage.class);
     }
 
     @Test
-    public void alwaysSetNullPayload(){
+    public void alwaysSetNullPayload()
+    {
         MunitMessageProcessor mp = buildMp();
         mp.doProcess(muleMessage, null);
 
@@ -30,11 +34,13 @@ public class SetNullPayloadMessageProcessorTest extends AbstractMessageProcessor
     }
 
     @Override
-    protected MunitMessageProcessor doBuildMp() {
+    protected MunitMessageProcessor doBuildMp()
+    {
         return new SetNullPayloadMessageProcessor();
     }
 
-    protected String getExpectedName() {
+    protected String getExpectedName()
+    {
         return "SetNull";
     }
 }

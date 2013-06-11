@@ -39,7 +39,8 @@
     <munit:test name="testingMClientCallWithComplexFlow"
                 description="We want to validate that the call using MClient works without problems for a call to a complex flow">
 
-        <mclient:call path="http://localhost:10443/inbound-up-test2" payload-ref="#[getResource('testFile.xml').asStream()]">
+        <mclient:call path="http://localhost:10443/inbound-up-test2"
+                      payload-ref="#[getResource('testFile.xml').asStream()]">
             <mclient:response-processing>
                 <object-to-string-transformer/>
             </mclient:response-processing>

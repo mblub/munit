@@ -14,100 +14,99 @@ import java.util.List;
 
 /**
  * <p>
- *     This class is a Munit Tool to create Endpoint mocks
+ * This class is a Munit Tool to create Endpoint mocks
  * </p>
- *
+ * <p/>
  * <p>
- *     This is though as a fluent pattern implementation
+ * This is though as a fluent pattern implementation
  * </p>
- *
+ * <p/>
  * <p>Usage:</p>
- *
+ * <p/>
  * <code>
- *     new EndpointMocker(muleContext).whenEndpointWithAddress("http://localhost:8080").thenReturn(muleMessage);
+ * new EndpointMocker(muleContext).whenEndpointWithAddress("http://localhost:8080").thenReturn(muleMessage);
  * </code>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class EndpointMocker {
+public class EndpointMocker
+{
 
     /**
      * <p>
-     *     The mule context
+     * The mule context
      * </p>
      */
     private MuleContext muleContext;
 
     /**
      * <p>
-     *     The endpoint address. The address is used to identify the endpoint
+     * The endpoint address. The address is used to identify the endpoint
      * </p>
      */
     private String address;
 
     /**
      * <p>
-     *     The processes for Spying the entry of the inbound endpoint
+     * The processes for Spying the entry of the inbound endpoint
      * </p>
      */
     private List<SpyProcess> process;
 
-    public EndpointMocker(MuleContext muleContext) {
+    public EndpointMocker(MuleContext muleContext)
+    {
         this.muleContext = muleContext;
     }
 
     /**
      * <p>
-     *     Defines which endpoint to use based on the endpoint address
+     * Defines which endpoint to use based on the endpoint address
      * </p>
-
-     * @param address
-     *      <p>
-     *          The endpoint identification
-     *      </p>
-
-     * @return
-     *      <p>
-     *          The EndpointMocker object
-     *      </p>
+     *
+     * @param address <p>
+     *                The endpoint identification
+     *                </p>
+     * @return <p>
+     *         The EndpointMocker object
+     *         </p>
      */
-    public EndpointMocker whenEndpointWithAddress(String address){
+    public EndpointMocker whenEndpointWithAddress(String address)
+    {
         this.address = address;
         return this;
     }
 
     /**
      * <p>
-     *     Adds the spying processes to be consider when executing the endpoint
+     * Adds the spying processes to be consider when executing the endpoint
      * </p>
      *
-     * @param process
-     *      <p>
-     *          The spying processes
-     *      </p>
-     * @return
-     *      <p>
-     *          The EndpointMocker object
-     *      </p>
+     * @param process <p>
+     *                The spying processes
+     *                </p>
+     * @return <p>
+     *         The EndpointMocker object
+     *         </p>
      */
-    public EndpointMocker withIncomingMessageSatisfying(List<SpyProcess> process){
+    public EndpointMocker withIncomingMessageSatisfying(List<SpyProcess> process)
+    {
         this.process = process;
 
-        return this; 
+        return this;
     }
 
     /**
      * <p>
-     *     Determines what value must the endpoint return
+     * Determines what value must the endpoint return
      * </p>
      *
-     * @param message
-     *      <p>
-     *          The {@link MuleMessage} to return
-     *      </p>
+     * @param message <p>
+     *                The {@link MuleMessage} to return
+     *                </p>
      */
-    public void thenReturn(MuleMessage message){
+    public void thenReturn(MuleMessage message)
+    {
         OutboundBehavior behavior = new OutboundBehavior(message, createMessageProcessorFromSpy(process));
 
         MockEndpointManager factory = (MockEndpointManager) muleContext.getRegistry().lookupObject(MuleProperties.OBJECT_MULE_ENDPOINT_FACTORY);
@@ -115,21 +114,26 @@ public class EndpointMocker {
     }
 
 
-    protected List<MessageProcessor> createMessageProcessorFromSpy(final List<SpyProcess> process) {
+    protected List<MessageProcessor> createMessageProcessorFromSpy(final List<SpyProcess> process)
+    {
         List<MessageProcessor> messageProcessors = new ArrayList<MessageProcessor>();
 
-        messageProcessors.add(new MessageProcessor() {
+        messageProcessors.add(new MessageProcessor()
+        {
             @Override
-            public MuleEvent process(MuleEvent event) throws MuleException {
-                if (process != null ){
-                    for ( SpyProcess spyProcess : process){
+            public MuleEvent process(MuleEvent event) throws MuleException
+            {
+                if (process != null)
+                {
+                    for (SpyProcess spyProcess : process)
+                    {
                         spyProcess.spy(event);
                     }
                 }
                 return event;
             }
         });
-        
+
         return messageProcessors;
     }
 }

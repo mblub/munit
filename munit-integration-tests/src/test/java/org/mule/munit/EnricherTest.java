@@ -2,9 +2,12 @@ package org.mule.munit;
 
 import org.mule.munit.runner.java.AbstractMuleSuite;
 
-public class EnricherTest extends AbstractMuleSuite {
+public class EnricherTest extends AbstractMuleSuite
+{
+
     @Override
-    public String getConfigResources() {
+    public String getConfigResources()
+    {
         return "enricher-test.xml";
     }
 }

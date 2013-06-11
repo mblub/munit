@@ -9,10 +9,11 @@
     <smtp:gmail-connector name="emailConnector"/>
 
     <flow name="NotificationOfError">
-        <object-to-string-transformer />
+        <object-to-string-transformer/>
         <smtp:outbound-endpoint host="localhost"
-                                port="3025" user="" password="" from="fernando.federico@localhost.com" to="test@localhost.com" subject="#[string:Testing app]"
-                                connector-ref="emailConnector" />
+                                port="3025" user="" password="" from="fernando.federico@localhost.com"
+                                to="test@localhost.com" subject="#[string:Testing app]"
+                                connector-ref="emailConnector"/>
     </flow>
 
 </mule>

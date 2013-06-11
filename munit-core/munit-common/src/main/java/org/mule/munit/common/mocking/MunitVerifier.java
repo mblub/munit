@@ -11,33 +11,34 @@ import static junit.framework.Assert.fail;
 
 /**
  * <p>
- *     This is the general Munit Tool
+ * This is the general Munit Tool
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitVerifier extends MunitMockingTool {
+public class MunitVerifier extends MunitMockingTool
+{
 
-    public MunitVerifier(MuleContext muleContext) {
+    public MunitVerifier(MuleContext muleContext)
+    {
         super(muleContext);
     }
 
     /**
      * <p>
-     *     Defines the name of the message processor to verify call
+     * Defines the name of the message processor to verify call
      * </p>
      *
-     * @param name
-     *      <p>
-     *          The name of the message processor to verify call
-     *      </p>
-     * @return
-     *      <p>
-     *          Itself
-     *      </p>
+     * @param name <p>
+     *             The name of the message processor to verify call
+     *             </p>
+     * @return <p>
+     *         Itself
+     *         </p>
      */
-    public MunitVerifier verifyCallOfMessageProcessor(String name) {
+    public MunitVerifier verifyCallOfMessageProcessor(String name)
+    {
         this.messageProcessorName = name;
         return this;
     }
@@ -45,105 +46,110 @@ public class MunitVerifier extends MunitMockingTool {
 
     /**
      * <p>
-     *     Defines the namespace of the message processor to verify call
+     * Defines the namespace of the message processor to verify call
      * </p>
      *
-     * @param namespace
-     *      <p>
-     *          The namespace of the message processor to verify call
-     *      </p>
-     * @return
-     *      <p>
-     *          Itself
-     *      </p>
+     * @param namespace <p>
+     *                  The namespace of the message processor to verify call
+     *                  </p>
+     * @return <p>
+     *         Itself
+     *         </p>
      */
-    public MunitVerifier ofNamespace(String namespace) {
+    public MunitVerifier ofNamespace(String namespace)
+    {
         this.messageProcessorNamespace = namespace;
         return this;
     }
 
     /**
      * <p>
-     *     The times it must be called
+     * The times it must be called
      * </p>
      *
-     * @param times
-     *      <p>
-     *          The times it must be called
-     *      </p>
+     * @param times <p>
+     *              The times it must be called
+     *              </p>
      */
-    public void times(Integer times) {
+    public void times(Integer times)
+    {
         List<MessageProcessorCall> executedCalls = getExecutedCalls();
-        
-        if (executedCalls.size() != times) {
+
+        if (executedCalls.size() != times)
+        {
             fail("On " + getFullName() + ".Expected " + times +
-                    " but got " + executedCalls.size() + " calls");
+                 " but got " + executedCalls.size() + " calls");
         }
     }
 
     /**
      * <p>
-     *     At least the times it must be called
+     * At least the times it must be called
      * </p>
      *
-     * @param atLeast
-     *      <p>
-     *          At least the times it must be called
-     *      </p>
+     * @param atLeast <p>
+     *                At least the times it must be called
+     *                </p>
      */
-    public void atLeast(Integer atLeast) {
+    public void atLeast(Integer atLeast)
+    {
         checkValidQuery();
 
         List<MessageProcessorCall> executedCalls = getExecutedCalls();
 
-        if (executedCalls.size() < atLeast) {
+        if (executedCalls.size() < atLeast)
+        {
             fail("On " + getFullName() + ".Expected at least " + atLeast + " but got " + executedCalls.size() + " calls");
         }
     }
 
     /**
      * <p>
-     *     At most the times it must be called
+     * At most the times it must be called
      * </p>
      *
-     * @param atMost
-     *      <p>
-     *          At most the times it must be called
-     *      </p>
+     * @param atMost <p>
+     *               At most the times it must be called
+     *               </p>
      */
-    public void atMost(Integer atMost) {
+    public void atMost(Integer atMost)
+    {
         checkValidQuery();
         List<MessageProcessorCall> executedCalls = getExecutedCalls();
 
-        if (executedCalls.size() > atMost) {
+        if (executedCalls.size() > atMost)
+        {
             fail("On " + getFullName() + ".Expected at most " + atMost + " but got " + executedCalls.size() + " calls");
         }
     }
 
     /**
      * <p>
-     *     At least one time called
+     * At least one time called
      * </p>
      */
-    public void atLeastOnce() {
+    public void atLeastOnce()
+    {
         checkValidQuery();
         List<MessageProcessorCall> executedCalls = getExecutedCalls();
-        if (executedCalls.isEmpty()) {
-            fail("On " + getFullName()  + ".It was never called");
+        if (executedCalls.isEmpty())
+        {
+            fail("On " + getFullName() + ".It was never called");
         }
 
     }
 
-    private List<MessageProcessorCall> getExecutedCalls() {
+    private List<MessageProcessorCall> getExecutedCalls()
+    {
         return getManager().findCallsFor(new MessageProcessorId(messageProcessorName,
-                messageProcessorNamespace), messageProcessorAttributes);
+                                                                messageProcessorNamespace), messageProcessorAttributes);
     }
 
-    public MunitVerifier withAttributes(Map<String, Object> attributes) {
+    public MunitVerifier withAttributes(Map<String, Object> attributes)
+    {
         this.messageProcessorAttributes = attributes;
         return this;
     }
-
 
 
 }

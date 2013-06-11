@@ -2,6 +2,7 @@ package org.mule.munit.common.endpoint;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleException;
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.EndpointFactory;
@@ -16,7 +17,8 @@ import static org.mockito.Mockito.verify;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MockEndpointManagerTest {
+public class MockEndpointManagerTest
+{
 
     public static final OutboundBehavior OUTBOUND_BEHAVIOR = new OutboundBehavior(null, null);
     EndpointFactory realFactory;
@@ -24,14 +26,16 @@ public class MockEndpointManagerTest {
     EndpointBuilder endpointBuilder;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         realFactory = mock(EndpointFactory.class);
         endpointURI = mock(EndpointURI.class);
         endpointBuilder = mock(EndpointBuilder.class);
     }
 
     @Test
-    public void testCreateInboundEndpoint() throws MuleException {
+    public void testCreateInboundEndpoint() throws MuleException
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.setDefaultFactory(realFactory);
 
@@ -41,7 +45,8 @@ public class MockEndpointManagerTest {
     }
 
     @Test
-    public void testCreateInboundEndpointWithEnpointUri() throws MuleException {
+    public void testCreateInboundEndpointWithEnpointUri() throws MuleException
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.setDefaultFactory(realFactory);
 
@@ -51,7 +56,8 @@ public class MockEndpointManagerTest {
     }
 
     @Test
-    public void testCreateInboundEndpointWithEndpointBuilderi() throws MuleException {
+    public void testCreateInboundEndpointWithEndpointBuilderi() throws MuleException
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.setDefaultFactory(realFactory);
 
@@ -61,7 +67,8 @@ public class MockEndpointManagerTest {
     }
 
     @Test
-    public void testCreateOutboundEndpoint() throws MuleException {
+    public void testCreateOutboundEndpoint() throws MuleException
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.setDefaultFactory(realFactory);
 
@@ -71,7 +78,8 @@ public class MockEndpointManagerTest {
     }
 
     @Test
-    public void testCreateOutboundEndpointWithEnpointUri() throws MuleException {
+    public void testCreateOutboundEndpointWithEnpointUri() throws MuleException
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.setDefaultFactory(realFactory);
 
@@ -81,7 +89,8 @@ public class MockEndpointManagerTest {
     }
 
     @Test
-    public void testCreateOutboundEndpointWithEndpointBuilderi() throws MuleException {
+    public void testCreateOutboundEndpointWithEndpointBuilderi() throws MuleException
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.setDefaultFactory(realFactory);
 
@@ -89,9 +98,10 @@ public class MockEndpointManagerTest {
 
         verify(realFactory).getOutboundEndpoint(endpointBuilder);
     }
-    
+
     @Test
-    public void testAddBehavior(){
+    public void testAddBehavior()
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.addBehavior("any", OUTBOUND_BEHAVIOR);
 
@@ -99,7 +109,8 @@ public class MockEndpointManagerTest {
     }
 
     @Test
-    public void testReset(){
+    public void testReset()
+    {
         MockEndpointManager manager = new MockEndpointManager();
         manager.addBehavior("any", OUTBOUND_BEHAVIOR);
 

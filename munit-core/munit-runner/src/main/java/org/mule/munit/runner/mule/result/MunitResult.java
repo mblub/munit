@@ -6,15 +6,16 @@ package org.mule.munit.runner.mule.result;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public interface MunitResult {
-	
-	String getTestName();
+public interface MunitResult
+{
 
-	boolean hasSucceeded();
+    String getTestName();
 
-	int getNumberOfFailures();
-	
-	int getNumberOfErrors();
+    boolean hasSucceeded();
+
+    int getNumberOfFailures();
+
+    int getNumberOfErrors();
 
     int getNumberOfTests();
 

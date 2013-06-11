@@ -40,12 +40,14 @@
 
     <flow name="create-consumer-version">
         <loggly:logger message="Creating a new version of consumer #[flowVars['consumerName']]"/>
-        <loggly:logger message="Retrieving an organization named #[message.inboundProperties['http.query.params'].get('organizationName')]"/>
+        <loggly:logger
+                message="Retrieving an organization named #[message.inboundProperties['http.query.params'].get('organizationName')]"/>
         <enricher target="flowVars['organization']">
             <morphia:find-single config-ref="morphia-master-config"
                                  className="org.mule.munit.Organization" disableValidation="true">
                 <morphia:filters>
-                    <morphia:filter key="id">#[message.inboundProperties['http.query.params'].get('organizationName')]</morphia:filter>
+                    <morphia:filter key="id">#[message.inboundProperties['http.query.params'].get('organizationName')]
+                    </morphia:filter>
                 </morphia:filters>
             </morphia:find-single>
         </enricher>

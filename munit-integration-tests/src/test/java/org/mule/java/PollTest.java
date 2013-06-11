@@ -9,8 +9,10 @@ import org.junit.Test;
 
 public class PollTest extends FunctionalMunitSuite
 {
+
     @Test
-    public void test() throws Exception {
+    public void test() throws Exception
+    {
         whenMessageProcessor("create-issue")
                 .ofNamespace("jira")
                 .thenReturn(muleMessageWithPayload("OK"));

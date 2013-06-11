@@ -7,26 +7,32 @@ import org.mule.api.el.ExpressionLanguageContext;
 
 /**
  * <p>
- *     MEL function to evaluate that an element of the message matches something
+ * MEL function to evaluate that an element of the message matches something
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.4
  */
-public class MessageMatchingAssertionMelFunction extends AssertionMelFunction{
+public class MessageMatchingAssertionMelFunction extends AssertionMelFunction
+{
+
     private ElementMatcherFactory command;
 
-    public MessageMatchingAssertionMelFunction(ElementMatcherFactory command) {
+    public MessageMatchingAssertionMelFunction(ElementMatcherFactory command)
+    {
         this.command = command;
     }
 
 
     @Override
-    public Object call(Object[] params, ExpressionLanguageContext context) {
-        if ( params != null && params.length>0 && params[0] instanceof String ){
+    public Object call(Object[] params, ExpressionLanguageContext context)
+    {
+        if (params != null && params.length > 0 && params[0] instanceof String)
+        {
             MuleMessage messageFrom = getMuleMessageFrom(context);
 
-            if ( messageFrom == null ){
+            if (messageFrom == null)
+            {
                 throw new RuntimeException("Could not get message;");
             }
 

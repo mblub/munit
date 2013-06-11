@@ -3,6 +3,7 @@ package org.mule.munit.common.mocking;
 import junit.framework.AssertionFailedError;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 import org.mule.api.registry.MuleRegistry;
 import org.mule.modules.interceptor.processors.MessageProcessorCall;
@@ -20,14 +21,16 @@ import static org.mockito.Mockito.when;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitVerifierTest {
+public class MunitVerifierTest
+{
 
     private MuleContext muleContext;
     private MuleRegistry muleRegistry;
     private MockedMessageProcessorManager manager;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleContext = mock(MuleContext.class);
         muleRegistry = mock(MuleRegistry.class);
         manager = mock(MockedMessageProcessorManager.class);
@@ -36,8 +39,10 @@ public class MunitVerifierTest {
         when(muleRegistry.lookupObject(MockedMessageProcessorManager.ID)).thenReturn(manager);
 
     }
+
     @Test(expected = AssertionFailedError.class)
-    public void withNoCallFailAtLeast(){
+    public void withNoCallFailAtLeast()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(new ArrayList<MessageProcessorCall>());
@@ -45,11 +50,12 @@ public class MunitVerifierTest {
         new MunitVerifier(muleContext).verifyCallOfMessageProcessor("testName")
                 .ofNamespace("testNamespace")
                 .atLeast(1);
-        
+
     }
 
     @Test(expected = AssertionFailedError.class)
-    public void withNoCallFailAtLeastOne(){
+    public void withNoCallFailAtLeastOne()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(new ArrayList<MessageProcessorCall>());
@@ -61,7 +67,8 @@ public class MunitVerifierTest {
     }
 
     @Test(expected = AssertionFailedError.class)
-    public void withNoCallFailTimes(){
+    public void withNoCallFailTimes()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(new ArrayList<MessageProcessorCall>());
@@ -73,7 +80,8 @@ public class MunitVerifierTest {
     }
 
     @Test(expected = AssertionFailedError.class)
-    public void withCallsFailAtMost(){
+    public void withCallsFailAtMost()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(createCalls());
@@ -86,7 +94,8 @@ public class MunitVerifierTest {
 
 
     @Test
-    public void withCallsOkTimes(){
+    public void withCallsOkTimes()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(createCalls());
@@ -98,7 +107,8 @@ public class MunitVerifierTest {
     }
 
     @Test
-    public void withCallsOkAtLeastOnce(){
+    public void withCallsOkAtLeastOnce()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(createCalls());
@@ -111,7 +121,8 @@ public class MunitVerifierTest {
 
 
     @Test
-    public void withCallsOkAtLeast(){
+    public void withCallsOkAtLeast()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(createCalls());
@@ -123,7 +134,8 @@ public class MunitVerifierTest {
     }
 
     @Test
-    public void withCallsOkAtMost(){
+    public void withCallsOkAtMost()
+    {
 
         when(manager.findCallsFor(any(MessageProcessorId.class), any(Map.class)))
                 .thenReturn(createCalls());
@@ -134,7 +146,8 @@ public class MunitVerifierTest {
 
     }
 
-    private ArrayList<MessageProcessorCall> createCalls() {
+    private ArrayList<MessageProcessorCall> createCalls()
+    {
         ArrayList<MessageProcessorCall> calls = new ArrayList<MessageProcessorCall>();
         calls.add(new MessageProcessorCall(null));
         calls.add(new MessageProcessorCall(null));

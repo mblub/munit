@@ -2,7 +2,9 @@ package org.mule.munit.config.spring;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.munit.config.AssertOnEqualsMessageProcessor;
+
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -20,7 +22,8 @@ import static org.mockito.Mockito.when;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitDefinitionParserTest {
+public class MunitDefinitionParserTest
+{
 
     public static final String A_MESSAGE = "A Message";
     public static final String EXPRESSION = "#[expression]";
@@ -30,12 +33,14 @@ public class MunitDefinitionParserTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         element = mock(Element.class);
     }
 
     @Test
-    public void test(){
+    public void test()
+    {
         MunitDefinitionParser parser = new MockMunitDefinitionParser(AssertOnEqualsMessageProcessor.class, asList("message"), asList("expected", "value"));
 
         when(element.getAttribute("message")).thenReturn(A_MESSAGE);
@@ -50,22 +55,26 @@ public class MunitDefinitionParserTest {
         assertEquals(AssertOnEqualsMessageProcessor.class.getName(), beanDefinition.getBeanClassName());
         assertEquals(A_MESSAGE, propertyValues.getPropertyValue("message").getValue());
         assertEquals(EXPRESSION, propertyValues.getPropertyValue("value").getValue());
-        assertTrue(propertyValues.getPropertyValue("expected").getValue() instanceof  RuntimeBeanReference );
+        assertTrue(propertyValues.getPropertyValue("expected").getValue() instanceof RuntimeBeanReference);
 
     }
 
-    private static List<String> asList(String ... attrs){
+    private static List<String> asList(String... attrs)
+    {
         return Arrays.asList(attrs);
     }
 
-    private class MockMunitDefinitionParser extends MunitDefinitionParser {
+    private class MockMunitDefinitionParser extends MunitDefinitionParser
+    {
 
-        public MockMunitDefinitionParser(Class mpClass, List<String> attributes, List<String> refAttributes) {
+        public MockMunitDefinitionParser(Class mpClass, List<String> attributes, List<String> refAttributes)
+        {
             super(mpClass, attributes, refAttributes);
         }
 
         @Override
-        protected void attachProcessorDefinition(ParserContext parserContext, BeanDefinition definition) {
+        protected void attachProcessorDefinition(ParserContext parserContext, BeanDefinition definition)
+        {
 
         }
     }

@@ -13,8 +13,10 @@ import org.apache.xerces.xni.XNIException;
 
 public class MunitDomParser extends DOMParser
 {
+
     public static final String NAMESPACE = "http://www.mule.org/munit";
     XMLLocator xmlLocator;
+
     @Override
     public void startDocument(XMLLocator locator, String encoding, NamespaceContext namespaceContext, Augmentations augs) throws XNIException
     {

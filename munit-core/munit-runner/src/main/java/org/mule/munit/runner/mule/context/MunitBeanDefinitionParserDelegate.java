@@ -2,14 +2,18 @@ package org.mule.munit.runner.mule.context;
 
 import org.mule.config.spring.MuleHierarchicalBeanDefinitionParserDelegate;
 import org.mule.config.spring.util.SpringXMLUtils;
+
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 
-public class MunitBeanDefinitionParserDelegate extends MuleHierarchicalBeanDefinitionParserDelegate {
-    public MunitBeanDefinitionParserDelegate(XmlReaderContext readerContext, DefaultBeanDefinitionDocumentReader spring) {
+public class MunitBeanDefinitionParserDelegate extends MuleHierarchicalBeanDefinitionParserDelegate
+{
+
+    public MunitBeanDefinitionParserDelegate(XmlReaderContext readerContext, DefaultBeanDefinitionDocumentReader spring)
+    {
         super(readerContext, spring);
     }
 
@@ -38,14 +42,15 @@ public class MunitBeanDefinitionParserDelegate extends MuleHierarchicalBeanDefin
             boolean forceRecurse = false;
             BeanDefinition finalChild;
 
-            do {
+            do
+            {
                 ParserContext parserContext = new ParserContext(getReaderContext(), this, parent);
                 finalChild = new MunitHandlerWrapper(handler).parse(element, parserContext);
                 registerBean(element, finalChild);
                 noRecurse = noRecurse || testFlag(finalChild, MULE_NO_RECURSE);
                 forceRecurse = forceRecurse || testFlag(finalChild, MULE_FORCE_RECURSE);
-            } while (null != finalChild && testFlag(finalChild, MULE_REPEAT_PARSE));
-
+            }
+            while (null != finalChild && testFlag(finalChild, MULE_REPEAT_PARSE));
 
 
             boolean isRecurse;

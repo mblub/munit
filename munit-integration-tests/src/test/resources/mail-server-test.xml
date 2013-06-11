@@ -25,7 +25,7 @@
     <mail-server:config/>
 
     <munit:before-suite name="startMail" description="Starting mail server">
-           <mail-server:start-server/>
+        <mail-server:start-server/>
     </munit:before-suite>
 
     <munit:test name="testingMailServerCall"

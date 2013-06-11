@@ -9,13 +9,14 @@ import org.xml.sax.InputSource;
 
 /**
  * <p>
- *     We change the document loader in order to get the line numbers as element attribute.
+ * We change the document loader in order to get the line numbers as element attribute.
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.4
  */
-public class MunitDocumentLoader extends DefaultDocumentLoader {
+public class MunitDocumentLoader extends DefaultDocumentLoader
+{
 
     static final String JAXP_SCHEMA_LANGUAGE =
             "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
@@ -23,7 +24,8 @@ public class MunitDocumentLoader extends DefaultDocumentLoader {
             "http://www.w3.org/2001/XMLSchema";
 
     public Document loadDocument(InputSource inputSource, EntityResolver entityResolver,
-                                 ErrorHandler errorHandler, int validationMode, boolean namespaceAware) throws Exception {
+                                 ErrorHandler errorHandler, int validationMode, boolean namespaceAware) throws Exception
+    {
 
         DOMParser xmlReader = new MunitDomParser();
         xmlReader.setFeature("http://xml.org/sax/features/validation", Boolean.TRUE);

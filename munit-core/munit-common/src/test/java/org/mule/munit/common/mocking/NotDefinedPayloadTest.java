@@ -9,16 +9,19 @@ import static org.junit.Assert.assertTrue;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class NotDefinedPayloadTest {
+public class NotDefinedPayloadTest
+{
 
     @Test
-    public void testItCreatesANonDefinedPayload(){
+    public void testItCreatesANonDefinedPayload()
+    {
         assertTrue(NotDefinedPayload.getInstance() != null);
     }
 
 
     @Test
-    public void testIfNonDefinedPayloadThenNonDefined(){
+    public void testIfNonDefinedPayloadThenNonDefined()
+    {
         assertTrue(NotDefinedPayload.isNotDefined(NotDefinedPayload.getInstance()));
     }
 }

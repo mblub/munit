@@ -3,6 +3,7 @@ package org.mule.munit.runner;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 import org.mule.api.registry.MuleRegistry;
 import org.mule.api.registry.RegistrationException;
@@ -18,21 +19,23 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class SuiteBuilderTest {
-    
-    
+public class SuiteBuilderTest
+{
+
+
     private MuleContext muleContext;
     private MuleRegistry registry;
     private List<MunitAfterTest> afterTestFlows = new ArrayList<MunitAfterTest>();
     private List<MunitBeforeTest> beforeTestFlows = new ArrayList<MunitBeforeTest>();
     private MunitTestFlow munitTest;
-    
+
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleContext = mock(MuleContext.class);
         registry = mock(MuleRegistry.class);
         munitTest = mock(MunitTestFlow.class);
-        
+
         when(muleContext.getRegistry()).thenReturn(registry);
     }
 
@@ -40,17 +43,18 @@ public class SuiteBuilderTest {
      * Checks that all the non Ignored Tests are in the suite
      */
     @Test
-    public void beforeAndAfterFlowsMustBeRetrieved() throws RegistrationException {
+    public void beforeAndAfterFlowsMustBeRetrieved() throws RegistrationException
+    {
         MockSuiteBuilder builder = new MockSuiteBuilder(muleContext, true);
         runTest(builder);
     }
 
 
-
-    private void runTest(MockSuiteBuilder builder) {
+    private void runTest(MockSuiteBuilder builder)
+    {
         when(registry.lookupObjects(MunitBeforeTest.class)).thenReturn(beforeTestFlows);
         when(registry.lookupObjects(MunitAfterTest.class)).thenReturn(afterTestFlows);
-        when(registry.lookupObjects(MunitTestFlow.class)).thenReturn(Arrays.asList(new MunitTestFlow[]{munitTest}));
+        when(registry.lookupObjects(MunitTestFlow.class)).thenReturn(Arrays.asList(new MunitTestFlow[] {munitTest}));
 
         builder.build("test");
 
@@ -59,17 +63,22 @@ public class SuiteBuilderTest {
         verify(registry, times(1)).lookupObjects(MunitTestFlow.class);
     }
 
-    private class MockSuiteBuilder extends SuiteBuilder<MockSuite, MockTest>{
+    private class MockSuiteBuilder extends SuiteBuilder<MockSuite, MockTest>
+    {
+
         private boolean mustNotHaveTests;
 
-        protected MockSuiteBuilder(MuleContext muleContext, boolean mustHaveTests) {
+        protected MockSuiteBuilder(MuleContext muleContext, boolean mustHaveTests)
+        {
             super(muleContext);
             this.mustNotHaveTests = mustHaveTests;
         }
 
         @Override
-        protected MockSuite createSuite(String name) {
-            if ( mustNotHaveTests ){
+        protected MockSuite createSuite(String name)
+        {
+            if (mustNotHaveTests)
+            {
                 assertFalse(this.tests.isEmpty());
                 return new MockSuite();
             }
@@ -78,18 +87,23 @@ public class SuiteBuilderTest {
         }
 
         @Override
-        protected MockTest test(List<MunitFlow> beforeTest, MunitTestFlow test, List<MunitFlow> afterTest) {
+        protected MockTest test(List<MunitFlow> beforeTest, MunitTestFlow test, List<MunitFlow> afterTest)
+        {
             assertEquals(afterTestFlows, afterTest);
-            assertEquals(beforeTestFlows,beforeTest);
+            assertEquals(beforeTestFlows, beforeTest);
             assertEquals(munitTest, test);
             return new MockTest();
         }
 
     }
 
-    private class MockSuite {
+    private class MockSuite
+    {
+
     }
 
-    private class MockTest {
+    private class MockTest
+    {
+
     }
 }

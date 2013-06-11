@@ -14,8 +14,8 @@
         http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
         http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
 
-    <munit:config />
-    <mock:config />
+    <munit:config/>
+    <mock:config/>
 
     <spring:beans>
         <spring:import resource="enricher-config.xml"/>
@@ -40,7 +40,8 @@
                 <munit:invocation-property key="consumerName" value-ref="#[string:consumerName]"/>
             </munit:invocation-properties>
             <munit:inbound-properties>
-                <munit:inbound-property key="http.query.params" value-ref="#[['organizationName':'dummyOrganization']]" />
+                <munit:inbound-property key="http.query.params"
+                                        value-ref="#[['organizationName':'dummyOrganization']]"/>
             </munit:inbound-properties>
         </munit:set>
 
@@ -59,7 +60,7 @@
         </mock:when>
 
         <mock:when messageProcessor="morphia:save">
-            <mock:then-return payload-ref="#[string:anyPayload]" />
+            <mock:then-return payload-ref="#[string:anyPayload]"/>
         </mock:when>
 
         <mock:when messageProcessor="loggly:logger"/>
@@ -69,17 +70,21 @@
         <mock:verify-call messageProcessor="morphia:find-single" times="2"/>
         <mock:verify-call messageProcessor="morphia:save" times="1"/>
 
-        <munit:assert-on-equals expected-ref='#[Integer.valueOf("1")]' value-ref="#[flowVars['consumer'].getVersions().size()]"/>
-        <munit:assert-on-equals expected-ref='#[string:3.3.1]' value-ref="#[flowVars['consumer'].getVersions().get(0)]"/>
+        <munit:assert-on-equals expected-ref='#[Integer.valueOf("1")]'
+                                value-ref="#[flowVars['consumer'].getVersions().size()]"/>
+        <munit:assert-on-equals expected-ref='#[string:3.3.1]'
+                                value-ref="#[flowVars['consumer'].getVersions().get(0)]"/>
     </munit:test>
 
-    <munit:test name="testCreateConsumerVersionInvalidConsumer" description="Testing the API to create a consumer version with invalid consumer name">
+    <munit:test name="testCreateConsumerVersionInvalidConsumer"
+                description="Testing the API to create a consumer version with invalid consumer name">
         <munit:set payload-ref="#[resultOfScript('mockConsumer')]">
             <munit:invocation-properties>
                 <munit:invocation-property key="consumerName" value-ref="#[string:consumerName]"/>
             </munit:invocation-properties>
             <munit:inbound-properties>
-                <munit:inbound-property key="http.query.params" value-ref="#[['organizationName':'dummyOrganization']]" />
+                <munit:inbound-property key="http.query.params"
+                                        value-ref="#[['organizationName':'dummyOrganization']]"/>
             </munit:inbound-properties>
         </munit:set>
 
@@ -106,13 +111,15 @@
         <munit:assert-on-equals expected-ref='#[string:404]' value-ref="#[message.outboundProperties['http.status']]"/>
     </munit:test>
 
-    <munit:test name="testCreateConsumerVersionInvalidOrganization" description="Testing the API to create a consumer version with invalid organization name">
+    <munit:test name="testCreateConsumerVersionInvalidOrganization"
+                description="Testing the API to create a consumer version with invalid organization name">
         <munit:set payload-ref="#[resultOfScript('mockConsumer')]">
             <munit:invocation-properties>
                 <munit:invocation-property key="consumerName" value-ref="#[string:consumerName]"/>
             </munit:invocation-properties>
             <munit:inbound-properties>
-                <munit:inbound-property key="http.query.params" value-ref="#[['organizationName':'dummyOrganization']]" />
+                <munit:inbound-property key="http.query.params"
+                                        value-ref="#[['organizationName':'dummyOrganization']]"/>
             </munit:inbound-properties>
         </munit:set>
 
@@ -139,7 +146,8 @@
                 <munit:invocation-property key="consumerName" value-ref="#[string:consumerName]"/>
             </munit:invocation-properties>
             <munit:inbound-properties>
-                <munit:inbound-property key="http.query.params" value-ref="#[['organizationName':'dummyOrganization']]" />
+                <munit:inbound-property key="http.query.params"
+                                        value-ref="#[['organizationName':'dummyOrganization']]"/>
             </munit:inbound-properties>
         </munit:set>
 
@@ -168,7 +176,6 @@
 
         <munit:assert-on-equals expected-ref='#[string:409]' value-ref="#[message.outboundProperties['http.status']]"/>
     </munit:test>
-
 
 
 </mule>

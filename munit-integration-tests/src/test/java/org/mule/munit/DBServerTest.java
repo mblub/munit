@@ -2,9 +2,12 @@ package org.mule.munit;
 
 import org.mule.munit.runner.java.AbstractMuleSuite;
 
-public class DBServerTest extends AbstractMuleSuite {
+public class DBServerTest extends AbstractMuleSuite
+{
+
     @Override
-    public String getConfigResources() {
+    public String getConfigResources()
+    {
         return "dbserver-test.xml";
     }
-  }
+}

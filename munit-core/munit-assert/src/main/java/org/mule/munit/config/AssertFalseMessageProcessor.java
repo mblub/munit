@@ -7,7 +7,7 @@ import org.mule.munit.AssertModule;
 
 /**
  * <p>
- *     Assert False message processor
+ * Assert False message processor
  * </p>
  *
  * @author Federico, Fernando
@@ -15,6 +15,7 @@ import org.mule.munit.AssertModule;
  */
 public class AssertFalseMessageProcessor extends MunitMessageProcessor
 {
+
     /**
      * @see AssertModule#assertFalse(String, Boolean)
      */
@@ -29,24 +30,28 @@ public class AssertFalseMessageProcessor extends MunitMessageProcessor
      * @see MunitMessageProcessor#doProcess(org.mule.api.MuleMessage, org.mule.munit.AssertModule)
      */
     @Override
-    protected void doProcess(MuleMessage mulemessage, AssertModule module) {
-        module.assertFalse(message, (Boolean) evaluate(mulemessage,condition));
+    protected void doProcess(MuleMessage mulemessage, AssertModule module)
+    {
+        module.assertFalse(message, (Boolean) evaluate(mulemessage, condition));
     }
 
     /**
      * @see org.mule.munit.config.MunitMessageProcessor#getProcessor()
      */
     @Override
-    protected String getProcessor() {
+    protected String getProcessor()
+    {
         return "assertFalse";
     }
 
 
-    public void setMessage(String value) {
+    public void setMessage(String value)
+    {
         this.message = value;
     }
 
-    public void setCondition(Object value) {
+    public void setCondition(Object value)
+    {
         this.condition = value;
     }
 }

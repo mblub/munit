@@ -2,6 +2,7 @@ package org.mule.munit.config;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleMessage;
 import org.mule.api.expression.ExpressionManager;
 import org.mule.munit.AssertModule;
@@ -14,25 +15,30 @@ import static org.mockito.Mockito.mock;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public abstract class AbstractMessageProcessorTest {
+public abstract class AbstractMessageProcessorTest
+{
+
     protected MuleMessage muleMessage;
     protected AssertModule module;
     protected ExpressionManager expressionManager;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleMessage = mock(MuleMessage.class);
         module = mock(AssertModule.class);
         expressionManager = mock((ExpressionManager.class));
     }
 
     @Test
-    public void checkProcessorName(){
+    public void checkProcessorName()
+    {
         MunitMessageProcessor mp = buildMp();
         assertEquals(getExpectedName(), mp.getProcessor());
     }
 
-    protected MunitMessageProcessor buildMp(){
+    protected MunitMessageProcessor buildMp()
+    {
         MunitMessageProcessor mp = doBuildMp();
         mp.expressionManager = this.expressionManager;
         mp.patternInfo = TemplateParser.createMuleStyleParser().getStyle();
@@ -41,5 +47,6 @@ public abstract class AbstractMessageProcessorTest {
     }
 
     protected abstract MunitMessageProcessor doBuildMp();
+
     protected abstract String getExpectedName();
 }

@@ -5,27 +5,26 @@ import org.mule.api.annotations.Configurable;
 
 /**
  * <p>
- *     Definition of the message processor attribute that wants to be mocked.
+ * Definition of the message processor attribute that wants to be mocked.
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class Attribute {
+public class Attribute
+{
 
     /**
      * <p>
-     *     factory method to simplify test coding
+     * factory method to simplify test coding
      * </p>
      *
-     * @param name
-     *      <p>The Name of the attribute</p>
-     * @param whereValue
-     *      <p>Its value</p>
-     * @return
-     *     <p>A new instance of the Attribute</p>
+     * @param name       <p>The Name of the attribute</p>
+     * @param whereValue <p>Its value</p>
+     * @return <p>A new instance of the Attribute</p>
      */
-    public static Attribute create(String name, String whereValue){
+    public static Attribute create(String name, String whereValue)
+    {
         Attribute attribute = new Attribute();
         attribute.setName(name);
         attribute.setWhereValue(whereValue);
@@ -44,19 +43,23 @@ public class Attribute {
     @Configurable
     private Object whereValue;
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public Object getWhereValue() {
+    public Object getWhereValue()
+    {
         return whereValue;
     }
 
-    public void setWhereValue(Object whereValue) {
+    public void setWhereValue(Object whereValue)
+    {
         this.whereValue = whereValue;
     }
 }

@@ -9,13 +9,15 @@ import static org.mockito.Mockito.*;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class AssertFalseMessageProcessorTest extends AbstractMessageProcessorTest{
+public class AssertFalseMessageProcessorTest extends AbstractMessageProcessorTest
+{
 
     public static final String FALSE_CONDITION = "#[1==2]";
     public static final String TEST_MESSAGE = "testMessage";
 
     @Test
-    public void validateFalseCondition(){
+    public void validateFalseCondition()
+    {
         AssertFalseMessageProcessor mp = (AssertFalseMessageProcessor) buildMp();
         mp.setCondition(FALSE_CONDITION);
 
@@ -28,14 +30,16 @@ public class AssertFalseMessageProcessorTest extends AbstractMessageProcessorTes
     }
 
     @Override
-    protected MunitMessageProcessor doBuildMp() {
+    protected MunitMessageProcessor doBuildMp()
+    {
         AssertFalseMessageProcessor mp = new AssertFalseMessageProcessor();
         mp.setMessage(TEST_MESSAGE);
         return mp;
     }
 
     @Override
-    protected String getExpectedName() {
+    protected String getExpectedName()
+    {
         return "assertFalse";
     }
 }

@@ -2,6 +2,7 @@ package org.mule.munit.config;
 
 
 import org.junit.Test;
+
 import org.mule.transport.NullPayload;
 
 import static org.mockito.Mockito.verify;
@@ -11,13 +12,15 @@ import static org.mockito.Mockito.when;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class AssertNullMessageProcessorTest extends AbstractMessageProcessorTest{
+public class AssertNullMessageProcessorTest extends AbstractMessageProcessorTest
+{
 
     public static final String TEST_MESSAGE = "testMessage";
 
 
     @Test
-    public void testCallCorrectly(){
+    public void testCallCorrectly()
+    {
         MunitMessageProcessor mp = buildMp();
 
         when(muleMessage.getPayload()).thenReturn(NullPayload.getInstance());
@@ -29,14 +32,16 @@ public class AssertNullMessageProcessorTest extends AbstractMessageProcessorTest
 
 
     @Override
-    protected MunitMessageProcessor doBuildMp() {
+    protected MunitMessageProcessor doBuildMp()
+    {
         AssertNullMessageProcessor mp = new AssertNullMessageProcessor();
         mp.setMessage(TEST_MESSAGE);
         return mp;
     }
 
     @Override
-    protected String getExpectedName() {
+    protected String getExpectedName()
+    {
         return "assertNull";
     }
 }

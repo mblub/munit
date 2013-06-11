@@ -1,6 +1,7 @@
 package org.mule.munit.config;
 
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 
 import static org.mockito.Mockito.mock;
@@ -9,15 +10,17 @@ import static org.mockito.Mockito.mock;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitBeforeSuiteTest {
+public class MunitBeforeSuiteTest
+{
 
     MuleContext muleContext = mock(MuleContext.class);
 
 
     @Test
-    public void testConstructor(){
-        new MunitBeforeSuite("name",muleContext);
+    public void testConstructor()
+    {
+        new MunitBeforeSuite("name", muleContext);
     }
-    
-    
+
+
 }

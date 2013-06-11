@@ -2,6 +2,7 @@ package org.mule.munit.common.mp;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleMessage;
 import org.mule.modules.interceptor.matchers.EqMatcher;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
@@ -19,7 +20,8 @@ import static org.mockito.Mockito.mock;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MockedMessageProcessorManagerTest {
+public class MockedMessageProcessorManagerTest
+{
 
     public static final String TEST_NAMESPACE = "testNamespace";
     public static final String TEST_NAME = "testName";
@@ -28,11 +30,14 @@ public class MockedMessageProcessorManagerTest {
     private MuleMessage muleMessage;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleMessage = mock(MuleMessage.class);
     }
+
     @Test
-    public void getCallsWithEmptyMatchers(){
+    public void getCallsWithEmptyMatchers()
+    {
         MockedMessageProcessorManager manager = new MockedMessageProcessorManager();
         manager.addCall(createCall());
 
@@ -43,7 +48,8 @@ public class MockedMessageProcessorManagerTest {
     }
 
     @Test
-     public void getCallsWithEmptyNonMatchers(){
+    public void getCallsWithEmptyNonMatchers()
+    {
         MockedMessageProcessorManager manager = new MockedMessageProcessorManager();
         manager.addCall(createCall());
 
@@ -56,7 +62,8 @@ public class MockedMessageProcessorManagerTest {
     }
 
     @Test
-    public void getCallsWithEmptyInvalidMatchers(){
+    public void getCallsWithEmptyInvalidMatchers()
+    {
         MockedMessageProcessorManager manager = new MockedMessageProcessorManager();
         manager.addCall(createCall());
 
@@ -69,7 +76,8 @@ public class MockedMessageProcessorManagerTest {
 
 
     @Test
-    public void getCallsWithEmptyInvalidId(){
+    public void getCallsWithEmptyInvalidId()
+    {
         MockedMessageProcessorManager manager = new MockedMessageProcessorManager();
         manager.addCall(createCall());
 
@@ -79,11 +87,12 @@ public class MockedMessageProcessorManagerTest {
     }
 
     @Test
-    public void validThatResetRemovesAll(){
+    public void validThatResetRemovesAll()
+    {
         MockedMessageProcessorManager manager = new MockedMessageProcessorManager();
         manager.addCall(createCall());
-        manager.addBehavior(new MessageProcessorBehavior(createCall(),muleMessage));
-        manager.addSpyAssertion(MESSAGE_PROCESSOR_ID, new SpyAssertion(null,null));
+        manager.addBehavior(new MessageProcessorBehavior(createCall(), muleMessage));
+        manager.addSpyAssertion(MESSAGE_PROCESSOR_ID, new SpyAssertion(null, null));
 
         manager.reset();
 
@@ -92,10 +101,11 @@ public class MockedMessageProcessorManagerTest {
     }
 
     @Test
-    public void getTheBestMatchingBehavior(){
+    public void getTheBestMatchingBehavior()
+    {
         MockedMessageProcessorManager manager = new MockedMessageProcessorManager();
         MessageProcessorCall bestMatchingCall = createCall();
-        Map<String,Object> attributes = bestMatchingCall.getAttributes();
+        Map<String, Object> attributes = bestMatchingCall.getAttributes();
         attributes.put("attr2", "attrValue2");
 
         manager.addBehavior(new MessageProcessorBehavior(createCall(), muleMessage));
@@ -108,7 +118,8 @@ public class MockedMessageProcessorManagerTest {
     }
 
 
-    private MunitMessageProcessorCall createCall() {
+    private MunitMessageProcessorCall createCall()
+    {
         MunitMessageProcessorCall call = new MunitMessageProcessorCall(MESSAGE_PROCESSOR_ID);
         HashMap<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("attr", "attrValue");

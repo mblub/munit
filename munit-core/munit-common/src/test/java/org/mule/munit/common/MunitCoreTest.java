@@ -2,6 +2,7 @@ package org.mule.munit.common;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 import org.mule.api.config.MuleProperties;
 import org.mule.api.construct.FlowConstruct;
@@ -24,7 +25,8 @@ import static org.mockito.Mockito.*;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitCoreTest {
+public class MunitCoreTest
+{
 
     private MuleContext muleContext;
     private MuleRegistry muleRegistry;
@@ -33,7 +35,8 @@ public class MunitCoreTest {
     private FlowConstruct flowConstruct = mock(FlowConstruct.class);
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleContext = mock(MuleContext.class);
         muleRegistry = mock(MuleRegistry.class);
         manager = mock(MockedMessageProcessorManager.class);
@@ -47,7 +50,8 @@ public class MunitCoreTest {
     }
 
     @Test
-    public void testReset(){
+    public void testReset()
+    {
         MunitCore.reset(muleContext);
 
         verify(endpointManager).resetBehaviors();
@@ -56,18 +60,20 @@ public class MunitCoreTest {
     }
 
     @Test
-    public void testResetWhenNullManager(){
+    public void testResetWhenNullManager()
+    {
 
         when(muleRegistry.lookupObject(MockedMessageProcessorManager.ID)).thenReturn(null);
 
         MunitCore.reset(muleContext);
 
         verify(endpointManager).resetBehaviors();
-        verify(manager,times(0)).reset();
+        verify(manager, times(0)).reset();
     }
 
     @Test
-    public void testRegisterManager() throws RegistrationException {
+    public void testRegisterManager() throws RegistrationException
+    {
 
         MunitCore.registerManager(muleContext);
 
@@ -75,7 +81,8 @@ public class MunitCoreTest {
     }
 
     @Test
-    public void testRegisterManagerWithNull() throws RegistrationException {
+    public void testRegisterManagerWithNull() throws RegistrationException
+    {
 
         when(muleRegistry.lookupObject(MockedMessageProcessorManager.ID)).thenReturn(null);
 
@@ -85,7 +92,8 @@ public class MunitCoreTest {
     }
 
     @Test
-    public void testSetContext(){
+    public void testSetContext()
+    {
         MunitCore.setMuleContext(muleContext);
 
         assertEquals(muleContext, MunitCore.getMuleContext());
@@ -93,7 +101,8 @@ public class MunitCoreTest {
 
 
     @Test
-    public void buildStackTrace(){
+    public void buildStackTrace()
+    {
 
         when(manager.getCalls()).thenReturn(executedCalls());
         List<StackTraceElement> stackTraceElements = MunitCore.buildMuleStackTrace(muleContext);
@@ -105,7 +114,8 @@ public class MunitCoreTest {
         assertEquals(20, stackTraceElements.get(0).getLineNumber());
     }
 
-    private List<MunitMessageProcessorCall> executedCalls() {
+    private List<MunitMessageProcessorCall> executedCalls()
+    {
         ArrayList<MunitMessageProcessorCall> calls = new ArrayList<MunitMessageProcessorCall>();
         MunitMessageProcessorCall call1 = new MunitMessageProcessorCall(new MessageProcessorId("mp1", "nsp1"));
         call1.setFileName("mule-config.xml");

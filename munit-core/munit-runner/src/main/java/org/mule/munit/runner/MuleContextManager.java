@@ -4,6 +4,7 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
+
 import org.mule.api.MuleContext;
 import org.mule.api.config.ConfigurationBuilder;
 import org.mule.api.config.MuleProperties;
@@ -29,21 +30,23 @@ import java.util.Properties;
 /**
  * <p>Starts and stops mule</p>
  *
- *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MuleContextManager {
+public class MuleContextManager
+{
 
     public static final String CLASSNAME_ANNOTATIONS_CONFIG_BUILDER = "org.mule.org.mule.munit.config.AnnotationsConfigurationBuilder";
 
     private MockingConfiguration configuration;
 
-    public MuleContextManager(MockingConfiguration configuration) {
+    public MuleContextManager(MockingConfiguration configuration)
+    {
         this.configuration = configuration;
     }
 
-    public MuleContext startMule(String resources) throws Exception {
+    public MuleContext startMule(String resources) throws Exception
+    {
         MuleContext context = createMule(resources);
         context.start();
 
@@ -52,22 +55,27 @@ public class MuleContextManager {
         return context;
     }
 
-    public void killMule(MuleContext muleContext) {
-        try {
-            if ( muleContext != null && !muleContext.isStopped() )
+    public void killMule(MuleContext muleContext)
+    {
+        try
+        {
+            if (muleContext != null && !muleContext.isStopped())
             {
                 muleContext.stop();
             }
-        } catch (Throwable e1) {
+        }
+        catch (Throwable e1)
+        {
 
         }
-        if (muleContext != null && !muleContext.isDisposed() )
+        if (muleContext != null && !muleContext.isDisposed())
         {
             muleContext.dispose();
         }
     }
 
-    private MuleContext createMule(String resources) throws Exception {
+    private MuleContext createMule(String resources) throws Exception
+    {
         defineLogOutput(resources);
 
         MuleContext context;
@@ -76,7 +84,8 @@ public class MuleContextManager {
         List<ConfigurationBuilder> builders = new ArrayList<ConfigurationBuilder>();
         builders.add(new SimpleConfigurationBuilder(properties()));
         if (ClassUtils.isClassOnPath(CLASSNAME_ANNOTATIONS_CONFIG_BUILDER,
-                getClass())) {
+                                     getClass()))
+        {
             builders.add((ConfigurationBuilder) ClassUtils.instanciateClass(
                     CLASSNAME_ANNOTATIONS_CONFIG_BUILDER, ClassUtils.NO_ARGS,
                     getClass()));
@@ -95,17 +104,20 @@ public class MuleContextManager {
     private Properties properties()
     {
         Properties properties = configuration == null ? null : configuration.getStartUpProperties();
-        if ( properties == null ){
+        if (properties == null)
+        {
             properties = new Properties();
         }
         properties.setProperty(MuleProperties.APP_HOME_DIRECTORY_PROPERTY, new File(getClass().getResource("/").getPath()).getAbsolutePath());
         return properties;
     }
 
-    private void defineLogOutput(String resources) throws IOException {
+    private void defineLogOutput(String resources) throws IOException
+    {
         String path = System.getProperty(DefaultOutputHandler.OUTPUT_FOLDER_PROPERTY);
-        if ( path != null){
-            String name =resources.replace(".xml", "");
+        if (path != null)
+        {
+            String name = resources.replace(".xml", "");
             Logger logger = Logger.getRootLogger();
             logger.removeAllAppenders();
             logger.addAppender(new FileAppender(new SimpleLayout(), String.format(path, name)));
@@ -114,11 +126,13 @@ public class MuleContextManager {
     }
 
 
-    protected ConfigurationBuilder getBuilder(String resources) throws Exception {
+    protected ConfigurationBuilder getBuilder(String resources) throws Exception
+    {
         return new MunitSpringXmlConfigurationBuilder(resources, configuration);
     }
 
-    protected void configureMuleContext(MuleContextBuilder contextBuilder) {
+    protected void configureMuleContext(MuleContextBuilder contextBuilder)
+    {
         contextBuilder.setWorkListener(new TestingWorkListener());
     }
 

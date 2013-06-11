@@ -3,6 +3,7 @@ package org.mule.munit.common.mp;
 import net.sf.cglib.proxy.MethodProxy;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -29,7 +30,8 @@ import static org.mockito.Mockito.*;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitMessageProcessorInterceptorTest {
+public class MunitMessageProcessorInterceptorTest
+{
 
     public static final String NAMESPACE = "namespace";
     public static final String MP = "mp";
@@ -51,7 +53,8 @@ public class MunitMessageProcessorInterceptorTest {
     private ExpressionManager expressionManager;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Exception
+    {
         manager = mock(MockedMessageProcessorManager.class);
         proxy = mock(MethodProxy.class);
         event = mock(MuleEvent.class);
@@ -61,7 +64,8 @@ public class MunitMessageProcessorInterceptorTest {
         afterAssertionMp = new SpyMessageProcessor();
     }
 
-    private MockMunitMessageProcessorInterceptor interceptor() {
+    private MockMunitMessageProcessorInterceptor interceptor()
+    {
         MockMunitMessageProcessorInterceptor interceptor = new MockMunitMessageProcessorInterceptor(manager);
         interceptor.setId(MESSAGE_PROCESSOR_ID);
         return interceptor;
@@ -77,17 +81,20 @@ public class MunitMessageProcessorInterceptorTest {
      * </p>
      */
     @Test
-    public void interceptWithExceptionToThrow() throws Throwable {
+    public void interceptWithExceptionToThrow() throws Throwable
+    {
         MunitMessageProcessorInterceptor interceptor = interceptor();
         interceptor.setAttributes(new HashMap<String, String>());
 
         when(manager.getSpyAssertions()).thenReturn(new HashMap<MessageProcessorId, SpyAssertion>());
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(EXCEPTION_BEHAVIOR);
 
-        try{
-            interceptor.process(new Object(), new Object[]{event}, proxy);
+        try
+        {
+            interceptor.process(new Object(), new Object[] {event}, proxy);
         }
-        catch (Exception e){
+        catch (Exception e)
+        {
             assertEquals(EXCEPTION_TO_THROW, e);
             verify(manager).addCall(any(MunitMessageProcessorCall.class));
             return;
@@ -107,7 +114,8 @@ public class MunitMessageProcessorInterceptorTest {
      * </p>
      */
     @Test
-    public void interceptWithValueToReturn() throws Throwable {
+    public void interceptWithValueToReturn() throws Throwable
+    {
         MunitMessageProcessorInterceptor interceptor = interceptor();
         interceptor.setAttributes(new HashMap<String, String>());
 
@@ -117,7 +125,7 @@ public class MunitMessageProcessorInterceptorTest {
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
         when(event.getMessage()).thenReturn(expectedMessage);
 
-        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[]{event}, proxy);
+        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[] {event}, proxy);
 
         verify(manager).addCall(any(MunitMessageProcessorCall.class));
         assertEquals(expectedMessage, processed.getMessage());
@@ -134,7 +142,8 @@ public class MunitMessageProcessorInterceptorTest {
      * </p>
      */
     @Test
-    public void interceptWithSpyBeforeAssertion() throws Throwable {
+    public void interceptWithSpyBeforeAssertion() throws Throwable
+    {
         MunitMessageProcessorInterceptor interceptor = interceptor();
         interceptor.setAttributes(new HashMap<String, String>());
 
@@ -144,7 +153,7 @@ public class MunitMessageProcessorInterceptorTest {
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
         when(event.getMessage()).thenReturn(expectedMessage);
 
-        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[]{event}, proxy);
+        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[] {event}, proxy);
 
         verify(manager).addCall(any(MunitMessageProcessorCall.class));
         assertEquals(expectedMessage, processed.getMessage());
@@ -162,7 +171,8 @@ public class MunitMessageProcessorInterceptorTest {
      * </p>
      */
     @Test
-    public void interceptWithSpyBeforeAssertionWithAttributes() throws Throwable {
+    public void interceptWithSpyBeforeAssertionWithAttributes() throws Throwable
+    {
         MockMunitMessageProcessorInterceptor interceptor = interceptor();
         interceptor.setAttributes(getAttributes());
         interceptor.setContext(muleContext);
@@ -176,7 +186,7 @@ public class MunitMessageProcessorInterceptorTest {
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
         when(event.getMessage()).thenReturn(expectedMessage);
 
-        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[]{event}, proxy);
+        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[] {event}, proxy);
 
         verify(manager).addCall(any(MunitMessageProcessorCall.class));
         assertEquals(expectedMessage, processed.getMessage());
@@ -191,7 +201,8 @@ public class MunitMessageProcessorInterceptorTest {
      * </p>
      */
     @Test
-    public void interceptWithNoMockedMessageProcessor() throws Throwable {
+    public void interceptWithNoMockedMessageProcessor() throws Throwable
+    {
         MunitMessageProcessorInterceptor interceptor = interceptor();
         interceptor.setAttributes(new HashMap<String, String>());
 
@@ -208,7 +219,8 @@ public class MunitMessageProcessorInterceptorTest {
     }
 
     @Test
-    public void ifNoMessageProcessorClassThenCallProxyOnIntercept() throws Throwable {
+    public void ifNoMessageProcessorClassThenCallProxyOnIntercept() throws Throwable
+    {
 
         Method method = MunitMessageProcessorInterceptorTest.class.getMethod("ifNoMessageProcessorClassThenCallProxyOnIntercept");
         interceptor().intercept(OBJECT, method, null, proxy);
@@ -218,7 +230,8 @@ public class MunitMessageProcessorInterceptorTest {
 
 
     @Test
-    public void interceptProcessCallsOnly() throws Throwable {
+    public void interceptProcessCallsOnly() throws Throwable
+    {
 
         Method method = MessageProcessor.class.getMethod("process", MuleEvent.class);
         MockMunitMessageProcessorInterceptor interceptor = interceptor();
@@ -229,39 +242,46 @@ public class MunitMessageProcessorInterceptorTest {
         assertEquals(OBJECT, intercept);
     }
 
-    private HashMap<MessageProcessorId, SpyAssertion> spyAssertions(List<MessageProcessor> before,List<MessageProcessor> after ) {
+    private HashMap<MessageProcessorId, SpyAssertion> spyAssertions(List<MessageProcessor> before, List<MessageProcessor> after)
+    {
         HashMap<MessageProcessorId, SpyAssertion> map = new HashMap<MessageProcessorId, SpyAssertion>();
         map.put(MESSAGE_PROCESSOR_ID, new SpyAssertion(before, after));
         return map;
     }
 
-    private ArrayList<MessageProcessor> createAssertions(MessageProcessor messageProcessor) {
+    private ArrayList<MessageProcessor> createAssertions(MessageProcessor messageProcessor)
+    {
         ArrayList<MessageProcessor> messageProcessors = new ArrayList<MessageProcessor>();
         messageProcessors.add(messageProcessor);
         return messageProcessors;
     }
 
-    private MessageProcessorBehavior returnValueBehavior() {
+    private MessageProcessorBehavior returnValueBehavior()
+    {
         return new MessageProcessorBehavior(MESSAGE_PROCESSOR_CALL, muleMessage());
     }
 
-    private MuleMessage muleMessage() {
+    private MuleMessage muleMessage()
+    {
         return new DefaultMuleMessage(PAYLOAD, muleContext);
     }
 
-    private HashMap<String, String> getAttributes() {
+    private HashMap<String, String> getAttributes()
+    {
         HashMap<String, String> attrs = new HashMap<String, String>();
         attrs.put("attr", ATTR_VALUE);
         return attrs;
     }
 
 
-    private class SpyMessageProcessor implements MessageProcessor{
+    private class SpyMessageProcessor implements MessageProcessor
+    {
 
         boolean called;
 
         @Override
-        public MuleEvent process(MuleEvent event) throws MuleException {
+        public MuleEvent process(MuleEvent event) throws MuleException
+        {
             called = true;
             return event;
         }

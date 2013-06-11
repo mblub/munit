@@ -7,7 +7,7 @@ import org.mule.munit.AssertModule;
 
 /**
  * <p>
- *     Assert true message processor
+ * Assert true message processor
  * </p>
  *
  * @author Federico, Fernando
@@ -15,6 +15,7 @@ import org.mule.munit.AssertModule;
  */
 public class AssertTrueMessageProcessor extends MunitMessageProcessor
 {
+
     /**
      * @see AssertModule#assertTrue(String, Boolean)
      */
@@ -29,7 +30,8 @@ public class AssertTrueMessageProcessor extends MunitMessageProcessor
      * @see MunitMessageProcessor#doProcess(org.mule.api.MuleMessage, org.mule.munit.AssertModule)
      */
     @Override
-    protected void doProcess(MuleMessage mulemessage, AssertModule module) {
+    protected void doProcess(MuleMessage mulemessage, AssertModule module)
+    {
         module.assertTrue(message, (Boolean) evaluate(mulemessage, condition));
     }
 
@@ -37,15 +39,18 @@ public class AssertTrueMessageProcessor extends MunitMessageProcessor
      * @see org.mule.munit.config.MunitMessageProcessor#getProcessor()
      */
     @Override
-    protected String getProcessor() {
+    protected String getProcessor()
+    {
         return "assertTrue";
     }
 
-    public void setMessage(String message) {
+    public void setMessage(String message)
+    {
         this.message = message;
     }
 
-    public void setCondition(Object value) {
+    public void setCondition(Object value)
+    {
         this.condition = value;
     }
 

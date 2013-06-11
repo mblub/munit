@@ -3,6 +3,7 @@ package org.mule.munit.runner;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.registry.MuleRegistry;
@@ -16,7 +17,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class MunitRunnerTest {
+public class MunitRunnerTest
+{
 
 
     private static final String AFTER_TEST_DESCRIPTION = "After Test Description";
@@ -40,15 +42,16 @@ public class MunitRunnerTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         muleContext = mock(MuleContext.class);
         registry = mock(MuleRegistry.class);
         munitTest = mock(MunitTestFlow.class);
         manager = mock(MuleContextManager.class);
         afterTest = mock(MunitAfterSuite.class);
         beforeTest = mock(MunitBeforeSuite.class);
-        afterTestFlows = Arrays.asList(new MunitAfterSuite[]{afterTest});
-        beforeTestFlows = Arrays.asList(new MunitBeforeSuite[]{beforeTest});
+        afterTestFlows = Arrays.asList(new MunitAfterSuite[] {afterTest});
+        beforeTestFlows = Arrays.asList(new MunitBeforeSuite[] {beforeTest});
         handler = mock(TestOutputHandler.class);
 
         when(muleContext.getRegistry()).thenReturn(registry);
@@ -58,18 +61,22 @@ public class MunitRunnerTest {
      * If it doesn't fail then check that everything is called
      */
     @Test
-    public void killMuleMustBeCalled() throws MuleException {
+    public void killMuleMustBeCalled() throws MuleException
+    {
         setBehavior();
 
-        MunitRunner<MockSuiteResult> runner = new MunitRunner<MockSuiteResult>(handler, manager, muleContext){
+        MunitRunner<MockSuiteResult> runner = new MunitRunner<MockSuiteResult>(handler, manager, muleContext)
+        {
 
             @Override
-            protected MockSuiteResult runSuite() throws Exception {
+            protected MockSuiteResult runSuite() throws Exception
+            {
                 return null;
             }
 
             @Override
-            protected String getSuiteName() {
+            protected String getSuiteName()
+            {
                 return "testSuite";
             }
         };
@@ -84,18 +91,22 @@ public class MunitRunnerTest {
      * If fails after test and kill mule must be called
      */
     @Test(expected = RuntimeException.class)
-    public void killMuleMustBeCalledWhenFailed() throws MuleException {
+    public void killMuleMustBeCalledWhenFailed() throws MuleException
+    {
         setBehavior();
 
-        MunitRunner<MockSuiteResult> runner = new MunitRunner<MockSuiteResult>(handler, manager, muleContext){
+        MunitRunner<MockSuiteResult> runner = new MunitRunner<MockSuiteResult>(handler, manager, muleContext)
+        {
 
             @Override
-            protected MockSuiteResult runSuite() throws Exception {
+            protected MockSuiteResult runSuite() throws Exception
+            {
                 throw new Exception("error");
             }
 
             @Override
-            protected String getSuiteName() {
+            protected String getSuiteName()
+            {
                 return "testSuite";
             }
         };
@@ -105,7 +116,8 @@ public class MunitRunnerTest {
         verifyMocks();
     }
 
-    private void verifyMocks() throws MuleException {
+    private void verifyMocks() throws MuleException
+    {
         verify(handler, times(1)).printDescription(BEFORE_TEST_NAME, BEFORE_TEST_DESCRIPTION);
         verify(handler, times(1)).printDescription(AFTER_TEST_NAME, AFTER_TEST_DESCRIPTION);
         verify(afterTest, times(1)).process(null);
@@ -113,10 +125,11 @@ public class MunitRunnerTest {
         verify(manager, times(1)).killMule(muleContext);
     }
 
-    private void setBehavior() {
+    private void setBehavior()
+    {
         when(registry.lookupObjects(MunitBeforeSuite.class)).thenReturn(beforeTestFlows);
         when(registry.lookupObjects(MunitAfterSuite.class)).thenReturn(afterTestFlows);
-        when(registry.lookupObjects(MunitTestFlow.class)).thenReturn(Arrays.asList(new MunitTestFlow[]{munitTest}));
+        when(registry.lookupObjects(MunitTestFlow.class)).thenReturn(Arrays.asList(new MunitTestFlow[] {munitTest}));
 
         when(afterTest.getDescription()).thenReturn(AFTER_TEST_DESCRIPTION);
         when(afterTest.getName()).thenReturn(AFTER_TEST_NAME);
@@ -124,6 +137,8 @@ public class MunitRunnerTest {
         when(beforeTest.getName()).thenReturn(BEFORE_TEST_NAME);
     }
 
-    private class MockSuiteResult {
+    private class MockSuiteResult
+    {
+
     }
 }

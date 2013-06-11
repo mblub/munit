@@ -1,6 +1,7 @@
 package org.mule.munit.config;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.mule.api.*;
 import org.mule.api.construct.FlowConstruct;
 import org.mule.api.construct.FlowConstructAware;
@@ -21,13 +22,14 @@ import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
 
 /**
  * <p>
- *     Generic Munit Message Processor.
+ * Generic Munit Message Processor.
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public abstract class MunitMessageProcessor implements Initialisable, MessageProcessor, MuleContextAware, FlowConstructAware{
+public abstract class MunitMessageProcessor implements Initialisable, MessageProcessor, MuleContextAware, FlowConstructAware
+{
 
     protected FlowConstruct flowConstruct;
     protected Object moduleObject;
@@ -43,40 +45,55 @@ public abstract class MunitMessageProcessor implements Initialisable, MessagePro
         retryCount = new AtomicInteger();
         expressionManager = muleContext.getExpressionManager();
         patternInfo = TemplateParser.createMuleStyleParser().getStyle();
-        if (moduleObject == null) {
-            try {
+        if (moduleObject == null)
+        {
+            try
+            {
                 moduleObject = muleContext.getRegistry().lookupObject(AssertModule.class);
-                if (moduleObject == null) {
+                if (moduleObject == null)
+                {
                     throw new InitialisationException(MessageFactory.createStaticMessage("Cannot find object"), this);
                 }
-            } catch (RegistrationException e) {
+            }
+            catch (RegistrationException e)
+            {
                 throw new InitialisationException(CoreMessages.initialisationFailure("org.mule.munit.AssertModule"), e, this);
             }
         }
 
     }
 
-    protected AssertModule getModule(MuleEvent event, String methodName) throws MessagingException {
+    protected AssertModule getModule(MuleEvent event, String methodName) throws MessagingException
+    {
         AssertModule castedModuleObject;
-        if (moduleObject instanceof String) {
+        if (moduleObject instanceof String)
+        {
             castedModuleObject = ((AssertModule) muleContext.getRegistry().lookupObject(((String) moduleObject)));
-            if (castedModuleObject == null) {
+            if (castedModuleObject == null)
+            {
                 throw new MessagingException(CoreMessages.failedToCreate(methodName), event, new RuntimeException("Cannot find the configuration specified by the org.mule.munit.config-ref attribute."));
             }
-        } else {
+        }
+        else
+        {
             castedModuleObject = ((AssertModule) moduleObject);
         }
         return castedModuleObject;
     }
 
 
-    protected Object evaluate(MuleMessage muleMessage, Object source) {
-        if (source instanceof String) {
+    protected Object evaluate(MuleMessage muleMessage, Object source)
+    {
+        if (source instanceof String)
+        {
             String stringSource = ((String) source);
-            if (stringSource.startsWith(patternInfo.getPrefix())&&stringSource.endsWith(patternInfo.getSuffix())) {
+            if (stringSource.startsWith(patternInfo.getPrefix()) && stringSource.endsWith(patternInfo.getSuffix()))
+            {
                 return expressionManager.evaluate(stringSource, muleMessage);
-            } else {
-                    return expressionManager.parse(stringSource, muleMessage);
+            }
+            else
+            {
+                return expressionManager.parse(stringSource, muleMessage);
             }
         }
         return source;
@@ -84,39 +101,41 @@ public abstract class MunitMessageProcessor implements Initialisable, MessagePro
 
     /**
      * <p>
-     *     Executes the message processor code. In case of an assertion error it throws a new exception with the
-     *     mule stack trace (@since 3.4)
+     * Executes the message processor code. In case of an assertion error it throws a new exception with the
+     * mule stack trace (@since 3.4)
      * </p>
-     * @param event
-     * <p>
-     *     The mule event to be processed.
-     * </p>
-     * @return
-     * <p>
-     *     The result mule event
-     * </p>
-     * @throws MuleException
-     * <p>
-     *     In case of error. If the assertion fails, it throws an {@link AssertionError}
-     * </p>
+     *
+     * @param event <p>
+     *              The mule event to be processed.
+     *              </p>
+     * @return <p>
+     *         The result mule event
+     *         </p>
+     * @throws MuleException <p>
+     *                       In case of error. If the assertion fails, it throws an {@link AssertionError}
+     *                       </p>
      */
     public MuleEvent process(MuleEvent event)
             throws MuleException
     {
         MuleMessage mulemessage = event.getMessage();
         AssertModule module = getModule(event, getProcessor());
-        try {
+        try
+        {
             retryCount.getAndIncrement();
             doProcess(mulemessage, module);
             retryCount.set(0);
             return event;
-        }catch (AssertionError error){
-            AssertionError exception = new AssertionError(getMessage(error));
-            exception.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[]{}));
-
-            throw  exception;
         }
-        catch (Exception e) {
+        catch (AssertionError error)
+        {
+            AssertionError exception = new AssertionError(getMessage(error));
+            exception.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[] {}));
+
+            throw exception;
+        }
+        catch (Exception e)
+        {
             throw new MessagingException(CoreMessages.failedToInvoke(getProcessor()), event, e);
         }
     }
@@ -124,42 +143,45 @@ public abstract class MunitMessageProcessor implements Initialisable, MessagePro
 
     /**
      * <p>
-     *     The method that do the actual process
+     * The method that do the actual process
      * </p>
      *
-     * @param mulemessage
-     *      <p>The mule Message</p>
-     * @param module
-     *      <p>The instance of the assert module</p>
+     * @param mulemessage <p>The mule Message</p>
+     * @param module      <p>The instance of the assert module</p>
      */
     protected abstract void doProcess(MuleMessage mulemessage, AssertModule module);
 
     /**
-     * @return
-     *      <p>The name of the processor</p>
+     * @return <p>The name of the processor</p>
      */
     protected abstract String getProcessor();
 
-    public void setMuleContext(MuleContext context) {
+    public void setMuleContext(MuleContext context)
+    {
         this.muleContext = context;
     }
 
-    public void setModuleObject(Object moduleObject) {
+    public void setModuleObject(Object moduleObject)
+    {
         this.moduleObject = moduleObject;
     }
 
-    public void setRetryMax(int value) {
+    public void setRetryMax(int value)
+    {
         this.retryMax = value;
     }
 
 
-    public void setFlowConstruct(FlowConstruct flowConstruct) {
+    public void setFlowConstruct(FlowConstruct flowConstruct)
+    {
         this.flowConstruct = flowConstruct;
     }
 
-    private String getMessage(AssertionError error) {
+    private String getMessage(AssertionError error)
+    {
         String message = error.getMessage();
-        if ( StringUtils.isEmpty(message )) {
+        if (StringUtils.isEmpty(message))
+        {
             return this.getProcessor();
         }
         return message;

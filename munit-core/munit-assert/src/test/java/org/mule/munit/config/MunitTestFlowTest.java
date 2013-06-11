@@ -2,6 +2,7 @@ package org.mule.munit.config;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mule.api.MessagingException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -17,7 +18,8 @@ import static org.mockito.Mockito.when;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitTestFlowTest {
+public class MunitTestFlowTest
+{
 
     public static final String EXPECTED = "expected";
     MuleContext muleContext = mock(MuleContext.class);
@@ -27,14 +29,16 @@ public class MunitTestFlowTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         when(muleContext.getRegistry()).thenReturn(registry);
         when(muleContext.getExpressionManager()).thenReturn(expressionManager);
 
     }
 
     @Test
-    public void testSetters(){
+    public void testSetters()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
 
         testFlow.setExpectExceptionThatSatisfies(EXPECTED);
@@ -43,9 +47,10 @@ public class MunitTestFlowTest {
         assertTrue(testFlow.isIgnore());
         assertEquals(EXPECTED, testFlow.getExpectExceptionThatSatisfies());
     }
-    
+
     @Test
-    public void testExceptionWhenMatchesExpression(){
+    public void testExceptionWhenMatchesExpression()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
         testFlow.setExpectExceptionThatSatisfies(EXPECTED);
 
@@ -55,8 +60,9 @@ public class MunitTestFlowTest {
         assertTrue(testFlow.expectException(new Exception(), muleEvent));
     }
 
-    @Test(expected =  junit.framework.AssertionFailedError.class)
-    public void testExceptionWhenDoesntMatchExpression(){
+    @Test(expected = junit.framework.AssertionFailedError.class)
+    public void testExceptionWhenDoesntMatchExpression()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
         testFlow.setExpectExceptionThatSatisfies(EXPECTED);
 
@@ -67,7 +73,8 @@ public class MunitTestFlowTest {
     }
 
     @Test
-    public void testExceptionWheIsNotExpressionButMatchesName(){
+    public void testExceptionWheIsNotExpressionButMatchesName()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
         testFlow.setExpectExceptionThatSatisfies(Exception.class.getCanonicalName());
 
@@ -76,8 +83,9 @@ public class MunitTestFlowTest {
         assertTrue(testFlow.expectException(new Exception(), muleEvent));
     }
 
-    @Test(expected =  junit.framework.AssertionFailedError.class)
-    public void testExceptionWheIsNotExpressionAndDoesntMatchName(){
+    @Test(expected = junit.framework.AssertionFailedError.class)
+    public void testExceptionWheIsNotExpressionAndDoesntMatchName()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
         testFlow.setExpectExceptionThatSatisfies("any");
 
@@ -86,8 +94,9 @@ public class MunitTestFlowTest {
         testFlow.expectException(new Exception(), muleEvent);
     }
 
-    @Test(expected =  junit.framework.AssertionFailedError.class)
-    public void testMessagingWithNoCauseException(){
+    @Test(expected = junit.framework.AssertionFailedError.class)
+    public void testMessagingWithNoCauseException()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
         testFlow.setExpectExceptionThatSatisfies("any");
 
@@ -96,8 +105,9 @@ public class MunitTestFlowTest {
         testFlow.expectException(new MessagingException(muleEvent, null), muleEvent);
     }
 
-    @Test(expected =  junit.framework.AssertionFailedError.class)
-    public void testMessagingWithCauseExceptionThatDoesntMatchTheName(){
+    @Test(expected = junit.framework.AssertionFailedError.class)
+    public void testMessagingWithCauseExceptionThatDoesntMatchTheName()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
         testFlow.setExpectExceptionThatSatisfies("any");
 
@@ -107,7 +117,8 @@ public class MunitTestFlowTest {
     }
 
     @Test
-    public void testMessagingWithCauseExceptionThattMatchesTheName(){
+    public void testMessagingWithCauseExceptionThattMatchesTheName()
+    {
         MunitTestFlow testFlow = new MunitTestFlow("name", muleContext);
         testFlow.setExpectExceptionThatSatisfies(Exception.class.getCanonicalName());
 

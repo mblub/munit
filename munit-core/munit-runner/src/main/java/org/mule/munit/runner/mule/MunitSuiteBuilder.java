@@ -15,16 +15,19 @@ import java.util.List;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitSuiteBuilder extends SuiteBuilder<MunitSuite, MunitTest> {
+public class MunitSuiteBuilder extends SuiteBuilder<MunitSuite, MunitTest>
+{
 
     private TestOutputHandler handler;
 
 
     public MunitSuiteBuilder(MuleContext muleContext,
-                             TestOutputHandler handler) {
+                             TestOutputHandler handler)
+    {
         super(muleContext);
 
-        if ( handler == null ){
+        if (handler == null)
+        {
             throw new IllegalArgumentException("Handler must not be null");
         }
 
@@ -35,9 +38,11 @@ public class MunitSuiteBuilder extends SuiteBuilder<MunitSuite, MunitTest> {
      * @see SuiteBuilder
      */
     @Override
-    protected MunitSuite createSuite(String name) {
+    protected MunitSuite createSuite(String name)
+    {
         MunitSuite suite = new MunitSuite(name);
-        for ( MunitTest test : this.tests){
+        for (MunitTest test : this.tests)
+        {
             suite.add(test);
         }
 
@@ -48,7 +53,8 @@ public class MunitSuiteBuilder extends SuiteBuilder<MunitSuite, MunitTest> {
      * @see SuiteBuilder
      */
     @Override
-    protected MunitTest test(List<MunitFlow> beforeTest, MunitTestFlow test, List<MunitFlow> afterTest) {
+    protected MunitTest test(List<MunitFlow> beforeTest, MunitTestFlow test, List<MunitFlow> afterTest)
+    {
         return new MunitTest(beforeTest, test, afterTest, handler);
     }
 }

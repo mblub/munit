@@ -9,34 +9,39 @@ import org.mule.munit.runner.mule.result.notification.NotificationListener;
 
 import java.io.PrintStream;
 
-public class StreamNotificationListener implements NotificationListener {
+public class StreamNotificationListener implements NotificationListener
+{
+
     private PrintStream out;
     private boolean debugMode = true;
 
-    public StreamNotificationListener(PrintStream out) {
+    public StreamNotificationListener(PrintStream out)
+    {
         this.out = out;
     }
 
-    public void notifyStartOf(MunitTest test) {
+    public void notifyStartOf(MunitTest test)
+    {
         out.flush();
     }
 
-    public void notify(TestResult testResult) {
+    public void notify(TestResult testResult)
+    {
         Notification notification = null;
-        if ( testResult.getNumberOfErrors() > 0 )
+        if (testResult.getNumberOfErrors() > 0)
         {
             out.println("ERROR - The test " + testResult.getTestName() + " finished with an Error.");
             out.flush();
             notification = testResult.getError();
         }
-        else if ( testResult.getFailure() != null )
+        else if (testResult.getFailure() != null)
         {
             out.println("FAILURE - The test " + testResult.getTestName() + " finished with a Failure.");
             out.flush();
             notification = testResult.getFailure();
         }
 
-        if ( notification != null )
+        if (notification != null)
         {
             out.println(notification.getShortMessage());
 
@@ -54,7 +59,8 @@ public class StreamNotificationListener implements NotificationListener {
     }
 
     @Override
-    public void notifyEnd(SuiteResult result) {
+    public void notifyEnd(SuiteResult result)
+    {
         out.println();
         out.println("===========================================================================");
         out.println("Number of tests run: " + result.getNumberOfTests() + " - Failed: " + result.getNumberOfFailures() + " - Errors: " + result.getNumberOfErrors() + " - Skipped: " + result.getNumberOfSkipped());
@@ -62,7 +68,8 @@ public class StreamNotificationListener implements NotificationListener {
         out.flush();
     }
 
-    public void setDebugMode(boolean debugMode) {
+    public void setDebugMode(boolean debugMode)
+    {
         this.debugMode = debugMode;
     }
 }

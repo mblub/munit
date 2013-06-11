@@ -69,7 +69,8 @@ public class MunitApplicationContext extends MuleApplicationContext
 
 
     @Override
-    protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+    protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory)
+    {
         super.prepareBeanFactory(beanFactory);
         MunitSpringFactoryPostProcessor bean = beanFactory.getBean(MunitSpringFactoryPostProcessor.class);
         bean.setMuleContext(this.getMuleContext());

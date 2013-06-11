@@ -11,11 +11,11 @@
             http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
             http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
 
-    <munit:config />
+    <munit:config/>
     <mock:config/>
 
     <spring:beans>
-        <spring:import resource="poll-config.xml" />
+        <spring:import resource="poll-config.xml"/>
     </spring:beans>
 
 
@@ -37,9 +37,9 @@
         </mock:when>
 
         <munit:set
-                payload-ref="#[resultOfScript('mockTaskList')]" />
+                payload-ref="#[resultOfScript('mockTaskList')]"/>
 
-        <flow-ref name="jira-mock-exampleFlow" />
+        <flow-ref name="jira-mock-exampleFlow"/>
 
 
     </munit:test>

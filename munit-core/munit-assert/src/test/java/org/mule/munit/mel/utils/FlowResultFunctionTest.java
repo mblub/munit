@@ -1,6 +1,7 @@
 package org.mule.munit.mel.utils;
 
 import org.junit.Test;
+
 import org.mule.api.MuleContext;
 import org.mule.api.registry.MuleRegistry;
 import org.mule.module.scripting.component.Scriptable;
@@ -17,7 +18,8 @@ import static org.mockito.Mockito.when;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class FlowResultFunctionTest {
+public class FlowResultFunctionTest
+{
 
     public static final String SCRIPT_NAME = "scriptName";
     public static final String SCRIPT_RESULT = "scriptResult";
@@ -28,57 +30,63 @@ public class FlowResultFunctionTest {
     private Bindings bindings = mock(Bindings.class);
 
     @Test(expected = IllegalArgumentException.class)
-    public void callWithNull(){
-        new FlowResultFunction(muleContext).call(null,null);
+    public void callWithNull()
+    {
+        new FlowResultFunction(muleContext).call(null, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void callWithEmpty(){
-        new FlowResultFunction(muleContext).call(new Object[]{},null);
+    public void callWithEmpty()
+    {
+        new FlowResultFunction(muleContext).call(new Object[] {}, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void callWithNotString(){
-        new FlowResultFunction(muleContext).call(new Object[]{new Object()},null);
+    public void callWithNotString()
+    {
+        new FlowResultFunction(muleContext).call(new Object[] {new Object()}, null);
     }
 
     @Test(expected = NullPointerException.class)
-    public void callWithScriptNameThatDoesNotExist(){
+    public void callWithScriptNameThatDoesNotExist()
+    {
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
         when(muleRegistry.lookupObject(SCRIPT_NAME)).thenReturn(null);
-        new FlowResultFunction(muleContext).call(new Object[]{SCRIPT_NAME}, null);
+        new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void callWithScriptNameThatExistsButIsNotAnScript(){
+    public void callWithScriptNameThatExistsButIsNotAnScript()
+    {
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
         when(muleRegistry.lookupObject(SCRIPT_NAME)).thenReturn(new Object());
-        new FlowResultFunction(muleContext).call(new Object[]{SCRIPT_NAME}, null);
+        new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null);
     }
 
 
     @Test
-    public void callWithScriptNameThatExists() throws ScriptException {
+    public void callWithScriptNameThatExists() throws ScriptException
+    {
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
         when(muleRegistry.lookupObject(SCRIPT_NAME)).thenReturn(script);
         when(script.getScriptEngine()).thenReturn(scriptEngine);
         when(scriptEngine.createBindings()).thenReturn(bindings);
         when(script.runScript(bindings)).thenReturn(SCRIPT_RESULT);
-       
-        assertEquals(SCRIPT_RESULT, new FlowResultFunction(muleContext).call(new Object[]{SCRIPT_NAME}, null));
+
+        assertEquals(SCRIPT_RESULT, new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null));
     }
 
     @Test(expected = RuntimeException.class)
-    public void callAndScriptFails() throws ScriptException {
+    public void callAndScriptFails() throws ScriptException
+    {
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
         when(muleRegistry.lookupObject(SCRIPT_NAME)).thenReturn(script);
         when(script.getScriptEngine()).thenReturn(scriptEngine);
         when(scriptEngine.createBindings()).thenReturn(bindings);
         when(script.runScript(bindings)).thenThrow(new ScriptException("error"));
 
-        new FlowResultFunction(muleContext).call(new Object[]{SCRIPT_NAME}, null);
+        new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null);
     }
-
 
 
 }

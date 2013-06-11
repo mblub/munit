@@ -4,6 +4,7 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetupTest;
 
 import javax.mail.internet.MimeMessage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,30 +14,38 @@ import java.util.List;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MailServer {
+public class MailServer
+{
+
     /**
      * <p>This class is just a wrapper of Green Mail, so here is the instance of GreenMail server</p>
      */
     private GreenMail mailServer;
 
-    public MailServer() {
+    public MailServer()
+    {
         mailServer = new GreenMail(ServerSetupTest.ALL);
     }
 
-    public void start(){
+    public void start()
+    {
         mailServer.start();
     }
 
-    public void stop(){
-        try{
+    public void stop()
+    {
+        try
+        {
             mailServer.stop();
         }
-        catch (Throwable e){
+        catch (Throwable e)
+        {
             // Do nothing
         }
     }
 
-    public List<MimeMessage> getReceivedMessages(){
+    public List<MimeMessage> getReceivedMessages()
+    {
         return Arrays.asList(mailServer.getReceivedMessages());
     }
 

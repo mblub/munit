@@ -1,6 +1,7 @@
 package org.mule.munit.config;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.mule.api.MessagingException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -14,13 +15,15 @@ import static junit.framework.Assert.fail;
 
 /**
  * <p>
- *     The Test Flow
+ * The Test Flow
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class MunitTestFlow extends MunitFlow {
+public class MunitTestFlow extends MunitFlow
+{
+
     /**
      * <p>Determines if the test has to be ignored</p>
      */
@@ -31,34 +34,42 @@ public class MunitTestFlow extends MunitFlow {
      */
     private String expectExceptionThatSatisfies;
 
-    public MunitTestFlow(String name, MuleContext muleContext) {
+    public MunitTestFlow(String name, MuleContext muleContext)
+    {
         super(name, muleContext);
 
         registerMpManager(muleContext);
     }
 
-    public String getExpectExceptionThatSatisfies() {
+    public String getExpectExceptionThatSatisfies()
+    {
         return expectExceptionThatSatisfies;
     }
 
-    public void setExpectExceptionThatSatisfies(String expectExceptionThatSatisfies) {
+    public void setExpectExceptionThatSatisfies(String expectExceptionThatSatisfies)
+    {
         this.expectExceptionThatSatisfies = expectExceptionThatSatisfies;
     }
 
-    public void setIgnore(boolean ignore) {
+    public void setIgnore(boolean ignore)
+    {
         this.ignore = ignore;
     }
 
-    public boolean isIgnore() {
+    public boolean isIgnore()
+    {
         return ignore;
     }
 
-    private boolean expectException(Throwable t) {
+    private boolean expectException(Throwable t)
+    {
 
         String className = t.getClass().getName();
-        if (t instanceof MessagingException) {
+        if (t instanceof MessagingException)
+        {
             Exception causeException = ((MessagingException) t).getCauseException();
-            if (causeException != null) {
+            if (causeException != null)
+            {
                 className = causeException.getClass().getName();
             }
         }
@@ -66,36 +77,43 @@ public class MunitTestFlow extends MunitFlow {
         return true;
     }
 
-    public boolean expectException(Throwable t, MuleEvent event) {
+    public boolean expectException(Throwable t, MuleEvent event)
+    {
 
-        if (!StringUtils.isEmpty(expectExceptionThatSatisfies)) {
+        if (!StringUtils.isEmpty(expectExceptionThatSatisfies))
+        {
             ExpressionManager expressionManager = muleContext.getExpressionManager();
-            if ( expressionManager.isExpression(expectExceptionThatSatisfies)) {
+            if (expressionManager.isExpression(expectExceptionThatSatisfies))
+            {
                 Boolean expressionResult = (Boolean) expressionManager.evaluate(expectExceptionThatSatisfies, event);
-                if ( !expressionResult ){
+                if (!expressionResult)
+                {
                     fail("The exception does not match your MEL expression");
                 }
                 return true;
             }
-            else{
+            else
+            {
                 return expectException(t);
             }
-            
+
         }
 
         return false;
     }
 
     @Override
-    public MuleEvent process(MuleEvent event) throws MuleException {
+    public MuleEvent process(MuleEvent event) throws MuleException
+    {
 
-            MuleEvent process = super.process(event);
-            return process;
+        MuleEvent process = super.process(event);
+        return process;
 
 
     }
 
-    private void registerMpManager(MuleContext muleContext) {
+    private void registerMpManager(MuleContext muleContext)
+    {
         MunitCore.registerManager(muleContext);
     }
 

@@ -31,9 +31,10 @@ import org.mule.api.annotations.param.Optional;
  * @author Federico, Fernando
  * @author Casal, Javier
  */
-@Module(name="dbserver", schemaVersion="1.0")
+@Module(name = "dbserver", schemaVersion = "1.0")
 public class DBServerModule
 {
+
     /**
      * <p>H2 Database name</p>
      */
@@ -59,26 +60,24 @@ public class DBServerModule
     private DatabaseServer server;
 
 
-
     /**
      * <p>Starts the server</p>
      * <p>Executes the correspondent queries if an SQL file has been included in the dbserver configuration</p>
      * <p>Creates the correspondent tables in the database if a CSV file has been included in the dbserver
      * configuration</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/DBServer-connector.xml.sample dbserver:start}
-     *
      */
     @Processor
     public void startDbServer()
     {
-        server = new DatabaseServer(database,sqlFile,csv);
+        server = new DatabaseServer(database, sqlFile, csv);
         server.start();
     }
 
     /**
      * <p>Executes the SQL query received as parameter</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/DBServer-connector.xml.sample dbserver:execute}
      *
      * @param sql query to be executed
@@ -93,7 +92,7 @@ public class DBServerModule
 
     /**
      * <p>Executes a SQL query</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/DBServer-connector.xml.sample dbserver:executeQuery}
      *
      * @param sql query to be executed
@@ -107,21 +106,21 @@ public class DBServerModule
 
     /**
      * <p>Executes a SQL query</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/DBServer-connector.xml.sample dbserver:validateThat}
      *
-     * @param query query to be executed
+     * @param query   query to be executed
      * @param returns Expected value
      */
     @Processor
     public void validateThat(String query, String returns)
     {
-       server.validateThat(query,returns);
+        server.validateThat(query, returns);
     }
 
     /**
      * <p>Stops the server.</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/DBServer-connector.xml.sample dbserver:stop}
      */
     @Processor

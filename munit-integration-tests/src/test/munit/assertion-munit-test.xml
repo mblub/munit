@@ -22,8 +22,6 @@
     </spring:beans>
 
 
-
-
     <munit:test name="testingEchoFlow"
                 description="
         We want to test that the flow always returns the same payload as we had before calling it.">
@@ -92,7 +90,7 @@
 
 
     <munit:test name="testingGetResourceFunctionAsString"
-    	description="We want to validate that the payload is the same as the file picked">
+                description="We want to validate that the payload is the same as the file picked">
 
         <munit:set payload-ref='#[getResource("testFile.txt").asString()]'/>
 
@@ -101,7 +99,8 @@
     </munit:test>
 
 
-    <munit:test name="testExceptions" description="Test Exceptions" expectExceptionThatSatisfies="org.mule.api.transformer.TransformerException">
+    <munit:test name="testExceptions" description="Test Exceptions"
+                expectExceptionThatSatisfies="org.mule.api.transformer.TransformerException">
         <flow-ref name="exceptionFlow"/>
     </munit:test>
 
@@ -119,10 +118,10 @@
                 <munit:invocation-property key="invocation" value-ref="#[string:invocationValue]"/>
             </munit:invocation-properties>
             <munit:inbound-properties>
-                <munit:inbound-property key="inbound" value-ref="#[string:inboundValue]" />
+                <munit:inbound-property key="inbound" value-ref="#[string:inboundValue]"/>
             </munit:inbound-properties>
             <munit:outbound-properties>
-                <munit:outbound-property key="outbound" value-ref="#[string:outboundValue]" />
+                <munit:outbound-property key="outbound" value-ref="#[string:outboundValue]"/>
             </munit:outbound-properties>
         </munit:set>
 

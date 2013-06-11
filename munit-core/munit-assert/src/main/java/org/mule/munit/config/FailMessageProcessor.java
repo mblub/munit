@@ -7,7 +7,7 @@ import org.mule.munit.AssertModule;
 
 /**
  * <p>
- *     Assert Fail Message processor
+ * Assert Fail Message processor
  * </p>
  *
  * @author Federico, Fernando
@@ -15,6 +15,7 @@ import org.mule.munit.AssertModule;
  */
 public class FailMessageProcessor extends MunitMessageProcessor
 {
+
     /**
      * @see AssertModule#fail(String)
      */
@@ -24,7 +25,8 @@ public class FailMessageProcessor extends MunitMessageProcessor
      * @see MunitMessageProcessor#doProcess(org.mule.api.MuleMessage, org.mule.munit.AssertModule)
      */
     @Override
-    protected void doProcess(MuleMessage mulemessage, AssertModule module) {
+    protected void doProcess(MuleMessage mulemessage, AssertModule module)
+    {
         module.fail(message);
     }
 
@@ -32,11 +34,13 @@ public class FailMessageProcessor extends MunitMessageProcessor
      * @see org.mule.munit.config.MunitMessageProcessor#getProcessor()
      */
     @Override
-    protected String getProcessor() {
+    protected String getProcessor()
+    {
         return "Fail";
     }
 
-    public void setMessage(String message) {
+    public void setMessage(String message)
+    {
         this.message = message;
     }
 }

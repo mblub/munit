@@ -8,17 +8,15 @@ import org.mule.api.MuleEvent;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public interface MunitAssertion {
+public interface MunitAssertion
+{
 
     /**
      * <p>Method that asserts a mule event</p>
      *
-     * @param muleEvent
-     *      <p>Mule Event to be asserted</p></p>
-     * @return
-     *      <p>The original Mule Event</p>
-     * @throws AssertionError
-     *      <p>Case the assertion fails</p>
+     * @param muleEvent <p>Mule Event to be asserted</p></p>
+     * @return <p>The original Mule Event</p>
+     * @throws AssertionError <p>Case the assertion fails</p>
      */
     MuleEvent execute(MuleEvent muleEvent) throws AssertionError;
 }

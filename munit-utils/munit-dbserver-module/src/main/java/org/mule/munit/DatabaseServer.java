@@ -16,7 +16,8 @@ import java.util.Map;
 import static junit.framework.Assert.assertEquals;
 
 
-public class DatabaseServer {
+public class DatabaseServer
+{
 
     private static Logger logger = Logger.getLogger(DatabaseServer.class);
 
@@ -42,7 +43,8 @@ public class DatabaseServer {
      */
     private Connection connection;
 
-    public DatabaseServer(String database, String sqlFile, String csv) {
+    public DatabaseServer(String database, String sqlFile, String csv)
+    {
         this.database = database;
         this.sqlFile = sqlFile;
         this.csv = csv;
@@ -60,7 +62,7 @@ public class DatabaseServer {
         try
         {
             addJdbcToClassLoader();
-            connection = DriverManager.getConnection("jdbc:h2:mem:"+ database);
+            connection = DriverManager.getConnection("jdbc:h2:mem:" + database);
             executeQueriesFromSQLFile(connection);
             Statement stmt = connection.createStatement();
             createTablesFromCsv(stmt);
@@ -73,7 +75,6 @@ public class DatabaseServer {
 
     /**
      * <p>Executes the SQL query received as parameter</p>
-     *
      *
      * @param sql query to be executed
      * @return result of the SQL query received
@@ -115,7 +116,7 @@ public class DatabaseServer {
     /**
      * <p>Executes a SQL query</p>
      *
-     * @param query query to be executed
+     * @param query   query to be executed
      * @param returns Expected value
      */
     public void validateThat(String query, String returns)
@@ -147,7 +148,10 @@ public class DatabaseServer {
     {
         try
         {
-            if ( connection != null ) connection.close();
+            if (connection != null)
+            {
+                connection.close();
+            }
         }
         catch (SQLException e)
         {
@@ -156,14 +160,14 @@ public class DatabaseServer {
     }
 
     private void addJdbcToClassLoader() throws InstantiationException,
-            IllegalAccessException, ClassNotFoundException
+                                               IllegalAccessException, ClassNotFoundException
     {
         Class.forName("org.h2.Driver").newInstance();
     }
 
     private void executeQueriesFromSQLFile(Connection conn) throws SQLException, FileNotFoundException
     {
-        if(sqlFile != null)
+        if (sqlFile != null)
         {
             InputStream streamImput = getClass().getResourceAsStream(File.separator + sqlFile);
             RunScript.execute(conn, new InputStreamReader(streamImput));
@@ -175,13 +179,13 @@ public class DatabaseServer {
         if (csv != null)
         {
             String[] tables = csv.split(";");
-            for ( String table : tables )
+            for (String table : tables)
             {
                 String tableName = table.replaceAll(".csv", "");
                 try
                 {
-                    stmt.execute("CREATE TABLE "+tableName+" AS SELECT * FROM CSVREAD(\'" + getClass().
-                            getResource("/"+table).toURI().toASCIIString()  + "\');");
+                    stmt.execute("CREATE TABLE " + tableName + " AS SELECT * FROM CSVREAD(\'" + getClass().
+                            getResource("/" + table).toURI().toASCIIString() + "\');");
                 }
                 catch (SQLException e)
                 {
@@ -200,11 +204,11 @@ public class DatabaseServer {
         Statement statement;
         statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
-        List<Map<String, String>> jsonArray = new ArrayList<Map<String,String>>();
+        List<Map<String, String>> jsonArray = new ArrayList<Map<String, String>>();
         ResultSetMetaData metaData = resultSet.getMetaData();
         while (resultSet.next())
         {
-            HashMap<String, String> jsonObject = new HashMap<String,String>();
+            HashMap<String, String> jsonObject = new HashMap<String, String>();
             for (int i = 1; i <= metaData.getColumnCount(); i++)
             {
                 String columnName = metaData.getColumnName(i);
@@ -215,14 +219,15 @@ public class DatabaseServer {
         return jsonArray;
     }
 
-    private Writer getResults(String sql) throws SQLException, IOException {
+    private Writer getResults(String sql) throws SQLException, IOException
+    {
         Statement statement;
         statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
         Writer writer = new StringWriter();
         CSVWriter csvwriter = new CSVWriter(writer);
-        csvwriter.writeAll(resultSet,true);
+        csvwriter.writeAll(resultSet, true);
 
         return writer;
     }

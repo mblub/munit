@@ -19,18 +19,21 @@ import java.util.Arrays;
  *
  * @author Federico, Fernando
  */
-public class SFTPServer extends Server {
+public class SFTPServer extends Server
+{
 
     private SshServer sshd;
 
-    public static Server instance(int port){
+    public static Server instance(int port)
+    {
         SFTPServer sftpServer = new SFTPServer();
         sftpServer.initialize(port);
         return sftpServer;
     }
 
     @Override
-    public void initialize(int port) {
+    public void initialize(int port)
+    {
         Security.addProvider(new BouncyCastleProvider());
         sshd = SshServer.setUpDefaultServer();
         sshd.setPort(port);
@@ -46,19 +49,27 @@ public class SFTPServer extends Server {
     }
 
     @Override
-    public void start() {
-        try {
+    public void start()
+    {
+        try
+        {
             sshd.start();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new RuntimeException("Could not start the server", e);
         }
     }
 
     @Override
-    public void stop() {
-        try {
+    public void stop()
+    {
+        try
+        {
             sshd.stop();
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             throw new RuntimeException("Could not stop the server", e);
         }
         sshd = null;
@@ -69,7 +80,8 @@ public class SFTPServer extends Server {
     {
 
         @Override
-        public boolean authenticate(String s, String s1, ServerSession serverSession) {
+        public boolean authenticate(String s, String s1, ServerSession serverSession)
+        {
             return true;
         }
     }

@@ -3,19 +3,22 @@ package org.mule.munit;
 
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
+
 import org.mule.transport.NullPayload;
 
 /**
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class AssertModuleTest {
+public class AssertModuleTest
+{
 
     /**
      * Two equal payloads should not fail
      */
     @Test
-    public void assertPayloadOkWithEmptyMessage(){
+    public void assertPayloadOkWithEmptyMessage()
+    {
         module().assertThat(null, "a", "a");
     }
 
@@ -23,7 +26,8 @@ public class AssertModuleTest {
      * Two equal payloads should not fail
      */
     @Test
-    public void assertPayloadOkWithMessage(){
+    public void assertPayloadOkWithMessage()
+    {
         module().assertThat("My Message", "a", "a");
     }
 
@@ -31,7 +35,8 @@ public class AssertModuleTest {
      * Two different payloads must fail
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertPayloadFailWithEmptyMessage(){
+    public void assertPayloadFailWithEmptyMessage()
+    {
         module().assertThat(null, "a", "b");
     }
 
@@ -39,7 +44,8 @@ public class AssertModuleTest {
      * Assert True accepts true values
      */
     @Test
-    public void assertTrueOkWithTrueValues(){
+    public void assertTrueOkWithTrueValues()
+    {
         module().assertTrue(null, true);
     }
 
@@ -47,7 +53,8 @@ public class AssertModuleTest {
      * Assert True rejects false values
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertTrueRejectsFalseValues(){
+    public void assertTrueRejectsFalseValues()
+    {
         module().assertTrue(null, false);
     }
 
@@ -55,7 +62,8 @@ public class AssertModuleTest {
      * if two expressions are equal then return ok
      */
     @Test
-    public void assertOnEqualsOk(){
+    public void assertOnEqualsOk()
+    {
         module().assertOnEquals(null, "a", "a");
     }
 
@@ -63,7 +71,8 @@ public class AssertModuleTest {
      * if two expressions are not equal then fail
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertOnEqualsFail(){
+    public void assertOnEqualsFail()
+    {
         module().assertOnEquals(null, "a", "b");
     }
 
@@ -71,7 +80,8 @@ public class AssertModuleTest {
      * if are equal Fail
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertNotSameFail(){
+    public void assertNotSameFail()
+    {
         module().assertNotSame(null, "a", "a");
     }
 
@@ -79,7 +89,8 @@ public class AssertModuleTest {
      * if are different ok
      */
     @Test
-    public void assertNotSameOk(){
+    public void assertNotSameOk()
+    {
         module().assertNotSame(null, "a", "b");
     }
 
@@ -88,7 +99,8 @@ public class AssertModuleTest {
      * if true then fail
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertTrueFail(){
+    public void assertTrueFail()
+    {
         module().assertFalse(null, true);
     }
 
@@ -96,7 +108,8 @@ public class AssertModuleTest {
      * if is false ok
      */
     @Test
-    public void assertFalseOk(){
+    public void assertFalseOk()
+    {
         module().assertFalse(null, false);
     }
 
@@ -104,7 +117,8 @@ public class AssertModuleTest {
      * if Null Payload ThenFail
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertNotNullFail(){
+    public void assertNotNullFail()
+    {
         module().assertNotNull(null, NullPayload.getInstance());
     }
 
@@ -112,7 +126,8 @@ public class AssertModuleTest {
      * if not Null then ok
      */
     @Test
-    public void assertNotNullOk(){
+    public void assertNotNullOk()
+    {
         module().assertNotNull(null, new Object());
     }
 
@@ -120,7 +135,8 @@ public class AssertModuleTest {
      * if not Null Payload ThenFail
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertNullFail(){
+    public void assertNullFail()
+    {
         module().assertNull(null, new Object());
     }
 
@@ -128,20 +144,24 @@ public class AssertModuleTest {
      * if  Null then ok
      */
     @Test
-    public void assertNullOk(){
+    public void assertNullOk()
+    {
         module().assertNull(null, NullPayload.getInstance());
     }
 
     /**
      * No matter what just fail
+     *
      * @return
      */
     @Test(expected = AssertionFailedError.class)
-    public void assertFail(){
+    public void assertFail()
+    {
         module().fail(null);
     }
 
-    private static AssertModule module() {
+    private static AssertModule module()
+    {
         return new AssertModule();
     }
 }

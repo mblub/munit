@@ -8,13 +8,15 @@ import static org.mockito.Mockito.verify;
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public class FailMessageProcessorTest extends AbstractMessageProcessorTest{
+public class FailMessageProcessorTest extends AbstractMessageProcessorTest
+{
 
     public static final String TEST_MESSAGE = "testMessage";
 
 
     @Test
-    public void calledCorrectly(){
+    public void calledCorrectly()
+    {
         MunitMessageProcessor mp = buildMp();
 
 
@@ -24,14 +26,16 @@ public class FailMessageProcessorTest extends AbstractMessageProcessorTest{
     }
 
     @Override
-    protected MunitMessageProcessor doBuildMp() {
+    protected MunitMessageProcessor doBuildMp()
+    {
         FailMessageProcessor mp = new FailMessageProcessor();
         mp.setMessage(TEST_MESSAGE);
         return mp;
     }
 
     @Override
-    protected String getExpectedName() {
+    protected String getExpectedName()
+    {
         return "Fail";
     }
 }

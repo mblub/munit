@@ -10,17 +10,21 @@ import org.apache.ftpserver.listener.ListenerFactory;
  *
  * @author Federico, Fernando
  */
-public class FTPServer extends Server {
+public class FTPServer extends Server
+{
+
     private FtpServer server;
 
-    public static Server instance(int port){
+    public static Server instance(int port)
+    {
         FTPServer ftpServer = new FTPServer();
         ftpServer.initialize(port);
         return ftpServer;
     }
 
     @Override
-    void initialize(int port) {
+    void initialize(int port)
+    {
         FtpServerFactory serverFactory = new FtpServerFactory();
 
         ListenerFactory factory = new ListenerFactory();
@@ -33,16 +37,21 @@ public class FTPServer extends Server {
     }
 
     @Override
-    void start() {
-        try {
+    void start()
+    {
+        try
+        {
             server.start();
-        } catch (FtpException e) {
+        }
+        catch (FtpException e)
+        {
             throw new RuntimeException("Could not start FTP server", e);
         }
     }
 
     @Override
-    void stop() {
+    void stop()
+    {
         server.stop();
     }
 }

@@ -17,20 +17,22 @@ import java.util.List;
 
 /**
  * <p>Runs the Munit Suite</p>
- *
- *  <p>T is the expected result from the suite run</p>
+ * <p/>
+ * <p>T is the expected result from the suite run</p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-public abstract class MunitRunner<T> {
+public abstract class MunitRunner<T>
+{
 
     private TestOutputHandler handler = new DefaultOutputHandler();
     private MuleContextManager muleContextManager = new MuleContextManager(null);
 
     private MuleContext muleContext;
 
-    public MunitRunner(TestOutputHandler handler, MuleContextManager muleContextManager, MuleContext muleContext) {
+    public MunitRunner(TestOutputHandler handler, MuleContextManager muleContextManager, MuleContext muleContext)
+    {
         this.handler = handler;
         this.muleContextManager = muleContextManager;
         this.muleContext = muleContext;
@@ -38,6 +40,7 @@ public abstract class MunitRunner<T> {
 
     /**
      * <p>Runs all the tests of the suite</p>
+     *
      * @return The suite result
      * @throws Exception If the suite fails
      */
@@ -45,16 +48,20 @@ public abstract class MunitRunner<T> {
 
     /**
      * <p>Get the name of the suite</p>
+     *
      * @return The suite name
      */
     protected abstract String getSuiteName();
 
     /**
      * <p>Runs the suite based on the constructor arguments </p>
+     *
      * @return The suite result
      */
-    public T run() {
-        try {
+    public T run()
+    {
+        try
+        {
             handler.printTestName(getSuiteName());
             process(lookupFlows(MunitBeforeSuite.class), muleEvent());
 
@@ -62,14 +69,20 @@ public abstract class MunitRunner<T> {
 
             return result;
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             muleContextManager.killMule(muleContext);
             throw new RuntimeException("Could not Run the suite", e);
         }
-        finally {
-            try {
+        finally
+        {
+            try
+            {
                 process(lookupFlows(MunitAfterSuite.class), muleEvent());
-            } catch (MuleException e) {
+            }
+            catch (MuleException e)
+            {
                 throw new RuntimeException("After Suite process could not be executed", e);
             }
 
@@ -78,25 +91,32 @@ public abstract class MunitRunner<T> {
 
     }
 
-    private MuleEvent muleEvent() {
-        try {
+    private MuleEvent muleEvent()
+    {
+        try
+        {
             return MuleTestUtils.getTestEvent(null,
-                    MessageExchangePattern.REQUEST_RESPONSE, muleContext);
-        } catch (Exception e) {
+                                              MessageExchangePattern.REQUEST_RESPONSE, muleContext);
+        }
+        catch (Exception e)
+        {
             return null;
         }
     }
 
     private void process(Collection<MunitFlow> flowConstructs, MuleEvent event)
-            throws MuleException {
-        for (MunitFlow flowConstruct : flowConstructs) {
+            throws MuleException
+    {
+        for (MunitFlow flowConstruct : flowConstructs)
+        {
             handler.printDescription(flowConstruct.getName(), flowConstruct.getDescription());
             (flowConstruct).process(event);
         }
     }
 
-    private List<MunitFlow> lookupFlows(Class munitClass) {
+    private List<MunitFlow> lookupFlows(Class munitClass)
+    {
         return new ArrayList<MunitFlow>(muleContext.getRegistry()
-                .lookupObjects(munitClass));
+                                                .lookupObjects(munitClass));
     }
 }

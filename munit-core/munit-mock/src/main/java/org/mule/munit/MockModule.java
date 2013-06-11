@@ -4,6 +4,7 @@
 package org.mule.munit;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.mule.DefaultMuleMessage;
 import org.mule.api.*;
 import org.mule.api.annotations.Module;
@@ -24,16 +25,17 @@ import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
 
 /**
  * <p>
- *     Munit module for mocking message processors.
- *
+ * Munit module for mocking message processors.
+ * <p/>
  * </p>
  *
  * @author Federico, Fernando
  * @since 3.3.2
  */
-@Module(name="mock", schemaVersion="3.4")
+@Module(name = "mock", schemaVersion = "3.4")
 public class MockModule implements MuleContextAware
 {
+
     private MuleContext muleContext;
 
 
@@ -48,23 +50,24 @@ public class MockModule implements MuleContextAware
      * {@sample.xml ../../../doc/mock-connector.xml.sample mock:expect}
      *
      * @param messageProcessor Message processor name.
-     * @param thenReturn         Expected return value.
-     * @param withAttributes       Message processor parameters.
+     * @param thenReturn       Expected return value.
+     * @param withAttributes   Message processor parameters.
      */
     @Processor
     public void when(String messageProcessor,
                      @Optional List<Attribute> withAttributes,
-                     @Optional MunitMuleMessage thenReturn) {
+                     @Optional MunitMuleMessage thenReturn)
+    {
         MunitMuleMessage munitMuleMessage = thenReturn == null ? new MunitMuleMessage() : thenReturn;
 
         mocker().when(getName(messageProcessor))
-                    .ofNamespace(getNamespace(messageProcessor))
-                    .withAttributes(createAttributes(withAttributes))
-                    .thenReturn(createMuleMessageFrom(munitMuleMessage.getPayload(),
-                            munitMuleMessage.getInboundProperties(),
-                            munitMuleMessage.getOutboundProperties(),
-                            munitMuleMessage.getSessionProperties(),
-                            munitMuleMessage.getInvocationProperties()));
+                .ofNamespace(getNamespace(messageProcessor))
+                .withAttributes(createAttributes(withAttributes))
+                .thenReturn(createMuleMessageFrom(munitMuleMessage.getPayload(),
+                                                  munitMuleMessage.getInboundProperties(),
+                                                  munitMuleMessage.getOutboundProperties(),
+                                                  munitMuleMessage.getSessionProperties(),
+                                                  munitMuleMessage.getInvocationProperties()));
 
     }
 
@@ -78,23 +81,27 @@ public class MockModule implements MuleContextAware
      * <p/>
      * {@sample.xml ../../../doc/mock-connector.xml.sample mock:spy}
      *
-     * @param messageProcessor Message processor name.
+     * @param messageProcessor     Message processor name.
      * @param assertionsBeforeCall Expected return value.
      * @param assertionsAfterCall  Message processor parameters.
      */
     @Processor
     public void spy(String messageProcessor,
                     @Optional List<NestedProcessor> assertionsBeforeCall,
-                    @Optional List<NestedProcessor> assertionsAfterCall) {
+                    @Optional List<NestedProcessor> assertionsAfterCall)
+    {
 
-        try {
+        try
+        {
             spy().spyMessageProcessor(getName(messageProcessor))
-                .ofNamespace(getNamespace(messageProcessor))
-                .before(createSpyAssertion(createMessageProcessorsFrom(assertionsBeforeCall)))
-                .after(createSpyAssertion(createMessageProcessorsFrom(assertionsAfterCall)));
-        } catch (AssertionError error) {
+                    .ofNamespace(getNamespace(messageProcessor))
+                    .before(createSpyAssertion(createMessageProcessorsFrom(assertionsBeforeCall)))
+                    .after(createSpyAssertion(createMessageProcessorsFrom(assertionsAfterCall)));
+        }
+        catch (AssertionError error)
+        {
             AssertionError exception = new AssertionError(getMessage(error, "Spy Message Processor Failed"));
-            exception.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[]{}));
+            exception.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[] {}));
 
             throw exception;
         }
@@ -106,13 +113,14 @@ public class MockModule implements MuleContextAware
      * <p/>
      * {@sample.xml ../../../doc/mock-connector.xml.sample mock:expectFail}
      *
-     * @param exception Java Exception full qualified name.
-     * @param whenCalling   Message processor name.
+     * @param exception      Java Exception full qualified name.
+     * @param whenCalling    Message processor name.
      * @param withAttributes list of expected attributes
      */
     @Processor
     public void throwAn(Throwable exception, String whenCalling,
-                        @Optional List<Attribute> withAttributes) {
+                        @Optional List<Attribute> withAttributes)
+    {
 
         mocker().when(getName(whenCalling))
                 .ofNamespace(getNamespace(whenCalling))
@@ -136,28 +144,39 @@ public class MockModule implements MuleContextAware
     @Processor
     public void verifyCall(String messageProcessor, @Optional List<Attribute> attributes,
                            @Optional Integer times,
-                           @Optional Integer atLeast, @Optional Integer atMost) {
+                           @Optional Integer atLeast, @Optional Integer atMost)
+    {
 
-        try {
+        try
+        {
             MunitVerifier mockVerifier =
                     new MunitVerifier(muleContext).verifyCallOfMessageProcessor(getName(messageProcessor))
                             .ofNamespace(getNamespace(messageProcessor))
                             .withAttributes(createAttributes(attributes));
 
-            if (times != null) {
+            if (times != null)
+            {
                 mockVerifier.times(times);
 
-            } else if (atLeast != null) {
+            }
+            else if (atLeast != null)
+            {
                 mockVerifier.atLeast(atLeast);
-            } else if (atMost != null) {
+            }
+            else if (atMost != null)
+            {
                 mockVerifier.atMost(atMost);
-            } else {
+            }
+            else
+            {
                 mockVerifier.atLeastOnce();
             }
 
-        } catch (AssertionError error) {
+        }
+        catch (AssertionError error)
+        {
             AssertionError assertionException = new AssertionError(getMessage(error, "Verify Processor Failed"));
-            assertionException.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[]{}));
+            assertionException.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[] {}));
 
             throw assertionException;
         }
@@ -166,16 +185,16 @@ public class MockModule implements MuleContextAware
 
     /**
      * Reset mock behaviour
-     *
+     * <p/>
      * {@sample.xml ../../../doc/mock-connector.xml.sample mock:outboundEndpoint}
      *
-     * @param address the address
-     * @param returnPayload the Return Payload
-     * @param returnInboundProperties inbound properties
+     * @param address                    the address
+     * @param returnPayload              the Return Payload
+     * @param returnInboundProperties    inbound properties
      * @param returnInvocationProperties invocation properties
-     * @param returnSessionProperties invocation session properties
-     * @param returnOutboundProperties oubound properties
-     * @param assertions assertions
+     * @param returnSessionProperties    invocation session properties
+     * @param returnOutboundProperties   oubound properties
+     * @param assertions                 assertions
      */
     @Processor
     public void outboundEndpoint(String address,
@@ -184,7 +203,8 @@ public class MockModule implements MuleContextAware
                                  @Optional Map<String, Object> returnInboundProperties,
                                  @Optional Map<String, Object> returnSessionProperties,
                                  @Optional Map<String, Object> returnOutboundProperties,
-                                 @Optional List<NestedProcessor> assertions) {
+                                 @Optional List<NestedProcessor> assertions)
+    {
 
         endpointMocker().whenEndpointWithAddress(address)
                 .withIncomingMessageSatisfying(createSpyAssertion(createMessageProcessorsFrom(assertions)))
@@ -197,71 +217,86 @@ public class MockModule implements MuleContextAware
 
 
     @Override
-    public void setMuleContext(MuleContext muleContext) {
+    public void setMuleContext(MuleContext muleContext)
+    {
         this.muleContext = muleContext;
     }
 
-   
-    private MuleMessage createMuleMessageFrom(Object payload, 
-                                              Map<String,Object> inboundProperties,
-                                              Map<String,Object> outboundProperties,
-                                              Map<String,Object> sessionProperties,
-                                              Map<String,Object> invocationProperties
-                                              ) {
+
+    private MuleMessage createMuleMessageFrom(Object payload,
+                                              Map<String, Object> inboundProperties,
+                                              Map<String, Object> outboundProperties,
+                                              Map<String, Object> sessionProperties,
+                                              Map<String, Object> invocationProperties
+    )
+    {
         Object definedPayload = payload;
-        if ( payload == null ){
+        if (payload == null)
+        {
             definedPayload = NotDefinedPayload.getInstance();
         }
         DefaultMuleMessage message = new DefaultMuleMessage(definedPayload, muleContext);
 
-        if ( inboundProperties != null ){
-            for (String property : inboundProperties.keySet() ){
+        if (inboundProperties != null)
+        {
+            for (String property : inboundProperties.keySet())
+            {
                 message.setInboundProperty(property, inboundProperties.get(property));
             }
         }
 
-        if ( outboundProperties != null ){
-            for (String property : outboundProperties.keySet() ){
+        if (outboundProperties != null)
+        {
+            for (String property : outboundProperties.keySet())
+            {
                 message.setOutboundProperty(property, outboundProperties.get(property));
             }
         }
 
-        if ( invocationProperties != null ){
-            for (String property : invocationProperties.keySet() ){
+        if (invocationProperties != null)
+        {
+            for (String property : invocationProperties.keySet())
+            {
                 message.setInvocationProperty(property, invocationProperties.get(property));
             }
         }
 
         // TODO: how we can set the session properties?
-//        if ( sessionProperties != null ){
-//            for (String property : sessionProperties.keySet() ){
-//                message.setProperty(property, sessionProperties.get(property), PropertyScope.SESSION);
-//            }
-//        }
+        //        if ( sessionProperties != null ){
+        //            for (String property : sessionProperties.keySet() ){
+        //                message.setProperty(property, sessionProperties.get(property), PropertyScope.SESSION);
+        //            }
+        //        }
         return message;
     }
 
 
-    private List<MessageProcessor> createMessageProcessorsFrom(List<NestedProcessor> assertions) {
-        if (assertions == null) {
+    private List<MessageProcessor> createMessageProcessorsFrom(List<NestedProcessor> assertions)
+    {
+        if (assertions == null)
+        {
             return null;
         }
 
         final List<MessageProcessor> mps = new ArrayList<MessageProcessor>();
-        for (NestedProcessor nestedProcessor : assertions) {
+        for (NestedProcessor nestedProcessor : assertions)
+        {
             mps.add(new NestedMessageProcessor(nestedProcessor));
         }
 
         return mps;
     }
 
-    private Map<String, Object> createAttributes(List<Attribute> attributes) {
+    private Map<String, Object> createAttributes(List<Attribute> attributes)
+    {
         Map<String, Object> attrs = new HashMap<String, Object>();
-        if ( attributes == null ){
+        if (attributes == null)
+        {
             return attrs;
         }
 
-        for ( Attribute attr : attributes ){
+        for (Attribute attr : attributes)
+        {
             attrs.put(attr.getName(), attr.getWhereValue());
         }
 
@@ -269,20 +304,26 @@ public class MockModule implements MuleContextAware
     }
 
 
-    private List<SpyProcess> createSpyAssertion(final List<MessageProcessor> messageProcessorsFrom) {
+    private List<SpyProcess> createSpyAssertion(final List<MessageProcessor> messageProcessorsFrom)
+    {
         List<SpyProcess> mps = new ArrayList<SpyProcess>(1);
-        if (messageProcessorsFrom != null) {
+        if (messageProcessorsFrom != null)
+        {
             mps.add(createSpy(messageProcessorsFrom));
         }
         return mps;
     }
 
-    protected SpyProcess createSpy(final List<MessageProcessor> messageProcessorsFrom) {
-        return new SpyProcess(){
+    protected SpyProcess createSpy(final List<MessageProcessor> messageProcessorsFrom)
+    {
+        return new SpyProcess()
+        {
 
             @Override
-            public void spy(MuleEvent event) throws MuleException {
-                for ( MessageProcessor mp : messageProcessorsFrom ){
+            public void spy(MuleEvent event) throws MuleException
+            {
+                for (MessageProcessor mp : messageProcessorsFrom)
+                {
                     mp.process(event);
                 }
             }
@@ -290,21 +331,26 @@ public class MockModule implements MuleContextAware
     }
 
 
-    protected MessageProcessorMocker mocker() {
+    protected MessageProcessorMocker mocker()
+    {
         return new MessageProcessorMocker(muleContext);
     }
 
-    protected EndpointMocker endpointMocker() {
+    protected EndpointMocker endpointMocker()
+    {
         return new EndpointMocker(muleContext);
     }
 
-    protected MunitSpy spy() {
+    protected MunitSpy spy()
+    {
         return new MunitSpy(muleContext);
     }
 
-    private String getMessage(AssertionError error, String defaultValue) {
+    private String getMessage(AssertionError error, String defaultValue)
+    {
         String message = error.getMessage();
-        if ( StringUtils.isEmpty(message)) {
+        if (StringUtils.isEmpty(message))
+        {
             return defaultValue;
         }
         return message;

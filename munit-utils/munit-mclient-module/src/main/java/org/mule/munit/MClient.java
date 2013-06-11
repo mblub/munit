@@ -19,7 +19,7 @@ import java.util.Map;
  * @author Casal, Javier
  * @author Scandroglio, Matias
  */
-@Module(name="mclient", schemaVersion="1.0")
+@Module(name = "mclient", schemaVersion = "1.0")
 public class MClient implements MuleContextAware
 {
 
@@ -29,26 +29,27 @@ public class MClient implements MuleContextAware
 
     /**
      * <p>Do a real call to your inbound flows.</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/MClient-connector.xml.sample mclient:call}
      *
-     * @param path Path to call the transport, example: http://localhost:8081/tests
-     * @param payload Message payload
-     * @param parameters Connection parameters
+     * @param path               Path to call the transport, example: http://localhost:8081/tests
+     * @param payload            Message payload
+     * @param parameters         Connection parameters
      * @param responseProcessing Add any processing of the client response
      * @return Response call
      * @throws Exception an Exception
      */
     @Processor
-    public Object call(String path, @Optional Map<String, Object> parameters,  @Optional Object payload,
-                       @Optional List<NestedProcessor> responseProcessing) throws Exception {
+    public Object call(String path, @Optional Map<String, Object> parameters, @Optional Object payload,
+                       @Optional List<NestedProcessor> responseProcessing) throws Exception
+    {
 
         MuleMessage response = muleContext.getClient().send(path, payload, parameters);
 
         Object processedResponse = response;
-        if (responseProcessing != null )
+        if (responseProcessing != null)
         {
-            for ( NestedProcessor processor : responseProcessing )
+            for (NestedProcessor processor : responseProcessing)
             {
                 processedResponse = processor.process(processedResponse);
             }
@@ -60,41 +61,43 @@ public class MClient implements MuleContextAware
 
     /**
      * <p>Dispatches an event asynchronously to a endpointUri via a Mule server.</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/MClient-connector.xml.sample mclient:dispatch}
-
-     * @param path Path to call the transport, example: http://localhost:8081/tests
-     * @param payload Message payload
+     *
+     * @param path       Path to call the transport, example: http://localhost:8081/tests
+     * @param payload    Message payload
      * @param parameters Connection parameters
      * @return Response call
      * @throws Exception an Exception
      */
     @Processor
-    public void dispatch(String path, @Optional Map<String, Object> parameters,  @Optional Object payload) throws Exception {
+    public void dispatch(String path, @Optional Map<String, Object> parameters, @Optional Object payload) throws Exception
+    {
 
         muleContext.getClient().dispatch(path, payload, parameters);
     }
 
     /**
      * <p>Do a real call to your inbound flows.</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/MClient-connector.xml.sample mclient:request}
      *
-     * @param url Path to call the transport, example: http://localhost:8081/tests
-     * @param timeout time out processing
+     * @param url                Path to call the transport, example: http://localhost:8081/tests
+     * @param timeout            time out processing
      * @param responseProcessing Add any processing of the client response
      * @return Response call
      * @throws Exception an Exception
      */
     @Processor
-    public Object request(String url, Long timeout, @Optional List<NestedProcessor> responseProcessing) throws Exception {
+    public Object request(String url, Long timeout, @Optional List<NestedProcessor> responseProcessing) throws Exception
+    {
 
         MuleMessage response = muleContext.getClient().request(url, timeout);
 
         Object processedResponse = response;
-        if (responseProcessing != null )
+        if (responseProcessing != null)
         {
-            for ( NestedProcessor processor : responseProcessing )
+            for (NestedProcessor processor : responseProcessing)
             {
                 processedResponse = processor.process(processedResponse);
             }
@@ -106,28 +109,29 @@ public class MClient implements MuleContextAware
 
     /**
      * <p>Do a real call to your inbound flows.</p>
-     *
+     * <p/>
      * {@sample.xml ../../../doc/MClient-connector.xml.sample mclient:send}
      *
-     * @param url Path to call the transport, example: http://localhost:8081/tests
-     * @param timeout time out processing
+     * @param url                Path to call the transport, example: http://localhost:8081/tests
+     * @param timeout            time out processing
      * @param responseProcessing Add any processing of the client response
-     * @param messageProperties The send message properties
-     * @param payload payload to send
+     * @param messageProperties  The send message properties
+     * @param payload            payload to send
      * @return Response call
      * @throws Exception an Exception
      */
     @Processor
     public Object send(String url, Object payload, @Optional Long timeout,
                        @Optional Map<String, Object> messageProperties,
-                       @Optional List<NestedProcessor> responseProcessing) throws Exception {
+                       @Optional List<NestedProcessor> responseProcessing) throws Exception
+    {
 
-        MuleMessage response = muleContext.getClient().send(url,payload,messageProperties, timeout);
+        MuleMessage response = muleContext.getClient().send(url, payload, messageProperties, timeout);
 
         Object processedResponse = response;
-        if (responseProcessing != null )
+        if (responseProcessing != null)
         {
-            for ( NestedProcessor processor : responseProcessing )
+            for (NestedProcessor processor : responseProcessing)
             {
                 processedResponse = processor.process(processedResponse);
             }
@@ -138,7 +142,8 @@ public class MClient implements MuleContextAware
     }
 
     @Override
-    public void setMuleContext(MuleContext context) {
+    public void setMuleContext(MuleContext context)
+    {
         this.muleContext = context;
     }
 }
