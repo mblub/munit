@@ -41,4 +41,9 @@ public class MessageMatchingAssertionMelFunction extends AssertionMelFunction
 
         throw new IllegalArgumentException("Invalid parameter");
     }
+
+    public ElementMatcherFactory getCommand()
+    {
+        return command;
+    }
 }

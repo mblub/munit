@@ -1,10 +1,36 @@
 package org.mule.munit;
 
 
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 
+import org.mule.api.MuleMessage;
+import org.mule.api.el.ExpressionLanguageContext;
+import org.mule.api.transport.PropertyScope;
+import org.mule.modules.interceptor.matchers.mel.AnyClassMatcherFunction;
+import org.mule.modules.interceptor.matchers.mel.AnyMatcherFunction;
+import org.mule.modules.interceptor.matchers.mel.EqMatcherFunction;
+import org.mule.modules.interceptor.matchers.mel.NotNullMatcherFunction;
+import org.mule.modules.interceptor.matchers.mel.NullMatcherFunction;
+import org.mule.munit.mel.assertions.AssertionMelFunction;
+import org.mule.munit.mel.assertions.ElementMatcher;
+import org.mule.munit.mel.assertions.ElementMatcherFactory;
+import org.mule.munit.mel.assertions.MessageHasElementAssertionCommand;
+import org.mule.munit.mel.assertions.MessageHasElementAssertionMelFunction;
+import org.mule.munit.mel.assertions.MessageMatchingAssertionMelFunction;
+import org.mule.munit.mel.utils.FlowResultFunction;
+import org.mule.munit.mel.utils.GetResourceFunction;
 import org.mule.transport.NullPayload;
+
+import javax.activation.DataHandler;
 
 /**
  * @author Federico, Fernando
@@ -12,6 +38,8 @@ import org.mule.transport.NullPayload;
  */
 public class AssertModuleTest
 {
+
+    private ExpressionLanguageContext context = mock(ExpressionLanguageContext.class);
 
     /**
      * Two equal payloads should not fail
@@ -151,8 +179,6 @@ public class AssertModuleTest
 
     /**
      * No matter what just fail
-     *
-     * @return
      */
     @Test(expected = AssertionFailedError.class)
     public void assertFail()
@@ -160,8 +186,266 @@ public class AssertModuleTest
         module().fail(null);
     }
 
+
+    /**
+     * Make sure all the mel expressions are set in the context
+     */
+    @Test
+    public void configureContext()
+    {
+        AssertModule module = module();
+        module.configureContext(context);
+
+        verify(context).declareFunction(eq("messageHasPropertyInAnyScopeCalled"), argThat(functionMatcher(MessageHasElementAssertionMelFunction.class, new CommandValidator<MessageHasElementAssertionCommand>()
+        {
+
+            @Override
+            public boolean validate(MessageHasElementAssertionCommand command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                when(message.getProperty("param", PropertyScope.INBOUND)).thenReturn(new Object());
+
+                return command.messageHas("param", message);
+            }
+        })));
+        verify(context).declareFunction(eq("messageHasInboundPropertyCalled"), argThat(functionMatcher(MessageHasElementAssertionMelFunction.class, new CommandValidator<MessageHasElementAssertionCommand>()
+        {
+
+            @Override
+            public boolean validate(MessageHasElementAssertionCommand command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                when(message.getInboundProperty("param")).thenReturn(new Object());
+
+                return command.messageHas("param", message) && !command.messageHas("param2", message);
+            }
+        })));
+        verify(context).declareFunction(eq("messageHasOutboundPropertyCalled"), argThat(functionMatcher(MessageHasElementAssertionMelFunction.class, new CommandValidator<MessageHasElementAssertionCommand>()
+        {
+
+            @Override
+            public boolean validate(MessageHasElementAssertionCommand command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                when(message.getOutboundProperty("param")).thenReturn(new Object());
+
+                return command.messageHas("param", message) && !command.messageHas("param2", message);
+            }
+        })));
+        verify(context).declareFunction(eq("messageHasSessionPropertyCalled"), argThat(functionMatcher(MessageHasElementAssertionMelFunction.class, new CommandValidator<MessageHasElementAssertionCommand>()
+        {
+
+            @Override
+            public boolean validate(MessageHasElementAssertionCommand command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                when(message.getProperty("param", PropertyScope.SESSION)).thenReturn(new Object());
+
+                return command.messageHas("param", message) && !command.messageHas("param2", message);
+            }
+        })));
+        verify(context).declareFunction(eq("messageHasInvocationPropertyCalled"), argThat(functionMatcher(MessageHasElementAssertionMelFunction.class, new CommandValidator<MessageHasElementAssertionCommand>()
+        {
+
+            @Override
+            public boolean validate(MessageHasElementAssertionCommand command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                when(message.getInvocationProperty("param")).thenReturn(new Object());
+
+                return command.messageHas("param", message) && !command.messageHas("param2", message);
+            }
+        })));
+        verify(context).declareFunction(eq("messageHasInboundAttachmentCalled"), argThat(functionMatcher(MessageHasElementAssertionMelFunction.class, new CommandValidator<MessageHasElementAssertionCommand>()
+        {
+
+            @Override
+            public boolean validate(MessageHasElementAssertionCommand command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                when(message.getInboundAttachment("param")).thenReturn(new DataHandler(new Object(), "url"));
+
+                return command.messageHas("param", message) && !command.messageHas("param2", message);
+            }
+        })));
+        verify(context).declareFunction(eq("messageHasOutboundAttachmentCalled"), argThat(functionMatcher(MessageHasElementAssertionMelFunction.class, new CommandValidator<MessageHasElementAssertionCommand>()
+        {
+
+            @Override
+            public boolean validate(MessageHasElementAssertionCommand command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                when(message.getOutboundAttachment("param")).thenReturn(new DataHandler(new Object(), "url"));
+
+                return command.messageHas("param", message) && !command.messageHas("param2", message);
+            }
+        })));
+        verify(context).declareFunction(eq("messageInboundProperty"), argThat(assertMatcher(MessageMatchingAssertionMelFunction.class, new CommandValidator<ElementMatcherFactory>()
+        {
+
+            @Override
+            public boolean validate(ElementMatcherFactory command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                command.build("param", message);
+
+                verify(message).getInboundProperty("param");
+
+                return true;
+            }
+        })));
+        verify(context).declareFunction(eq("messageOutboundProperty"), argThat(assertMatcher(MessageMatchingAssertionMelFunction.class, new CommandValidator<ElementMatcherFactory>()
+        {
+
+            @Override
+            public boolean validate(ElementMatcherFactory command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                command.build("param", message);
+
+                verify(message).getOutboundProperty("param");
+
+                return true;
+            }
+        })));
+        verify(context).declareFunction(eq("messageInvocationProperty"), argThat(assertMatcher(MessageMatchingAssertionMelFunction.class, new CommandValidator<ElementMatcherFactory>()
+        {
+
+            @Override
+            public boolean validate(ElementMatcherFactory command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                command.build("param", message);
+
+                verify(message).getInvocationProperty("param");
+
+                return true;
+            }
+        })));
+        verify(context).declareFunction(eq("messageInboundAttachment"), argThat(assertMatcher(MessageMatchingAssertionMelFunction.class, new CommandValidator<ElementMatcherFactory>()
+        {
+
+            @Override
+            public boolean validate(ElementMatcherFactory command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                command.build("param", message);
+
+                verify(message).getInboundAttachment("param");
+
+                return true;
+            }
+        })));
+        verify(context).declareFunction(eq("messageOutboundAttachment"), argThat(assertMatcher(MessageMatchingAssertionMelFunction.class, new CommandValidator<ElementMatcherFactory>()
+        {
+
+            @Override
+            public boolean validate(ElementMatcherFactory command)
+            {
+                MuleMessage message = mock(MuleMessage.class);
+                command.build("param", message);
+
+                verify(message).getOutboundAttachment("param");
+
+                return true;
+            }
+        })));
+        verify(context).declareFunction(eq("eq"), isA(EqMatcherFunction.class));
+        verify(context).declareFunction(eq("anyByte"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyInt"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyDouble"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyFloat"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyShort"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyObject"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyString"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyList"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anySet"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyMap"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("anyCollection"), isA(AnyMatcherFunction.class));
+        verify(context).declareFunction(eq("isNull"), isA(NullMatcherFunction.class));
+        verify(context).declareFunction(eq("isNotNull"), isA(NotNullMatcherFunction.class));
+        verify(context).declareFunction(eq("any"), isA(AnyClassMatcherFunction.class));
+        verify(context).declareFunction(eq("resultOfScript"), isA(FlowResultFunction.class));
+        verify(context).declareFunction(eq("getResource"), isA(GetResourceFunction.class));
+
+    }
+
     private static AssertModule module()
     {
         return new AssertModule();
     }
+
+    private static FunctionMatcher functionMatcher(Class functionClass, CommandValidator commandValidator)
+    {
+        return new FunctionMatcher(functionClass, commandValidator);
+    }
+
+    private static AssertMatcher assertMatcher(Class functionClass, CommandValidator commandValidator)
+    {
+        return new AssertMatcher(functionClass, commandValidator);
+    }
+
+    private static class FunctionMatcher extends ArgumentMatcher<AssertionMelFunction>
+    {
+
+        Class functionClass;
+        CommandValidator commandValidator;
+
+        public FunctionMatcher(Class functionClass, CommandValidator commandValidator)
+        {
+            this.functionClass = functionClass;
+            this.commandValidator = commandValidator;
+        }
+
+        @Override
+        public boolean matches(Object o)
+        {
+            if (o.getClass().isAssignableFrom(functionClass))
+            {
+                MessageHasElementAssertionMelFunction function = (MessageHasElementAssertionMelFunction) o;
+                return commandValidator.validate(function.getCommand());
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    }
+
+    private static class AssertMatcher extends ArgumentMatcher<AssertionMelFunction>
+    {
+
+        Class functionClass;
+        CommandValidator commandValidator;
+
+        public AssertMatcher(Class functionClass, CommandValidator commandValidator)
+        {
+            this.functionClass = functionClass;
+            this.commandValidator = commandValidator;
+        }
+
+        @Override
+        public boolean matches(Object o)
+        {
+            if (o.getClass().isAssignableFrom(functionClass))
+            {
+                MessageMatchingAssertionMelFunction function = (MessageMatchingAssertionMelFunction) o;
+                return commandValidator.validate(function.getCommand());
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    }
+
+    private static interface CommandValidator<T>
+    {
+
+        boolean validate(T command);
+    }
+
+
 }

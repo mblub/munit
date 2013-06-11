@@ -46,4 +46,9 @@ public class MessageHasElementAssertionMelFunction extends AssertionMelFunction
         }
         return false;
     }
+
+    public MessageHasElementAssertionCommand getCommand()
+    {
+        return command;
+    }
 }

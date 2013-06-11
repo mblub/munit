@@ -223,14 +223,6 @@ public class AssertModule extends MunitSpringFactoryPostProcessor implements Exp
             }
         }));
 
-        context.declareFunction("messageInboundProperty", new MessageMatchingAssertionMelFunction(new ElementMatcherFactory()
-        {
-            @Override
-            public ElementMatcher build(String elementName, MuleMessage muleMessage)
-            {
-                return new ElementMatcher(muleMessage.getInboundProperty(elementName));
-            }
-        }));
 
         context.declareFunction("messageInvocationProperty", new MessageMatchingAssertionMelFunction(new ElementMatcherFactory()
         {

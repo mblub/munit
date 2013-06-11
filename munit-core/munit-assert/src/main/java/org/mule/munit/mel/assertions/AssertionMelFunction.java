@@ -25,18 +25,6 @@ public abstract class AssertionMelFunction implements ExpressionLanguageFunction
 
     protected MuleMessage getMuleMessageFrom(ExpressionLanguageContext context)
     {
-        // TODO: Change this once mule inserts the mule message in the context.
-        try
-        {
-            MessageContext messageContext = context.getVariable("message");
-
-            Field reqField = MessageContext.class.getDeclaredField("message");
-            reqField.setAccessible(true);
-            return (MuleMessage) reqField.get(messageContext);
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+        return context.getVariable("_muleMessage");
     }
 }
