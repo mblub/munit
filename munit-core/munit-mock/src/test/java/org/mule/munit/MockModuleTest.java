@@ -19,6 +19,7 @@ import org.mule.api.processor.MessageProcessor;
 import org.mule.munit.common.mocking.EndpointMocker;
 import org.mule.munit.common.mocking.MessageProcessorMocker;
 import org.mule.munit.common.mocking.MunitSpy;
+import org.mule.munit.common.mocking.MunitVerifier;
 import org.mule.munit.common.mocking.SpyProcess;
 
 import java.util.ArrayList;
@@ -50,11 +51,13 @@ public class MockModuleTest
     public static final String PAYLOAD = "payload";
     public static final Exception EXCEPTION = new Exception("error");
     public static final String ADDRESS = "address";
+    public static final ArrayList<Attribute> VERIFY_ATTRIBUTES = new ArrayList<Attribute>();
     private MessageProcessorMocker mocker = mock(MessageProcessorMocker.class);
     private MuleContext muleContext = mock(MuleContext.class);
     private EndpointMocker endpointMocker = mock(EndpointMocker.class);
     private MunitSpy spy = mock(MunitSpy.class);
     private MessageProcessor messageProcessor = mock(MessageProcessor.class);
+    private MunitVerifier verifier = mock(MunitVerifier.class);
 
     @Test
     public void whenMethodCanHandlerNullOptionals()
@@ -199,6 +202,51 @@ public class MockModuleTest
         verify(messageProcessor, times(1)).process(event);
     }
 
+    @Test
+    public void verifyCallXTimes()
+    {
+
+        verifierBehavior();
+
+        module().verifyCall(NAMESPACE + ":" + MESSAGE_PROCESSOR, VERIFY_ATTRIBUTES, 3, null,null);
+
+        verify(verifier, times(1)).times(3);
+    }
+
+    @Test
+    public void verifyCallAtLeastXTimes()
+    {
+
+        verifierBehavior();
+
+        module().verifyCall(NAMESPACE + ":" + MESSAGE_PROCESSOR, VERIFY_ATTRIBUTES, null, 3,null);
+
+        verify(verifier, times(1)).atLeast(3);
+    }
+
+    @Test
+    public void verifyCallAtMostXTimes()
+    {
+
+        verifierBehavior();
+
+        module().verifyCall(NAMESPACE + ":" + MESSAGE_PROCESSOR, VERIFY_ATTRIBUTES, null, null,3);
+
+        verify(verifier,times(1)).atMost(3);
+    }
+
+
+    @Test
+    public void verifyCallAtLeastOne()
+    {
+
+        verifierBehavior();
+
+        module().verifyCall(NAMESPACE + ":" + MESSAGE_PROCESSOR, VERIFY_ATTRIBUTES, null, null,null);
+
+        verify(verifier,times(1)).atLeastOnce();
+    }
+
     private List<MessageProcessor> createMessageProcessors()
     {
         ArrayList<MessageProcessor> messageProcessors = new ArrayList<MessageProcessor>();
@@ -213,6 +261,13 @@ public class MockModuleTest
         when(spy.spyMessageProcessor(MESSAGE_PROCESSOR)).thenReturn(spy);
         when(spy.before(anyList())).thenReturn(spy);
         when(spy.after(anyList())).thenReturn(spy);
+    }
+
+    private void verifierBehavior()
+    {
+        when(verifier.ofNamespace(NAMESPACE)).thenReturn(verifier);
+        when(verifier.verifyCallOfMessageProcessor(MESSAGE_PROCESSOR)).thenReturn(verifier);
+        when(verifier.withAttributes(anyMap())).thenReturn(verifier);
     }
 
     private List<NestedProcessor> createAssertions()
@@ -273,7 +328,7 @@ public class MockModuleTest
 
     private MockMockModule module()
     {
-        MockMockModule mockMockModule = new MockMockModule(mocker, endpointMocker, spy);
+        MockMockModule mockMockModule = new MockMockModule(mocker, endpointMocker, spy, verifier);
         mockMockModule.setMuleContext(muleContext);
         return mockMockModule;
     }

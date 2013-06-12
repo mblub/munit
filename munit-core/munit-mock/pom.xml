@@ -90,7 +90,7 @@
                 <version>2.9</version>
                 <configuration>
                     <excludePackageNames>
-                        org.mule.munit.connection:org.mule.munit.adapters:org.mule.munit.agents:org.mule.munit.functions:org.mule.munit.config:org.mule.munit.holders:org.mule.munit.process:org.mule.munit.processors:org.mule.munit.transformers
+                        org.mule.munit.connection:org.mule.munit.adapters:org.mule.munit.agents:org.mule.munit.functions:org.mule.munit.config:org.mule.munit.holders:org.mule.munit.process:org.mule.munit.processors:org.mule.munit.transformers:org.mule.munit.connection:org.mule.munit.oauth:org.mule.munit.basic
                     </excludePackageNames>
                 </configuration>
             </plugin>
@@ -126,7 +126,7 @@
                     <check>
                         <branchRate>70</branchRate>
                         <lineRate>70</lineRate>
-                        <haltOnFailure>false</haltOnFailure>
+                        <haltOnFailure>true</haltOnFailure>
                         <totalBranchRate>70</totalBranchRate>
                         <totalLineRate>70</totalLineRate>
                         <packageLineRate>70</packageLineRate>
@@ -142,6 +142,9 @@
                             <exclude>org/mule/munit/process/*</exclude>
                             <exclude>org/mule/munit/agents/*</exclude>
                             <exclude>org/mule/munit/holders/*</exclude>
+                            <exclude>org/mule/munit/basic/*</exclude>
+                            <exclude>org/mule/munit/oauth/*</exclude>
+                            <exclude>org/mule/munit/connection/*</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
@@ -184,12 +187,7 @@
             <artifactId>mule-devkit-annotations</artifactId>
             <version>${mule.devkit.version}</version>
         </dependency>
-        <dependency>
-            <groupId>oauth.signpost</groupId>
-            <artifactId>signpost-core</artifactId>
-            <version>1.2.1.1</version>
-        </dependency>
-        <dependency>
+         <dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>eclipse-workbench</artifactId>
             <version>3.6.1.M20100826-1330</version>

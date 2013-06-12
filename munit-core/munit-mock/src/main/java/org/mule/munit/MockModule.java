@@ -90,22 +90,10 @@ public class MockModule implements MuleContextAware
                     @Optional List<NestedProcessor> assertionsBeforeCall,
                     @Optional List<NestedProcessor> assertionsAfterCall)
     {
-
-        try
-        {
-            spy().spyMessageProcessor(getName(messageProcessor))
-                    .ofNamespace(getNamespace(messageProcessor))
-                    .before(createSpyAssertion(createMessageProcessorsFrom(assertionsBeforeCall)))
-                    .after(createSpyAssertion(createMessageProcessorsFrom(assertionsAfterCall)));
-        }
-        catch (AssertionError error)
-        {
-            AssertionError exception = new AssertionError(getMessage(error, "Spy Message Processor Failed"));
-            exception.setStackTrace(buildMuleStackTrace(muleContext).toArray(new StackTraceElement[] {}));
-
-            throw exception;
-        }
-
+        spy().spyMessageProcessor(getName(messageProcessor))
+                .ofNamespace(getNamespace(messageProcessor))
+                .before(createSpyAssertion(createMessageProcessorsFrom(assertionsBeforeCall)))
+                .after(createSpyAssertion(createMessageProcessorsFrom(assertionsAfterCall)));
     }
 
     /**
@@ -150,7 +138,7 @@ public class MockModule implements MuleContextAware
         try
         {
             MunitVerifier mockVerifier =
-                    new MunitVerifier(muleContext).verifyCallOfMessageProcessor(getName(messageProcessor))
+                    verifier().verifyCallOfMessageProcessor(getName(messageProcessor))
                             .ofNamespace(getNamespace(messageProcessor))
                             .withAttributes(createAttributes(attributes));
 
@@ -182,6 +170,8 @@ public class MockModule implements MuleContextAware
         }
 
     }
+
+
 
     /**
      * Reset mock behaviour
@@ -339,6 +329,11 @@ public class MockModule implements MuleContextAware
     protected EndpointMocker endpointMocker()
     {
         return new EndpointMocker(muleContext);
+    }
+
+    protected MunitVerifier verifier()
+    {
+        return new MunitVerifier(muleContext);
     }
 
     protected MunitSpy spy()
