@@ -11,6 +11,14 @@ import org.apache.xerces.xni.XMLLocator;
 import org.apache.xerces.xni.XNIException;
 
 
+/**
+ * <p>
+ * We override the {@link DOMParser} implementation to retrieve the line number of the XML
+ * </p>
+ *
+ * @author Federico, Fernando
+ * @since 3.4
+ */
 public class MunitDomParser extends DOMParser
 {
 
@@ -21,7 +29,7 @@ public class MunitDomParser extends DOMParser
     public void startDocument(XMLLocator locator, String encoding, NamespaceContext namespaceContext, Augmentations augs) throws XNIException
     {
         this.xmlLocator = locator;
-        super.startDocument(locator, encoding, namespaceContext, augs);    //To change body of overridden methods use File | Settings | File Templates.
+        super.startDocument(locator, encoding, namespaceContext, augs);
     }
 
     @Override

@@ -1,12 +1,16 @@
 package org.mule.munit.runner.mule.result;
 
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mule.munit.runner.mule.result.MockTestFactory.errorTest;
+import static org.mule.munit.runner.mule.result.MockTestFactory.failingTest;
+import static org.mule.munit.runner.mule.result.MockTestFactory.succeedTest;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mule.munit.runner.mule.result.MockTestFactory.*;
+import org.junit.Test;
 
 public class SuiteResultTest
 {

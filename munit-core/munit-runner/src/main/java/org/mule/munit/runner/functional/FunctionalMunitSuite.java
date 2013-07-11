@@ -45,6 +45,7 @@ public abstract class FunctionalMunitSuite
         }
     }
 
+
     private MockingConfiguration createConfiguration()
     {
         return new MockingConfiguration(haveToDisableInboundEndpoints(), getFlowsExcludedOfInboundDisabling(), haveToMockMuleConnectors(), getStartUpProperties());

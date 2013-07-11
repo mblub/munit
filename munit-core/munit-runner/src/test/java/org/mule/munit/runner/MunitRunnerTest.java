@@ -1,9 +1,10 @@
 package org.mule.munit.runner;
 
 
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.registry.MuleRegistry;
@@ -15,7 +16,8 @@ import org.mule.munit.runner.output.TestOutputHandler;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public class MunitRunnerTest
 {

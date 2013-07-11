@@ -1,13 +1,12 @@
 package org.mule.munit.runner.java;
 
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.mule.munit.config.MunitTestFlow;
-
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
+import org.mule.munit.config.MunitTestFlow;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class JunitTestSuiteBuilderTest
 {

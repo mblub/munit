@@ -1,14 +1,13 @@
 package org.mule.munit.runner.mule;
 
 
-import org.junit.Before;
-import org.junit.Test;
-
+import static junit.framework.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 import org.mule.api.MuleContext;
 import org.mule.munit.runner.output.DefaultOutputHandler;
 
-import static junit.framework.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
+import org.junit.Before;
+import org.junit.Test;
 
 public class MunitSuiteBuilderTest
 {

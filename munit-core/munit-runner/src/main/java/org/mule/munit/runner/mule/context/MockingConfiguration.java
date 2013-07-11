@@ -3,6 +3,14 @@ package org.mule.munit.runner.mule.context;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * <p>
+ * The configuration of the mocking elements for Munit
+ * </p>
+ *
+ * @author Federico, Fernando
+ * @since 3.3.2
+ */
 public class MockingConfiguration
 {
 

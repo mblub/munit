@@ -14,14 +14,42 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 
 
+/**
+ * <p>
+ * The {@link MunitApplicationContext} that represents an app running with Munit.
+ * </p>
+ * <p/>
+ * <p>
+ * The main difference between {@link MunitApplicationContext} and {@link MuleApplicationContext} is that
+ * it changes the bean definition reader in order to make the Mule stacktrace work and also registers the Bean definition
+ * of the {@link MockingConfiguration}
+ * </p>
+ *
+ * @author Federico, Fernando
+ * @since 3.3.2
+ */
 public class MunitApplicationContext extends MuleApplicationContext
 {
 
+    /**
+     * <p>
+     * The name of the Spring bean that defines the mocking strategy when running JAVA code
+     * </p>
+     */
+    public static final String MUNIT_FACTORY_POST_PROCESSOR = "___MunitSpringFactoryPostProcessor";
+    public static final String MOCK_INBOUNDS_PROPERTY_NAME = "mockInbounds";
+    public static final String MOCK_CONNECTORS_PROPERTY_NAME = "mockConnectors";
+    public static final String MOCKING_EXCLUDED_FLOWS_PROPERTY_NAME = "mockingExcludedFlows";
+
+    /**
+     * <p>
+     * The {@link MockingConfiguration} for Munit it is null in case of XML test writing.
+     * </p>
+     */
     private MockingConfiguration configuration;
 
     public MunitApplicationContext(MuleContext muleContext, ConfigResource[] configResources, MockingConfiguration configuration) throws BeansException
@@ -30,16 +58,10 @@ public class MunitApplicationContext extends MuleApplicationContext
         this.configuration = configuration;
     }
 
-    public MunitApplicationContext(MuleContext muleContext, Resource[] springResources, MockingConfiguration configuration) throws BeansException
-    {
-        super(muleContext, springResources);
-        this.configuration = configuration;
-    }
-
     @Override
     protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException
     {
-        XmlBeanDefinitionReader beanDefinitionReader = new MunitXmlBeanDefinitionReader(beanFactory);
+        XmlBeanDefinitionReader beanDefinitionReader = getMunitXmlBeanDefinitionReader(beanFactory);
         //hook in our custom hierarchical reader
         beanDefinitionReader.setDocumentReaderClass(MunitBeanDefinitionDocumentReader.class);
         //add error reporting
@@ -53,11 +75,11 @@ public class MunitApplicationContext extends MuleApplicationContext
             RootBeanDefinition beanDefinition = new RootBeanDefinition();
             beanDefinition.setBeanClass(MunitSpringFactoryPostProcessor.class);
             MutablePropertyValues propertyValues = new MutablePropertyValues();
-            propertyValues.add("mockInbounds", configuration.isMockInbounds());
-            propertyValues.add("mockConnectors", configuration.isMockConnectors());
-            propertyValues.add("mockingExcludedFlows", configuration.getMockingExcludedFlows());
+            propertyValues.add(MOCK_INBOUNDS_PROPERTY_NAME, configuration.isMockInbounds());
+            propertyValues.add(MOCK_CONNECTORS_PROPERTY_NAME, configuration.isMockConnectors());
+            propertyValues.add(MOCKING_EXCLUDED_FLOWS_PROPERTY_NAME, configuration.getMockingExcludedFlows());
             beanDefinition.setPropertyValues(propertyValues);
-            beanFactory.registerBeanDefinition("___MunitSpringFactoryPostProcessor", beanDefinition);
+            beanFactory.registerBeanDefinition(MUNIT_FACTORY_POST_PROCESSOR, beanDefinition);
         }
         // Communicate mule context to parsers
 
@@ -65,6 +87,11 @@ public class MunitApplicationContext extends MuleApplicationContext
         beanDefinitionReader.loadBeanDefinitions(getConfigResources());
 
         getCurrentMuleContext().remove();
+    }
+
+    protected MunitXmlBeanDefinitionReader getMunitXmlBeanDefinitionReader(DefaultListableBeanFactory beanFactory)
+    {
+        return new MunitXmlBeanDefinitionReader(beanFactory);
     }
 
 

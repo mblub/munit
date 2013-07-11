@@ -8,9 +8,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import org.mockito.Matchers;
-
 import org.mule.api.DefaultMuleException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -32,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
+import org.mockito.Matchers;
 
 public class MunitTestTest
 {
