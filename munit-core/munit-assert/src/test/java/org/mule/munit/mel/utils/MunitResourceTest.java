@@ -14,8 +14,10 @@ public class MunitResourceTest
     @Test
     public void testMunitResourceAsStream() throws IOException
     {
-        InputStream is = ((MunitResource) new GetResourceFunction().call(
-                new Object[] {"testFile.txt"}, null)).asStream();
+        String path = "/testFile.txt";
+        MunitResource file = new MunitResource(path);
+
+        InputStream is = file.asStream();
         assertEquals("Hello World!", IOUtils.toString(is, "UTF-8"));
     }
 
