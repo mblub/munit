@@ -4,6 +4,7 @@
       xmlns:script="http://www.mulesoft.org/schema/mule/scripting"
       xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc"
       xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:jira="http://www.mulesoft.org/schema/mule/jira"
       xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
@@ -13,7 +14,8 @@
         http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
         http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
         http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd
-        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
 
     <spring:bean id="jdbcDataSource"
                  class="org.enhydra.jdbc.standard.StandardDataSource" destroy-method="shutdown">
@@ -122,5 +124,12 @@
 
     <flow name="setMuleAppHomeFlow">
         <set-payload value="${app.home}"/>
+    </flow>
+
+    <!-- just to validate correct initialization of the xml-to-object-transformer -->
+    <flow name="xstream-issue-isolationFlow1" doc:name="xstream-issue-isolationFlow1">
+        <mulexml:xml-to-object-transformer doc:name="ToObject">
+            <mulexml:alias name="myAlias" class="org.mule.munit.Consumer" />
+        </mulexml:xml-to-object-transformer>
     </flow>
 </mule>
