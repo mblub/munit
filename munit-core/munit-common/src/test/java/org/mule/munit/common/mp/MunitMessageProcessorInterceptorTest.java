@@ -66,7 +66,7 @@ public class MunitMessageProcessorInterceptorTest
 
     private MockMunitMessageProcessorInterceptor interceptor()
     {
-        MockMunitMessageProcessorInterceptor interceptor = new MockMunitMessageProcessorInterceptor(manager);
+        MockMunitMessageProcessorInterceptor interceptor = new MockMunitMessageProcessorInterceptor("process",manager);
         interceptor.setId(MESSAGE_PROCESSOR_ID);
         return interceptor;
     }

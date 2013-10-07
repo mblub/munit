@@ -34,6 +34,11 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
     private String fileName;
     private String lineNumber;
 
+    public MunitMessageProcessorInterceptor(String methodName)
+    {
+        super(methodName);
+    }
+
 
     public Object process(Object obj, Object[] args, MethodProxy proxy) throws Throwable
     {

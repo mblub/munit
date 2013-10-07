@@ -9,7 +9,6 @@ import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.modules.interceptor.spring.BeanFactoryMethodBuilder;
 import org.mule.modules.interceptor.spring.MethodInterceptorFactory;
 
-import net.sf.cglib.proxy.MethodProxy;
 import net.sf.cglib.proxy.NoOp;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 
@@ -36,24 +35,6 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
      */
     private static Callback NULL_METHOD_INTERCEPTOR = new NoOp()
     {
-    };
-
-    /**
-     * <p>
-     * Allow callbacks only for  {@link org.mule.api.processor.MessageProcessor#process(org.mule.api.MuleEvent)}
-     * </p>
-     */
-    private static CallbackFilter CALLBACK_FILTER = new CallbackFilter()
-    {
-        @Override
-        public int accept(Method method)
-        {
-            if ("process".equals(method.getName()))
-            {
-                return 0;
-            }
-            return 1;
-        }
     };
 
     /**
@@ -88,7 +69,7 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
     {
         try
         {
-            Enhancer e = createEnhancer(realMpClass, id, attributes, fileName, lineNumber);
+            Enhancer e = createEnhancer(realMpClass, id, attributes, fileName, lineNumber, "process");
             return e.create();
 
         }
@@ -102,7 +83,8 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
     {
         try
         {
-            Enhancer e = createEnhancer(realMpClass, id, attributes, fileName, lineNumber);
+            // TODO: Fix on cascade, should be process not doProcess
+            Enhancer e = createEnhancer(realMpClass, id, attributes, fileName, lineNumber, "doProcess");
             return e.create(new Class[]{String.class}, new Object[]{mpName});
 
         }
@@ -112,22 +94,21 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
         }
     }
 
-    private Enhancer createEnhancer(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber)
+    private Enhancer createEnhancer(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber, String methodName)
     {
-        Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(Enhancer.class);
 
         Enhancer e = new Enhancer();
         e.setSuperclass(realMpClass);
         e.setUseFactory(true);
         e.setInterceptDuringConstruction(true);
-        MunitMessageProcessorInterceptor callback = new MunitMessageProcessorInterceptor();
+
+        MunitMessageProcessorInterceptor callback = new MunitMessageProcessorInterceptor(methodName);
         callback.setId(id);
         callback.setAttributes(attributes);
         callback.setFileName(fileName);
         callback.setLineNumber(lineNumber);
         e.setCallbacks(new Callback[] {callback, NULL_METHOD_INTERCEPTOR});
-        e.setCallbackFilter(CALLBACK_FILTER);
+        e.setCallbackFilter(new MessageProcessorCallbackFilter(methodName));
         return e;
     }
 
@@ -143,7 +124,27 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
     @Override
     protected MethodInterceptor createInterceptor()
     {
-        return new MunitMessageProcessorInterceptor();
+        return new MunitMessageProcessorInterceptor("process");
     }
 
+
+    private static class MessageProcessorCallbackFilter implements CallbackFilter{
+        private String methodName;
+
+        private MessageProcessorCallbackFilter(String methodName)
+        {
+            this.methodName = methodName;
+        }
+
+
+        @Override
+        public int accept(Method method)
+        {
+            if (methodName.equals(method.getName()))
+            {
+                return 0;
+            }
+            return 1;
+        }
+    }
 }

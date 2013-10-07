@@ -19,8 +19,9 @@ public class MockMunitMessageProcessorInterceptor extends MunitMessageProcessorI
     boolean mockProcess;
     MuleContext context;
 
-    public MockMunitMessageProcessorInterceptor(MockedMessageProcessorManager manager)
+    public MockMunitMessageProcessorInterceptor(String name, MockedMessageProcessorManager manager)
     {
+        super(name);
         this.manager = manager;
     }
 

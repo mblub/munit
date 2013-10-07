@@ -4,14 +4,11 @@ import static junit.framework.Assert.assertEquals;
 
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
-import java.io.File;
-
 import org.junit.Test;
 
 
-public class JavaMunitTest extends FunctionalMunitSuite
+public class MockingSalesforceTest extends FunctionalMunitSuite
 {
-
     @Override
     protected String getConfigResources()
     {
@@ -29,15 +26,4 @@ public class JavaMunitTest extends FunctionalMunitSuite
 
         assertEquals("expected", payload);
     }
-
-    //@Test
-    //public void testSetMuleAppHome() throws Exception
-    //{
-    //
-    //    Object payload = runFlow("setMuleAppHomeFlow", testEvent("something")).getMessage().getPayload();
-    //
-    //    assertEquals(new File(getClass().getResource("/mule-config.xml").getPath()).getParentFile().getAbsolutePath(), payload);
-    //}
-
-
 }
