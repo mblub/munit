@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.mule.munit.utils</groupId>
         <artifactId>munit-utils</artifactId>
-        <version>3.4-M4-SNAPSHOT</version>
+        <version>3.5-SNAPSHOT</version>
     </parent>
     <artifactId>munit-mailserver-module</artifactId>
     <packaging>mule-module</packaging>
@@ -16,6 +16,11 @@
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
             <version>1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
         </dependency>
     </dependencies>
 

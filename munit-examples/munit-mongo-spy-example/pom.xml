@@ -11,11 +11,11 @@
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jdk.version>1.6</jdk.version>
-        <mule.version>3.4.0</mule.version>
+        <mule.version>3.5.0-bighorn</mule.version>
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <jdkName>JavaSE-1.6</jdkName>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <munit.version>3.4-M4-SNAPSHOT</munit.version>
+        <munit.version>3.5-SNAPSHOT</munit.version>
         <junit.version>4.9</junit.version>
     </properties>
     <dependencies>

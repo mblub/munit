@@ -88,20 +88,7 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
     {
         try
         {
-            Enhancer enhancer = new Enhancer();
-            enhancer.setSuperclass(Enhancer.class);
-
-            Enhancer e = new Enhancer();
-            e.setSuperclass(realMpClass);
-            e.setUseFactory(true);
-            e.setInterceptDuringConstruction(true);
-            MunitMessageProcessorInterceptor callback = new MunitMessageProcessorInterceptor();
-            callback.setId(id);
-            callback.setAttributes(attributes);
-            callback.setFileName(fileName);
-            callback.setLineNumber(lineNumber);
-            e.setCallbacks(new Callback[] {callback, NULL_METHOD_INTERCEPTOR});
-            e.setCallbackFilter(CALLBACK_FILTER);
+            Enhancer e = createEnhancer(realMpClass, id, attributes, fileName, lineNumber);
             return e.create();
 
         }
@@ -109,6 +96,39 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
         {
             throw new Error("The message processor " + id.getFullName() + " could not be mocked", e);
         }
+    }
+
+    public Object create(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber, String mpName)
+    {
+        try
+        {
+            Enhancer e = createEnhancer(realMpClass, id, attributes, fileName, lineNumber);
+            return e.create(new Class[]{String.class}, new Object[]{mpName});
+
+        }
+        catch (Throwable e)
+        {
+            throw new Error("The message processor " + id.getFullName() + " could not be mocked", e);
+        }
+    }
+
+    private Enhancer createEnhancer(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber)
+    {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(Enhancer.class);
+
+        Enhancer e = new Enhancer();
+        e.setSuperclass(realMpClass);
+        e.setUseFactory(true);
+        e.setInterceptDuringConstruction(true);
+        MunitMessageProcessorInterceptor callback = new MunitMessageProcessorInterceptor();
+        callback.setId(id);
+        callback.setAttributes(attributes);
+        callback.setFileName(fileName);
+        callback.setLineNumber(lineNumber);
+        e.setCallbacks(new Callback[] {callback, NULL_METHOD_INTERCEPTOR});
+        e.setCallbackFilter(CALLBACK_FILTER);
+        return e;
     }
 
     /**
