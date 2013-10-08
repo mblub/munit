@@ -10,9 +10,13 @@ import org.mule.modules.interceptor.spring.BeanFactoryMethodBuilder;
 import org.mule.modules.interceptor.spring.MethodInterceptorFactory;
 
 import net.sf.cglib.proxy.NoOp;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -26,6 +30,7 @@ import java.util.Map;
  */
 public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFactory
 {
+
 
     /**
      * <p>
@@ -79,13 +84,17 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
         }
     }
 
-    public Object create(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber, String mpName)
+    public Object create(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber, Object ... attrs)
     {
         try
         {
             // TODO: Fix on cascade, should be process not doProcess
             Enhancer e = createEnhancer(realMpClass, id, attributes, fileName, lineNumber, "doProcess");
-            return e.create(new Class[]{String.class}, new Object[]{mpName});
+            List<Class> classes = new ArrayList<Class>();
+            for ( Object attr : attrs ){
+                classes.add(attr.getClass());
+            }
+            return e.create(classes.toArray(new Class[]{}), attrs);
 
         }
         catch (Throwable e)
