@@ -74,8 +74,18 @@ public class MunitSpy extends MunitMockingTool
     {
         if (withSpies != null && !withSpies.isEmpty())
         {
-            getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
-                                         createSpyAssertion(withSpies, Collections.<SpyProcess>emptyList()));
+
+            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace);
+            SpyAssertion spyAssertion = getManager().getSpyAssertions().get(messageProcessorId);
+            if (spyAssertion == null)
+            {
+                getManager().addSpyAssertion(messageProcessorId,
+                                             createSpyAssertion(withSpies, Collections.<SpyProcess>emptyList()));
+            }
+            else
+            {
+                spyAssertion.setBeforeMessageProcessors(createMessageProcessors(withSpies));
+            }
         }
         return this;
     }
@@ -99,8 +109,17 @@ public class MunitSpy extends MunitMockingTool
     {
         if (withSpies != null && !withSpies.isEmpty())
         {
-            getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
-                                         createSpyAssertion(Collections.<SpyProcess>emptyList(), withSpies));
+            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace);
+            SpyAssertion spyAssertion = getManager().getSpyAssertions().get(messageProcessorId);
+            if (spyAssertion == null)
+            {
+                getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
+                                             createSpyAssertion(Collections.<SpyProcess>emptyList(), withSpies));
+            }
+            else
+            {
+                spyAssertion.setAfterMessageProcessors(createMessageProcessors(withSpies));
+            }
         }
         return this;
     }
