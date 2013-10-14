@@ -46,4 +46,14 @@ public class SpyAssertion
     {
         return afterMessageProcessors;
     }
+
+    public void setBeforeMessageProcessors(List<MessageProcessor> beforeMessageProcessors)
+    {
+        this.beforeMessageProcessors = beforeMessageProcessors;
+    }
+
+    public void setAfterMessageProcessors(List<MessageProcessor> afterMessageProcessors)
+    {
+        this.afterMessageProcessors = afterMessageProcessors;
+    }
 }

@@ -124,11 +124,15 @@
             <mock:assertions-before-call>
                 <munit:assert-not-null/>
                 <munit:assert-that payloadIs-ref='#[resultOfScript("mockPayload")]'/>
+                <set-variable variableName="beforeCallKey" value="#[string:beforeCallValue]"/>
+
             </mock:assertions-before-call>
 
             <mock:assertions-after-call>
                 <munit:assert-not-null/>
                 <munit:assert-that payloadIs-ref="#[string:expectedPayload]"/>
+                <set-variable variableName="afterCallKey" value="#[string:afterCallValue]"/>
+
             </mock:assertions-after-call>
         </mock:spy>
 
@@ -146,6 +150,8 @@
         <mock:verify-call messageProcessor="jira:create-group" times="1"/>
         <mock:verify-call messageProcessor="jira:create-group" atMost="1"/>
         <munit:assert-that payloadIs-ref="#[string:expectedPayload]"/>
+        <munit:assert-on-equals expected-ref="#[string:beforeCallValue]" value-ref="#[beforeCallKey]"/>
+        <munit:assert-on-equals expected-ref="#[string:afterCallValue]" value-ref="#[afterCallKey]"/>
     </munit:test>
 
 
