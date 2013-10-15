@@ -15,14 +15,10 @@ import org.mule.api.el.ExpressionLanguageContext;
 public class ElementMatchingAssertionMelFunction extends AssertionMelFunction
 {
 
-    private ElementMatcherFactory command;
-
-
-
     @Override
     public Object call(Object[] params, ExpressionLanguageContext context)
     {
-        if (params != null && params.length > 0 && params[0] instanceof String)
+        if (params != null && params.length > 0)
         {
             MuleMessage messageFrom = getMuleMessageFrom(context);
 
