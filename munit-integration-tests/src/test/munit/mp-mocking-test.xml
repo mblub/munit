@@ -188,4 +188,18 @@
         <flow-ref name="callingJira"/>
     </munit:test>
 
+    <munit:test name="spy_test" description="This test checks if spy is working properly">
+        <mock:spy messageProcessor="set-variable">
+            <mock:assertions-before-call>
+                <munit:assert-not-null/>
+            </mock:assertions-before-call>
+            <mock:assertions-after-call>
+                <munit:assert-not-null/>
+                <munit:assert-on-equals value-ref="#[flowVars['myvar']]" expected-ref="#[string:Hello world!]"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <munit:set payload-ref="#[string:Hello world!]"/>
+        <flow-ref name="setVariable"/>
+    </munit:test>
+
 </mule>

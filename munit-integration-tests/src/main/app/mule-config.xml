@@ -132,4 +132,10 @@
             <mulexml:alias name="myAlias" class="org.mule.munit.Consumer" />
         </mulexml:xml-to-object-transformer>
     </flow>
+
+
+    <flow name="setVariable">
+        <set-variable variableName="myvar" value="#[message.payload]" doc:name="Variable"/>
+        <echo-component/>
+    </flow>
 </mule>
