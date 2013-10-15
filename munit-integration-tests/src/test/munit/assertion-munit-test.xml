@@ -125,6 +125,7 @@
             </munit:outbound-properties>
         </munit:set>
 
+        <munit:assert-true condition="#[valueOf(payload).is(anyString())]"/>
         <munit:assert-true condition="#[messageHasPropertyInAnyScopeCalled('invocation')]"/>
         <munit:assert-true condition="#[messageHasInvocationPropertyCalled('invocation')]"/>
         <munit:assert-true condition="#[messageInvocationProperty('invocation').is(anyString())]"/>
