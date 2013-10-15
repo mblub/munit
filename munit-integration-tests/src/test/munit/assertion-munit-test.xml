@@ -5,11 +5,13 @@
       xmlns:spring="http://www.springframework.org/schema/beans"
       xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
       xmlns:mock="http://www.mulesoft.org/schema/mule/mock"
+	  xmlns:script="http://www.mulesoft.org/schema/mule/scripting"
       xsi:schemaLocation="
+	  	http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.2/mule.xsd
         http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
-         http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+        http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
 
 
     <munit:config/>
@@ -21,6 +23,12 @@
         <spring:bean class="org.mule.assertions.CustomAssertion" name="customAssertion"/>
     </spring:beans>
 
+    <script:script name="binaryPayload" engine="groovy">
+    	<![CDATA[
+			String s = "hello";    
+			return s.getBytes();
+		]]>
+    </script:script>	
 
     <munit:test name="testingEchoFlow"
                 description="
@@ -138,6 +146,12 @@
         <munit:assert-true condition="#[messageHasPropertyInAnyScopeCalled('outbound')]"/>
         <munit:assert-true condition="#[messageHasOutboundPropertyCalled('outbound')]"/>
         <munit:assert-true condition="#[messageOutboundProperty('outbound').is(eq('outboundValue'))]"/>
+    </munit:test>
+
+    <munit:test name="testMelFunctionsOnBinaryPayload" description="Test MEL assertions on binary payload">
+		<munit:set payload-ref="#[resultOfScript('binaryPayload')]"/>
+
+        <munit:assert-true condition="#[valueOf(payload).is(anyByteArray())]"/>
     </munit:test>
 
 </mule>
