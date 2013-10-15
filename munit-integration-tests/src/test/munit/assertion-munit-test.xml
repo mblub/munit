@@ -151,7 +151,7 @@
     <munit:test name="testMelFunctionsOnBinaryPayload" description="Test MEL assertions on binary payload">
 		<munit:set payload-ref="#[resultOfScript('binaryPayload')]"/>
 
-        <munit:assert-true condition="#[valueOf(payload).is(anyByte())]"/>
+        <munit:assert-true condition="#[valueOf(payload).is(anyByteArray())]"/>
     </munit:test>
 
 </mule>

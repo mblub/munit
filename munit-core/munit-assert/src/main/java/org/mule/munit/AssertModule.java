@@ -257,6 +257,7 @@ public class AssertModule extends MunitSpringFactoryPostProcessor implements Exp
         context.declareFunction("eq", new EqMatcherFunction());
         context.declareFunction("anyBoolean", new AnyMatcherFunction(Boolean.class));
         context.declareFunction("anyByte", new AnyMatcherFunction(Byte.class));
+	    context.declareFunction("anyByteArray", new AnyMatcherFunction(byte[].class));	
         context.declareFunction("anyInt", new AnyMatcherFunction(Integer.class));
         context.declareFunction("anyDouble", new AnyMatcherFunction(Double.class));
         context.declareFunction("anyFloat", new AnyMatcherFunction(Float.class));
