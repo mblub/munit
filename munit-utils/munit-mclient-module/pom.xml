@@ -11,4 +11,8 @@
     <packaging>mule-module</packaging>
     <name>Mule Client for integration testing</name>
 
+    <properties>
+        <licensePath>../../LICENSE_HEADER.txt</licensePath>
+    </properties>
+
 </project>
