@@ -34,7 +34,7 @@ import javax.script.ScriptException;
  *     </pre>
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class FlowResultFunction implements ExpressionLanguageFunction

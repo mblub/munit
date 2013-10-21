@@ -11,7 +11,7 @@ import org.mule.munit.MunitAssertion;
  * Message processor that runs the custom assertion
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class RunAssertionMessageProcessor implements MessageProcessor

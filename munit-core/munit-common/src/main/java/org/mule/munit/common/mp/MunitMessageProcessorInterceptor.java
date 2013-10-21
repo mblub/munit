@@ -25,7 +25,7 @@ import java.util.Map;
  * It intercepts the {@link MessageProcessor#process(org.mule.api.MuleEvent)}  calls
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorInterceptor

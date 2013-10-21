@@ -18,7 +18,7 @@ import static junit.framework.Assert.fail;
  * The Test Flow
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitTestFlow extends MunitFlow

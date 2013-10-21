@@ -24,7 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MockOutboundEndpointTest

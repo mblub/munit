@@ -11,7 +11,7 @@ import org.mule.api.el.ExpressionLanguageContext;
  * All the #[messageHas*PropertyCalled('something') is implemented with this Object
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class MessageHasElementAssertionMelFunction extends AssertionMelFunction

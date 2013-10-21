@@ -5,7 +5,7 @@ package org.mule.munit.common.mocking;
  * This class is a marker to know that the payload must not be overridden
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class NotDefinedPayload

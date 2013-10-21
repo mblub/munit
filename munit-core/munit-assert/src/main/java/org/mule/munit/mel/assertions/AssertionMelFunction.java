@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
  * This class just contains a method to get the mule message when the function is called.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public abstract class AssertionMelFunction implements ExpressionLanguageFunction

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * <p>Creates a Munit Suite and its tests</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitSuiteBuilder extends SuiteBuilder<MunitSuite, MunitTest>

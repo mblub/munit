@@ -15,7 +15,7 @@ import java.util.Map;
  * Sets the payload
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class SetMessageProcessor extends MunitMessageProcessor

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.xml.XmlReaderContext;
 import org.w3c.dom.Element;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitBeanDefinitionDocumentReaderTest

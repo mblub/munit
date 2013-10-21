@@ -14,7 +14,7 @@ import org.mule.munit.runner.output.TestOutputHandler;
  * The Munit test runner
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitSuiteRunner

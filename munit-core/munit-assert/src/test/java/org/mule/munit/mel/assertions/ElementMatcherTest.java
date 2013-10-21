@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class ElementMatcherTest

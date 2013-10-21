@@ -11,7 +11,7 @@ import java.util.List;
  * The Assertions the must be executed after and before a message processor call
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class SpyAssertion

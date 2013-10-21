@@ -16,7 +16,7 @@ import org.mule.api.processor.MessageProcessor;
  * This class should die in future versions of Devkit.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class NestedMessageProcessor implements MessageProcessor

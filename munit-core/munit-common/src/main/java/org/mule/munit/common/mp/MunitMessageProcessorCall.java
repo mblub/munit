@@ -8,7 +8,7 @@ import org.mule.modules.interceptor.processors.MessageProcessorId;
  * Representation of the message processor call for Munit
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class MunitMessageProcessorCall extends MessageProcessorCall

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * <p>Pojo Simplified Representation of a Mime Message</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 public class MimeMessage
 {

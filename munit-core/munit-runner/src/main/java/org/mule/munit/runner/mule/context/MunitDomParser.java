@@ -16,7 +16,7 @@ import org.apache.xerces.xni.XNIException;
  * We override the {@link DOMParser} implementation to retrieve the line number of the XML
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class MunitDomParser extends DOMParser

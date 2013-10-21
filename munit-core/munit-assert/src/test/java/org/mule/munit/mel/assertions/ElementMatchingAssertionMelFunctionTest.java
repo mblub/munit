@@ -14,37 +14,30 @@ import org.junit.Test;
  * @author Mulesoft Inc.
  * @since 3.4
  */
-public class MessageHasElementAssertionMelFunctionTest
+public class ElementMatchingAssertionMelFunctionTest
 {
 
     private MessageHasElementAssertionCommand command = mock(MessageHasElementAssertionCommand.class);
     private ExpressionLanguageContext context = mock(ExpressionLanguageContext.class);
     private MuleMessage message = mock(MuleMessage.class);
 
-    @Test
-    public void whenNullParamsReturnFalse()
+    @Test(expected = java.lang.IllegalArgumentException.class)
+    public void whenNullParamsThrowException()
     {
-        assertFalse((Boolean) new MessageHasElementAssertionMelFunction(command).call(null, context));
+        assertFalse((Boolean) new ElementMatchingAssertionMelFunction().call(null, context));
     }
 
-    @Test
-    public void whenEmptyParamsReturnFalse()
+    @Test(expected = java.lang.IllegalArgumentException.class)
+    public void whenEmptyParamsThrowException()
     {
-        assertFalse((Boolean) new MessageHasElementAssertionMelFunction(command).call(new Object[] {}, context));
+        assertFalse((Boolean) new ElementMatchingAssertionMelFunction().call(new Object[] {}, context));
     }
 
-    @Test
-    public void whenNotStringParamsReturnFalse()
+    @Test(expected = java.lang.RuntimeException.class)
+    public void whenNotStringParamsThrowException()
     {
-        assertFalse((Boolean) new MessageHasElementAssertionMelFunction(command).call(new Object[] {new Object()}, context));
+        assertFalse((Boolean) new ElementMatchingAssertionMelFunction().call(new Object[] {new Object()}, context));
     }
-
-    @Test
-    public void whenMessageIsNullReturnFalse()
-    {
-        assertFalse((Boolean) new MockFunction(command, null).call(new Object[] {"anyString"}, context));
-    }
-
 
     @Test
     public void whenHasMessageThenExecuteCommand()

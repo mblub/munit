@@ -28,7 +28,7 @@ import org.mule.api.annotations.param.Optional;
 /**
  * <p>Module to test database connections</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @author Casal, Javier
  */
 @Module(name = "dbserver", schemaVersion = "1.0")

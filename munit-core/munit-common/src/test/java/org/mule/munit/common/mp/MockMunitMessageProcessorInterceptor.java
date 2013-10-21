@@ -9,7 +9,7 @@ import org.mule.api.MuleContext;
  * A class for test only. This just overrides protected methods to simplify class testing
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MockMunitMessageProcessorInterceptor extends MunitMessageProcessorInterceptor

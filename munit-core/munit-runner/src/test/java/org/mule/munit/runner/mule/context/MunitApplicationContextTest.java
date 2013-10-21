@@ -25,7 +25,7 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.core.io.Resource;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitApplicationContextTest

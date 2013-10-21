@@ -8,7 +8,7 @@ import org.mule.api.MuleException;
  * if you want to spy something this is the method that you need to implement
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public interface SpyProcess

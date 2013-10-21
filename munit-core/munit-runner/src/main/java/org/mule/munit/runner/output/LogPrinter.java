@@ -7,7 +7,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * <p>Prints the output in a log file</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class LogPrinter implements OutputPrinter

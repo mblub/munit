@@ -32,7 +32,7 @@ import static org.mule.modules.interceptor.connectors.ConnectorMethodInterceptor
  * endpoints of a mule application
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitSpringFactoryPostProcessor implements MuleContextAware

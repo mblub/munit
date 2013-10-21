@@ -14,7 +14,7 @@ import java.util.List;
  * Assert Module Namespace Handler
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class AssertModuleNamespaceHandler

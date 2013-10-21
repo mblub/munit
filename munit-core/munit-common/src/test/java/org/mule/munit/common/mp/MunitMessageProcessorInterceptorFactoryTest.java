@@ -2,6 +2,7 @@ package org.mule.munit.common.mp;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import org.mule.api.processor.LoggerMessageProcessor;
 import org.mule.component.simple.EchoComponent;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 
@@ -12,7 +13,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitMessageProcessorInterceptorFactoryTest
@@ -48,5 +49,13 @@ public class MunitMessageProcessorInterceptorFactoryTest
         MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
 
         factory.create(EchoComponent.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2");
+    }
+
+    @Test
+    public void testCreateLogger()
+    {
+        MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
+
+        factory.create(LoggerMessageProcessor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2");
     }
 }

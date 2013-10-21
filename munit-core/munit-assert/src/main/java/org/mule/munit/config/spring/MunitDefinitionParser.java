@@ -22,7 +22,7 @@ import java.util.List;
  * Munit Bean Definition Parser
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitDefinitionParser implements BeanDefinitionParser

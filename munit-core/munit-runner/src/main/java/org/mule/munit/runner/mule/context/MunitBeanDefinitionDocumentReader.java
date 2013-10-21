@@ -12,7 +12,7 @@ import org.w3c.dom.Element;
  * a {@link MunitBeanDefinitionParserDelegate}
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitBeanDefinitionDocumentReader extends MuleBeanDefinitionDocumentReader

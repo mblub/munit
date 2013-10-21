@@ -28,7 +28,7 @@ import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
  * extends from {@link TestCase}
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitTest extends TestCase

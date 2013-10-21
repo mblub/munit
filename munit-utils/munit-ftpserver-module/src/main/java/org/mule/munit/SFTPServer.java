@@ -17,7 +17,7 @@ import java.util.Arrays;
 /**
  * <p>SFTP Wrapper</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 public class SFTPServer extends Server
 {

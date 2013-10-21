@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
  * {@link ApplicationContext} in order to create an {@link MunitApplicationContext}
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitSpringXmlConfigurationBuilder extends SpringXmlConfigurationBuilder

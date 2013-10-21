@@ -10,7 +10,7 @@ import org.mule.transport.NullPayload;
 import static org.mockito.Mockito.*;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class SetNullPayloadMessageProcessorTest extends AbstractMessageProcessorTest

@@ -20,7 +20,7 @@ import java.util.Map;
  * This class must be reset before any Munit test run.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MockEndpointManager implements EndpointFactory

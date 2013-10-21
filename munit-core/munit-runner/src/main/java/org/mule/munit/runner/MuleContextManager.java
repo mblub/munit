@@ -30,7 +30,7 @@ import java.util.Properties;
 /**
  * <p>Starts and stops mule</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MuleContextManager

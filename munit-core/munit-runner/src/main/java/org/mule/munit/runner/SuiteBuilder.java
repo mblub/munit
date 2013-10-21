@@ -18,7 +18,7 @@ import java.util.List;
  * <p>T is the Type of the Suite</p>
  * <p>E is the Type of the Tests</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public abstract class SuiteBuilder<T, E>

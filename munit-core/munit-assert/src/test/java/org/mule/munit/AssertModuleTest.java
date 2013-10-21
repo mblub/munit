@@ -33,7 +33,7 @@ import org.mule.transport.NullPayload;
 import javax.activation.DataHandler;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class AssertModuleTest

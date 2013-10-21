@@ -12,7 +12,7 @@ import java.util.Map;
  * This is the general Munit Tool
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitMockingTool

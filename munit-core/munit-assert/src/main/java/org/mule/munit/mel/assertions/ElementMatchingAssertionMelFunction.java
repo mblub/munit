@@ -9,7 +9,7 @@ import org.mule.api.el.ExpressionLanguageContext;
  * MEL function to evaluate that an element of the message matches something
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class ElementMatchingAssertionMelFunction extends AssertionMelFunction

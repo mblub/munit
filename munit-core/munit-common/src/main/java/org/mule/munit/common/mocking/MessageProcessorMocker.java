@@ -21,7 +21,7 @@ import java.util.Map;
  * new MessageProcessorMocker(muleContext).when("mp").ofNamespace("namespace").thenReturn(muleMessage);
  * </code>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MessageProcessorMocker extends MunitMockingTool

@@ -15,7 +15,7 @@ import static org.mule.munit.common.mocking.NotDefinedPayload.isNotDefined;
  * <p/>
  * <p>Do not use this class for everything</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitUtils

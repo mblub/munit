@@ -10,8 +10,7 @@ import org.mule.modules.interceptor.spring.BeanFactoryMethodBuilder;
 import org.mule.modules.interceptor.spring.MethodInterceptorFactory;
 
 import net.sf.cglib.proxy.NoOp;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 
 import java.lang.reflect.Method;
@@ -19,13 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * <p>
  * This is the Message processor interceptor factory.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFactory

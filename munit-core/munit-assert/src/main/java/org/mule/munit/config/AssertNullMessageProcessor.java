@@ -10,7 +10,7 @@ import org.mule.munit.AssertModule;
  * Assert Null message processor
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class AssertNullMessageProcessor extends MunitMessageProcessor

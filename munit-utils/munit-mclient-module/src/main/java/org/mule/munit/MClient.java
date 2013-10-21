@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * <p>Module used to call mule transports.</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @author Casal, Javier
  * @author Scandroglio, Matias
  */

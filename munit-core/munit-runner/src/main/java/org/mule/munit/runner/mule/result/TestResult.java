@@ -5,7 +5,7 @@ import org.mule.munit.runner.mule.result.notification.Notification;
 /**
  * <p>The result of each test in Munit</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class TestResult implements MunitResult
