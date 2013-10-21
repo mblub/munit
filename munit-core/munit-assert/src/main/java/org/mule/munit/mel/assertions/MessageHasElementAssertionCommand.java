@@ -11,7 +11,7 @@ import org.mule.api.MuleMessage;
  * Hamcrest module functionality.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public interface MessageHasElementAssertionCommand

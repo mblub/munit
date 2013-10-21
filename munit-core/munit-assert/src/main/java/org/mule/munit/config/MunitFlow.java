@@ -9,7 +9,7 @@ import org.mule.construct.Flow;
  * Generic Munit Flow
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitFlow extends Flow

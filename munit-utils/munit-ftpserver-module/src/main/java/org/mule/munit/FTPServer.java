@@ -8,7 +8,7 @@ import org.apache.ftpserver.listener.ListenerFactory;
 /**
  * <p>Wrapper of the FTP Server</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 public class FTPServer extends Server
 {

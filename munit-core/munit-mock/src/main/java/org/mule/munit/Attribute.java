@@ -8,7 +8,7 @@ import org.mule.api.annotations.Configurable;
  * Definition of the message processor attribute that wants to be mocked.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class Attribute

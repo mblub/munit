@@ -29,7 +29,7 @@ import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
  * <p/>
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 @Module(name = "mock", schemaVersion = "3.4")

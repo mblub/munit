@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * <p>Reads the resource from the jar</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 public class StreamKeyPairProvider extends AbstractKeyPairProvider
 {

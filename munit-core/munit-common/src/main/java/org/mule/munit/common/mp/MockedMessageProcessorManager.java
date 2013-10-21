@@ -12,7 +12,7 @@ import java.util.*;
  * the spy process
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MockedMessageProcessorManager extends MessageProcessorManager

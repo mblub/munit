@@ -27,7 +27,7 @@ import java.util.List;
  * new EndpointMocker(muleContext).whenEndpointWithAddress("http://localhost:8080").thenReturn(muleMessage);
  * </code>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class EndpointMocker

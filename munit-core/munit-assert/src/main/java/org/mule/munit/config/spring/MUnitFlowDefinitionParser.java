@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
  * Munit Flow Definition Parser
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MUnitFlowDefinitionParser extends OrphanDefinitionParser

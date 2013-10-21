@@ -11,7 +11,7 @@ import java.util.List;
  * asserts the incoming payload and the return message of the outbound.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class OutboundBehavior

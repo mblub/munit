@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
  * <p/>
  * <p>With this module you can start a FTP server on your local machine </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 @Module(name = "ftpserver", schemaVersion = "1.0")
 public class FTPServerModule

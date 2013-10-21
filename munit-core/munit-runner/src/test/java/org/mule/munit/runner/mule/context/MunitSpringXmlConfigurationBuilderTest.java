@@ -9,7 +9,7 @@ import org.mule.config.ConfigResource;
 import org.junit.Test;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class MunitSpringXmlConfigurationBuilderTest

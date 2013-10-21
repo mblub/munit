@@ -1,6 +1,7 @@
 package org.mule.munit;
 
 
+import static junit.framework.Assert.assertEquals;
 import org.mule.api.MuleMessage;
 import org.mule.api.el.ExpressionLanguageContext;
 import org.mule.api.el.ExpressionLanguageExtension;
@@ -11,7 +12,12 @@ import org.mule.modules.interceptor.matchers.mel.EqMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.NotNullMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.NullMatcherFunction;
 import org.mule.munit.common.endpoint.MunitSpringFactoryPostProcessor;
-import org.mule.munit.mel.assertions.*;
+import org.mule.munit.mel.assertions.ElementMatcher;
+import org.mule.munit.mel.assertions.ElementMatcherFactory;
+import org.mule.munit.mel.assertions.ElementMatchingAssertionMelFunction;
+import org.mule.munit.mel.assertions.MessageHasElementAssertionCommand;
+import org.mule.munit.mel.assertions.MessageHasElementAssertionMelFunction;
+import org.mule.munit.mel.assertions.MessageMatchingAssertionMelFunction;
 import org.mule.munit.mel.utils.FlowResultFunction;
 import org.mule.munit.mel.utils.GetResourceFunction;
 import org.mule.transport.NullPayload;
@@ -21,12 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static junit.framework.Assert.assertEquals;
-
 /**
  * <p>Module to assert payload's results</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class AssertModule extends MunitSpringFactoryPostProcessor implements ExpressionLanguageExtension

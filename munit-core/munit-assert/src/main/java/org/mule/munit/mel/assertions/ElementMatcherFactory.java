@@ -8,7 +8,7 @@ import org.mule.api.MuleMessage;
  * Factory of {@link ElementMatcher}
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public interface ElementMatcherFactory

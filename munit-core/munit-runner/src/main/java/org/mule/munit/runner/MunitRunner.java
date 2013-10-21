@@ -20,7 +20,7 @@ import java.util.List;
  * <p/>
  * <p>T is the expected result from the suite run</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public abstract class MunitRunner<T>

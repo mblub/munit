@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 /**
  * <p>Junit Runner to run Munit from Junit (Java)</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 @RunWith(MuleSuiteRunner.class)

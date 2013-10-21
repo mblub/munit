@@ -5,7 +5,7 @@ import org.apache.ftpserver.ftplet.*;
 /**
  * <p>Mock user Manager for testing</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 public class MockUserManager implements UserManager
 {

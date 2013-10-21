@@ -15,7 +15,7 @@ import java.util.List;
  * Creates a Munit Suite and its tests to be run with Junit framework
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class JunitTestSuiteBuilder extends SuiteBuilder<TestSuite, MunitTest>

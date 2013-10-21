@@ -12,7 +12,7 @@ import org.xml.sax.InputSource;
  * We change the document loader in order to get the line numbers as element attribute.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class MunitDocumentLoader extends DefaultDocumentLoader

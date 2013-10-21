@@ -8,7 +8,7 @@ import org.mule.modules.interceptor.matchers.Matcher;
  * Wrapper of a matcher to improve the MEL message assertion legibility.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.4
  */
 public class ElementMatcher

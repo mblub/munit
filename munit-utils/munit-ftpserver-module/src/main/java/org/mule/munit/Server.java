@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * <p>Implementation of the FTP server</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 public abstract class Server
 {

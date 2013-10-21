@@ -29,7 +29,7 @@ import java.io.IOException;
  * of the {@link MockingConfiguration}
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitApplicationContext extends MuleApplicationContext

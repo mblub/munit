@@ -18,7 +18,7 @@ import java.util.List;
  * This class is a Munit Tool to create Message processor spiers
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitSpy extends MunitMockingTool

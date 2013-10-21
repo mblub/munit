@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
  * The {@link MunitBeanDefinitionParserDelegate} that is an extension of the {@link MuleHierarchicalBeanDefinitionParserDelegate}
  * it overrides only the parseCustomElement to wrapp then {@link NamespaceHandler}
  * </p>
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitBeanDefinitionParserDelegate extends MuleHierarchicalBeanDefinitionParserDelegate

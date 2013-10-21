@@ -10,7 +10,7 @@ import org.mule.munit.common.mocking.MunitVerifier;
  * This name might sound incorrect but it is a mock of the mock module.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MockMockModule extends MockModule

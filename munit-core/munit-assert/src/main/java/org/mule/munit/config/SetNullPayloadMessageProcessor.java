@@ -11,7 +11,7 @@ import org.mule.transport.NullPayload;
  * Sets the payload as null
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class SetNullPayloadMessageProcessor extends MunitMessageProcessor

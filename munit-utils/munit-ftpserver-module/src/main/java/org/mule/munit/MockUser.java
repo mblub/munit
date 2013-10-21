@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * <p>Mock User for testing</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 public class MockUser implements User
 {

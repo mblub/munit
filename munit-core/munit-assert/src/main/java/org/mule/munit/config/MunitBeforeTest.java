@@ -7,7 +7,7 @@ import org.mule.api.MuleContext;
  * Before Test flow
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitBeforeTest extends MunitFlow

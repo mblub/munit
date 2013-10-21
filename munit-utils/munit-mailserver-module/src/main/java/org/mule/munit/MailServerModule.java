@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * <p>Module for mail integration testing.</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  */
 @Module(name = "mail-server", schemaVersion = "1.0")
 public class MailServerModule

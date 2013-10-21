@@ -1,20 +1,18 @@
 package org.mule.munit.common.mp;
 
-import net.sf.cglib.proxy.Callback;
-import net.sf.cglib.proxy.CallbackFilter;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.modules.interceptor.spring.BeanFactoryMethodBuilder;
 import org.mule.modules.interceptor.spring.MethodInterceptorFactory;
 
-import net.sf.cglib.proxy.MethodProxy;
-import net.sf.cglib.proxy.NoOp;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-
 import java.lang.reflect.Method;
 import java.util.Map;
+
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.CallbackFilter;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.NoOp;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 
 
 /**
@@ -22,7 +20,7 @@ import java.util.Map;
  * This is the Message processor interceptor factory.
  * </p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFactory

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * <p>Representation of a mail server for Munit tests</p>
  *
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MailServer

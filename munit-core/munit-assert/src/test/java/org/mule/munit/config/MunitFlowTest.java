@@ -8,7 +8,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
- * @author Federico, Fernando
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitFlowTest
