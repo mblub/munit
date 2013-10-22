@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author Javier Casal
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class GetResourceFunctionTest

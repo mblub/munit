@@ -31,7 +31,7 @@ import java.io.File;
  *
  * </p>
  *
- * @author Javier Casal
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class GetResourceFunction implements ExpressionLanguageFunction
