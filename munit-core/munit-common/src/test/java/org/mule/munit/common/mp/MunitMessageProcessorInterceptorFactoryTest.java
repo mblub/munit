@@ -52,10 +52,28 @@ public class MunitMessageProcessorInterceptorFactoryTest
     }
 
     @Test
+    public void testCreateDoProcess()
+    {
+        MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
+
+        factory.create(MyTestMessageProcessor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", new Object());
+    }
+
+   @Test(expected = Error.class)
+    public void testCreateFailureOnDoProcess()
+    {
+        MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
+
+        factory.create(LoggerMessageProcessor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", new Object());
+    }
+
+
+    @Test
     public void testCreateLogger()
     {
         MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
 
         factory.create(LoggerMessageProcessor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2");
+
     }
 }
