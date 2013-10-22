@@ -19,7 +19,7 @@ import java.io.InputStream;
  * convert its content into String, InputStream or byte array
  * </p>
  *
- * @author Javier Casal
+ * @author Mulesoft Inc.
  * @since 3.3.2
  */
 public class MunitResource
