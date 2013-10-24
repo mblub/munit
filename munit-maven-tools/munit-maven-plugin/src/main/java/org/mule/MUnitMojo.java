@@ -23,6 +23,7 @@ package org.mule;
  */
 
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -45,6 +46,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -116,11 +118,11 @@ public class MUnitMojo
                 {
                     return;
                 }
-
-                for (File file : testFolder.listFiles())
+                Collection<File> allFiles = FileUtils.listFiles(testFolder, null, true);
+                for (File file : allFiles)
                 {
 
-                    String fileName = file.getName();
+                    String fileName = file.getPath();
                     if (fileName.endsWith(".xml") && validateFilter(fileName))
                     {
                         results.add(buildRunnerFor(fileName).run());
