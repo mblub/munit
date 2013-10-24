@@ -173,7 +173,7 @@ public class MUnitMojo
         {
             List<MunitResult> failingTests = run.getFailingTests();
             List<MunitResult> errorTests = run.getErrorTests();
-            System.out.println("\t >> " + run.getTestName() + " test result: Errors: " + errorTests.size() + ", Failures:" + failingTests.size());
+            System.out.println("\t >> " + run.getTestName().substring(run.getTestName().indexOf("munit") + 5) + " test result: Errors: " + errorTests.size() + ", Failures:" + failingTests.size());
 
             showFailures(failingTests);
             showError(errorTests);
