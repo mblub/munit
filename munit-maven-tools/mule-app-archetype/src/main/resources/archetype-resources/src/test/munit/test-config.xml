@@ -14,7 +14,7 @@
         http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
 
     <spring:beans>
-        <spring:import resource="mule-config.xml"/>
+        <spring:import resource="classpath:mule-config.xml"/>
     </spring:beans>
 
     <munit:config/>
