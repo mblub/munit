@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -199,17 +198,13 @@ public class DatabaseServer
                 String tableName = table.replaceAll(".csv", "");
                 try
                 {
-                    stmt.execute("CREATE TABLE " + tableName + " AS SELECT * FROM CSVREAD(\'" + getClass().getClassLoader().
-                            getResource(table).toURI().toASCIIString() + "\');");
+                    stmt.execute("CREATE TABLE " + tableName + " AS SELECT * FROM CSVREAD(\'classpath:" + table + "\');");
                 }
                 catch (SQLException e)
                 {
                     throw new RuntimeException("Invalid SQL, could not create table " + tableName + " from " + table);
                 }
-                catch (URISyntaxException e)
-                {
-                    throw new RuntimeException("Could not read file " + table);
-                }
+
             }
         }
     }
