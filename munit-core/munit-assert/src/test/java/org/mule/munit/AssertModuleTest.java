@@ -13,11 +13,6 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import junit.framework.AssertionFailedError;
-import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-
 import org.mule.api.MuleMessage;
 import org.mule.api.el.ExpressionLanguageContext;
 import org.mule.api.transport.PropertyScope;
@@ -27,7 +22,6 @@ import org.mule.modules.interceptor.matchers.mel.EqMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.NotNullMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.NullMatcherFunction;
 import org.mule.munit.mel.assertions.AssertionMelFunction;
-import org.mule.munit.mel.assertions.ElementMatcher;
 import org.mule.munit.mel.assertions.ElementMatcherFactory;
 import org.mule.munit.mel.assertions.MessageHasElementAssertionCommand;
 import org.mule.munit.mel.assertions.MessageHasElementAssertionMelFunction;
@@ -37,6 +31,10 @@ import org.mule.munit.mel.utils.GetResourceFunction;
 import org.mule.transport.NullPayload;
 
 import javax.activation.DataHandler;
+
+import junit.framework.AssertionFailedError;
+import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 
 /**
  * @author Mulesoft Inc.

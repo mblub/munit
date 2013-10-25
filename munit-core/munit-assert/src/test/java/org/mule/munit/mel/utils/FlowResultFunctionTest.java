@@ -6,9 +6,12 @@
  */
 package org.mule.munit.mel.utils;
 
-import org.junit.Test;
-
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.mule.api.MuleContext;
+import org.mule.api.MuleMessage;
+import org.mule.api.el.ExpressionLanguageContext;
 import org.mule.api.registry.MuleRegistry;
 import org.mule.module.scripting.component.Scriptable;
 
@@ -16,9 +19,8 @@ import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Mulesoft Inc.
@@ -34,23 +36,33 @@ public class FlowResultFunctionTest
     private Scriptable script = mock(Scriptable.class);
     private ScriptEngine scriptEngine = mock(ScriptEngine.class);
     private Bindings bindings = mock(Bindings.class);
+    private ExpressionLanguageContext context = mock(ExpressionLanguageContext.class);
+    private MuleMessage muleMessage = mock(MuleMessage.class);
+
+    @Before
+    public void returnMuleContext()
+    {
+       when(context.getVariable("_muleMessage")).thenReturn(muleMessage);
+       when(muleMessage.getMuleContext()).thenReturn(muleContext);
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void callWithNull()
     {
-        new FlowResultFunction(muleContext).call(null, null);
+        new FlowResultFunction().call(null, context);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void callWithEmpty()
     {
-        new FlowResultFunction(muleContext).call(new Object[] {}, null);
+        new FlowResultFunction().call(new Object[] {}, context);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void callWithNotString()
     {
-        new FlowResultFunction(muleContext).call(new Object[] {new Object()}, null);
+        new FlowResultFunction().call(new Object[] {new Object()}, context);
     }
 
     @Test(expected = NullPointerException.class)
@@ -58,7 +70,7 @@ public class FlowResultFunctionTest
     {
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
         when(muleRegistry.lookupObject(SCRIPT_NAME)).thenReturn(null);
-        new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null);
+        new FlowResultFunction().call(new Object[] {SCRIPT_NAME}, context);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -66,7 +78,7 @@ public class FlowResultFunctionTest
     {
         when(muleContext.getRegistry()).thenReturn(muleRegistry);
         when(muleRegistry.lookupObject(SCRIPT_NAME)).thenReturn(new Object());
-        new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null);
+        new FlowResultFunction().call(new Object[] {SCRIPT_NAME}, context);
     }
 
 
@@ -79,7 +91,7 @@ public class FlowResultFunctionTest
         when(scriptEngine.createBindings()).thenReturn(bindings);
         when(script.runScript(bindings)).thenReturn(SCRIPT_RESULT);
 
-        assertEquals(SCRIPT_RESULT, new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null));
+        assertEquals(SCRIPT_RESULT, new FlowResultFunction().call(new Object[] {SCRIPT_NAME}, context));
     }
 
     @Test(expected = RuntimeException.class)
@@ -91,7 +103,7 @@ public class FlowResultFunctionTest
         when(scriptEngine.createBindings()).thenReturn(bindings);
         when(script.runScript(bindings)).thenThrow(new ScriptException("error"));
 
-        new FlowResultFunction(muleContext).call(new Object[] {SCRIPT_NAME}, null);
+        new FlowResultFunction().call(new Object[] {SCRIPT_NAME}, context);
     }
 
 
