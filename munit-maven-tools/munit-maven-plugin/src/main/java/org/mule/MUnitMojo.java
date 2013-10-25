@@ -24,6 +24,7 @@ package org.mule;
 
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -173,7 +174,7 @@ public class MUnitMojo
         {
             List<MunitResult> failingTests = run.getFailingTests();
             List<MunitResult> errorTests = run.getErrorTests();
-            System.out.println("\t >> " + run.getTestName().substring(run.getTestName().indexOf("munit") + 5) + " test result: Errors: " + errorTests.size() + ", Failures:" + failingTests.size());
+            System.out.println("\t >> " + FilenameUtils.getName(run.getTestName()) + " test result: Errors: " + errorTests.size() + ", Failures:" + failingTests.size());
 
             showFailures(failingTests);
             showError(errorTests);
