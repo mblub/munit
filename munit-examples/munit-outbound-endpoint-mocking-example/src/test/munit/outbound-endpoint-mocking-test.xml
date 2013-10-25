@@ -12,7 +12,7 @@
     <mock:config/>
 
     <spring:beans>
-        <spring:import resource="outbound-endpoint-mocking-example.xml"/>
+        <spring:import resource="classpath:outbound-endpoint-mocking-example.xml"/>
     </spring:beans>
 
     <script:script name="mockTask" engine="groovy"><![CDATA[

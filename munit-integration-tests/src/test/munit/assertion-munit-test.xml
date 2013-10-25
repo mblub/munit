@@ -16,7 +16,7 @@
     <mock:config/>
 
     <spring:beans>
-        <spring:import resource="mule-config.xml"/>
+        <spring:import resource="classpath:mule-config.xml"/>
 
         <spring:bean class="org.mule.assertions.CustomAssertion" name="customAssertion"/>
     </spring:beans>

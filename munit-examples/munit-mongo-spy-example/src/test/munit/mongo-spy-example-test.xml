@@ -12,7 +12,7 @@
     <mock:config/>
 
     <spring:beans>
-        <spring:import resource="mongo-spy-example.xml"/>
+        <spring:import resource="classpath:mongo-spy-example.xml"/>
     </spring:beans>
 
     <munit:test name="afterFtpPollingSaveUser" description="Mongo must be called correctly">
