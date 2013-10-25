@@ -6,20 +6,29 @@
  */
 package org.mule.munit;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import org.apache.log4j.Logger;
-import org.h2.tools.RunScript;
+import static junit.framework.Assert.assertEquals;
 
-
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URISyntaxException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
+import au.com.bytecode.opencsv.CSVWriter;
+import org.apache.log4j.Logger;
+import org.h2.tools.RunScript;
 
 
 public class DatabaseServer
@@ -175,7 +184,7 @@ public class DatabaseServer
     {
         if (sqlFile != null)
         {
-            InputStream streamImput = getClass().getResourceAsStream(File.separator + sqlFile);
+            InputStream streamImput = getClass().getClassLoader().getResourceAsStream(sqlFile);
             RunScript.execute(conn, new InputStreamReader(streamImput));
         }
     }
@@ -190,8 +199,8 @@ public class DatabaseServer
                 String tableName = table.replaceAll(".csv", "");
                 try
                 {
-                    stmt.execute("CREATE TABLE " + tableName + " AS SELECT * FROM CSVREAD(\'" + getClass().
-                            getResource("/" + table).toURI().toASCIIString() + "\');");
+                    stmt.execute("CREATE TABLE " + tableName + " AS SELECT * FROM CSVREAD(\'" + getClass().getClassLoader().
+                            getResource(table).toURI().toASCIIString() + "\');");
                 }
                 catch (SQLException e)
                 {
