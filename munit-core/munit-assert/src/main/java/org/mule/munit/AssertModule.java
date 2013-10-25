@@ -280,7 +280,7 @@ public class AssertModule extends MunitSpringFactoryPostProcessor implements Exp
         context.declareFunction("isNull", new NullMatcherFunction());
         context.declareFunction("isNotNull", new NotNullMatcherFunction());
         context.declareFunction("any", new AnyClassMatcherFunction());
-        context.declareFunction("resultOfScript", new FlowResultFunction(muleContext));
+        context.declareFunction("resultOfScript", new FlowResultFunction());
         context.declareFunction("getResource", new GetResourceFunction());
 
     }

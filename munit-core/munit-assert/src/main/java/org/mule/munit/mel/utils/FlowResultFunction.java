@@ -6,12 +6,12 @@
  */
 package org.mule.munit.mel.utils;
 
-import com.google.common.base.Preconditions;
-
-import org.mule.api.MuleContext;
+import org.mule.api.MuleMessage;
 import org.mule.api.el.ExpressionLanguageContext;
 import org.mule.api.el.ExpressionLanguageFunction;
 import org.mule.module.scripting.component.Scriptable;
+
+import com.google.common.base.Preconditions;
 
 import javax.script.Bindings;
 import javax.script.ScriptException;
@@ -46,21 +46,15 @@ import javax.script.ScriptException;
 public class FlowResultFunction implements ExpressionLanguageFunction
 {
 
-    private MuleContext context;
-
-    public FlowResultFunction(MuleContext context)
-    {
-        this.context = context;
-    }
-
     @Override
     public Object call(Object[] params, ExpressionLanguageContext context)
     {
         if (params != null && params.length > 0 && params[0] instanceof String)
         {
 
+            MuleMessage message = getMuleMessageFrom(context);
             String flowName = (String) params[0];
-            Object registeredScript = this.context.getRegistry().lookupObject(flowName);
+            Object registeredScript = message.getMuleContext().getRegistry().lookupObject(flowName);
 
             Preconditions.checkNotNull(registeredScript, "The script called " + flowName + " could not be found");
             if (registeredScript instanceof Scriptable)
@@ -80,5 +74,10 @@ public class FlowResultFunction implements ExpressionLanguageFunction
         }
         throw new IllegalArgumentException("The script name references a non script component, make sure the script is written as in " +
                                            "http://www.mulesoft.org/documentation/display/MULE3USER/Scripting+Module+Reference ");
+    }
+
+    protected MuleMessage getMuleMessageFrom(ExpressionLanguageContext context)
+    {
+        return context.getVariable("_muleMessage");
     }
 }

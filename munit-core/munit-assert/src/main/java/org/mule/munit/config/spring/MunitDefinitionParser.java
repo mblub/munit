@@ -6,10 +6,12 @@
  */
 package org.mule.munit.config.spring;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.mule.config.spring.MuleHierarchicalBeanDefinitionParserDelegate;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -19,9 +21,6 @@ import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -163,5 +162,7 @@ public class MunitDefinitionParser implements BeanDefinitionParser
 
         return definition;
     }
+
+
 
 }

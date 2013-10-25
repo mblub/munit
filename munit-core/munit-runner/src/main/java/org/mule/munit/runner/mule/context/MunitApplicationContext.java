@@ -14,14 +14,16 @@ import org.mule.modules.interceptor.connectors.ConnectorMethodInterceptorFactory
 import org.mule.munit.common.endpoint.MunitSpringFactoryPostProcessor;
 import org.mule.munit.common.mp.MunitMessageProcessorInterceptorFactory;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-
-import java.io.IOException;
 
 
 /**
@@ -105,9 +107,14 @@ public class MunitApplicationContext extends MuleApplicationContext
     protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory)
     {
         super.prepareBeanFactory(beanFactory);
-        MunitSpringFactoryPostProcessor bean = beanFactory.getBean(MunitSpringFactoryPostProcessor.class);
-        bean.setMuleContext(this.getMuleContext());
-        bean.postProcessBeanFactory(beanFactory);
+        BeanDefinition beanDefinition = beanFactory.getBeanDefinition(MUNIT_FACTORY_POST_PROCESSOR);
+        MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
+        MunitApplicationContextPostProcessor postProcessor = new MunitApplicationContextPostProcessor();
+        postProcessor.setMockConnectors((Boolean) propertyValues.getPropertyValue("mockConnectors").getValue());
+        postProcessor.setMockInbounds((Boolean) propertyValues.getPropertyValue("mockInbounds").getValue());
+        postProcessor.setMockingExcludedFlows((List) propertyValues.getPropertyValue("mockingExcludedFlows").getValue());
+        postProcessor.postProcessBeanFactory(beanFactory);
+
     }
 
 }

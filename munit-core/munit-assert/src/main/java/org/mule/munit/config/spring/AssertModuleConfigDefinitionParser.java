@@ -6,13 +6,13 @@
  */
 package org.mule.munit.config.spring;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.mule.api.lifecycle.Disposable;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.config.spring.MuleHierarchicalBeanDefinitionParserDelegate;
-import org.mule.config.spring.parsers.generic.AutoIdUtils;
 import org.mule.munit.AssertModule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -21,9 +21,6 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -39,11 +36,8 @@ public class AssertModuleConfigDefinitionParser
 
     public BeanDefinition parse(Element element, ParserContext parserContent)
     {
-        String name = element.getAttribute("name");
-        if ((name == null) || StringUtils.isBlank(name))
-        {
-            element.setAttribute("name", AutoIdUtils.getUniqueName(element, "mule-bean"));
-        }
+        parseConfigName(element);
+
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(AssertModule.class.getName());
         if (Initialisable.class.isAssignableFrom(AssertModule.class))
         {
@@ -89,6 +83,11 @@ public class AssertModuleConfigDefinitionParser
         BeanDefinition definition = builder.getBeanDefinition();
         definition.setAttribute(MuleHierarchicalBeanDefinitionParserDelegate.MULE_NO_RECURSE, Boolean.TRUE);
         return definition;
+    }
+
+    protected void parseConfigName(Element element)
+    {
+        element.setAttribute("name", "___MunitSpringFactoryPostProcessor");
     }
 
 }
