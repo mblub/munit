@@ -6,19 +6,16 @@
  */
 package org.mule.java;
 
-import org.mule.tck.junit4.FunctionalTestCase;
+import static junit.framework.Assert.assertEquals;
+import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
-import org.junit.Rule;
+import java.io.File;
+
 import org.junit.Test;
-import org.junit.rules.MethodRule;
-import org.junit.rules.Timeout;
 
 
-public class JavaMunitTest extends FunctionalTestCase
+public class JavaMunitTest extends FunctionalMunitSuite
 {
-
-    @Rule
-    public MethodRule globalTimeout= new Timeout(20000);
 
     @Override
     protected String getConfigResources()
@@ -29,17 +26,23 @@ public class JavaMunitTest extends FunctionalTestCase
     @Test
     public void test() throws Exception
     {
-       System.out.println();
+        whenMessageProcessor("create-group")
+                .ofNamespace("jira")
+                .thenReturn(muleMessageWithPayload("expected"));
+
+        Object payload = runFlow("callingJira", testEvent("something")).getMessage().getPayload();
+
+        assertEquals("expected", payload);
     }
 
-    //@Test
-    //public void testSetMuleAppHome() throws Exception
-    //{
-    //
-    //    Object payload = runFlow("setMuleAppHomeFlow", testEvent("something")).getMessage().getPayload();
-    //
-    //    assertEquals(new File(getClass().getResource("/mule-config.xml").getPath()).getParentFile().getAbsolutePath(), payload);
-    //}
+    @Test
+    public void testSetMuleAppHome() throws Exception
+    {
+
+        Object payload = runFlow("setMuleAppHomeFlow", testEvent("something")).getMessage().getPayload();
+
+        assertEquals(new File(getClass().getResource("/mule-config.xml").getPath()).getParentFile().getAbsolutePath(), payload);
+    }
 
 
 }
