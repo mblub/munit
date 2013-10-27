@@ -13,7 +13,7 @@
     <mock:config/>
 
     <spring:beans>
-        <spring:import resource="jira-mock-example.xml"/>
+        <spring:import resource="classpath:jira-mock-example.xml"/>
     </spring:beans>
 
 

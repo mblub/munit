@@ -15,7 +15,7 @@
     <mock:config/>
 
     <spring:beans>
-        <spring:import resource="poll-config.xml"/>
+        <spring:import resource="classpath:poll-config.xml"/>
     </spring:beans>
 
 

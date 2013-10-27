@@ -15,7 +15,7 @@
         ">
 
     <spring:beans>
-        <spring:import resource="mule-dbserver-config.xml"/>
+        <spring:import resource="classpath:mule-dbserver-config.xml"/>
     </spring:beans>
 
     <munit:config mock-inbounds="false" mock-connectors="false"/>

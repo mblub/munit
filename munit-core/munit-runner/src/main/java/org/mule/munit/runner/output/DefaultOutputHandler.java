@@ -7,6 +7,7 @@
 package org.mule.munit.runner.output;
 
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -48,9 +49,9 @@ public class DefaultOutputHandler implements TestOutputHandler
     @Override
     public void printTestName(String suiteName)
     {
-        String title = StringUtils.repeat("=", 40 + suiteName.length());
+        String title = StringUtils.repeat("=", 40 + FilenameUtils.getName(suiteName).length());
         this.print(title);
-        this.print("===========  Running  " + suiteName + "  test ===========");
+        this.print("===========  Running  " + FilenameUtils.getName(suiteName) + "  test ===========");
         this.print(title);
     }
 
