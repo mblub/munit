@@ -16,7 +16,7 @@
 
 
     <spring:beans>
-        <spring:import resource="classpath:mail-server-config.xml"/>
+        <spring:import resource="mail-server-config.xml"/>
     </spring:beans>
 
     <munit:config mock-connectors="false" mock-inbounds="false"/>

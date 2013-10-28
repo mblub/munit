@@ -17,7 +17,7 @@
 
 
     <spring:beans>
-        <spring:import resource="classpath:mule-mclient-config.xml"/>
+        <spring:import resource="mule-mclient-config.xml"/>
     </spring:beans>
 
     <munit:config mock-inbounds="false" mock-connectors="false"/>

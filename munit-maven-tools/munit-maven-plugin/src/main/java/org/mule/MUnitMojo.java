@@ -23,13 +23,6 @@ package org.mule;
  */
 
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-
 import org.mule.munit.runner.mule.MunitSuiteRunner;
 import org.mule.munit.runner.mule.result.MunitResult;
 import org.mule.munit.runner.mule.result.SuiteResult;
@@ -40,7 +33,11 @@ import org.mule.notifiers.NotificationListenerDecorator;
 import org.mule.notifiers.StreamNotificationListener;
 import org.mule.notifiers.xml.XmlNotificationListener;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -50,6 +47,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 
 /**
  * Runs tests
@@ -123,7 +127,7 @@ public class MUnitMojo
                 for (File file : allFiles)
                 {
 
-                    String fileName = file.getPath();
+                    String fileName = file.getPath().replaceAll(testFolder.getPath() + File.separator, "");
                     if (fileName.endsWith(".xml") && validateFilter(fileName))
                     {
                         results.add(buildRunnerFor(fileName).run());
