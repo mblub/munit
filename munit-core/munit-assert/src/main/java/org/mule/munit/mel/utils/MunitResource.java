@@ -6,11 +6,11 @@
  */
 package org.mule.munit.mel.utils;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 /**
  * <p>
@@ -35,7 +35,7 @@ public class MunitResource
 
     public InputStream asStream()
     {
-        InputStream streamImput = getClass().getResourceAsStream(path);
+        InputStream streamImput = getClass().getClassLoader().getResourceAsStream(path);
         if (streamImput == null)
         {
             throw new IllegalArgumentException(
@@ -63,8 +63,7 @@ public class MunitResource
         byte[] byteArrayImput = null;
         try
         {
-            byteArrayImput = IOUtils.toByteArray(getClass()
-                                                         .getResourceAsStream(path));
+            byteArrayImput = IOUtils.toByteArray(asStream());
         }
         catch (IOException ioe)
         {

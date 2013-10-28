@@ -9,8 +9,6 @@ package org.mule.munit.mel.utils;
 import org.mule.api.el.ExpressionLanguageContext;
 import org.mule.api.el.ExpressionLanguageFunction;
 
-import java.io.File;
-
 /**
  * <p>
  * This is an extension that picks an indicated file, an returns its content in
@@ -47,7 +45,7 @@ public class GetResourceFunction implements ExpressionLanguageFunction
                     "You must provide one parameter that "
                     + "indicates where the resource file is placed");
         }
-        return new MunitResource(File.separator + (String) params[0]);
+        return new MunitResource((String) params[0]);
     }
 
 }
