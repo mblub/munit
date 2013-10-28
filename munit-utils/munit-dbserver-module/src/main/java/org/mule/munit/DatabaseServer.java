@@ -175,7 +175,7 @@ public class DatabaseServer
     {
         if (sqlFile != null)
         {
-            InputStream streamImput = getClass().getResourceAsStream(File.separator + sqlFile);
+           InputStream streamImput = getClass().getClassLoader().getResourceAsStream(sqlFile);
             RunScript.execute(conn, new InputStreamReader(streamImput));
         }
     }
@@ -190,8 +190,8 @@ public class DatabaseServer
                 String tableName = table.replaceAll(".csv", "");
                 try
                 {
-                    stmt.execute("CREATE TABLE " + tableName + " AS SELECT * FROM CSVREAD(\'" + getClass().
-                            getResource("/" + table).toURI().toASCIIString() + "\');");
+                   stmt.execute("CREATE TABLE " + tableName + " AS SELECT * FROM CSVREAD(\'" + getClass().getClassLoader().
+                            getResource(table).toURI().toASCIIString() + "\');");
                 }
                 catch (SQLException e)
                 {
