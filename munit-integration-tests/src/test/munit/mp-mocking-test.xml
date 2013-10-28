@@ -15,7 +15,7 @@
 
 
     <spring:beans>
-        <spring:import resource="classpath:mule-config.xml"/>
+        <spring:import resource="mule-config.xml"/>
     </spring:beans>
 
     <munit:config/>
