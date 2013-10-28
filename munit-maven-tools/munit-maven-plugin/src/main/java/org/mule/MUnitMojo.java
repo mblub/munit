@@ -127,7 +127,7 @@ public class MUnitMojo
                 for (File file : allFiles)
                 {
 
-                    String fileName = file.getPath().replaceAll(testFolder.getPath() + File.separator, "");
+                    String fileName = file.getPath().replace(testFolder.getPath() + File.separator, "");
                     if (fileName.endsWith(".xml") && validateFilter(fileName))
                     {
                         results.add(buildRunnerFor(fileName).run());
