@@ -6,13 +6,13 @@
  */
 package org.mule.munit.mel.utils;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
 public class MunitResourceTest
 {
@@ -20,7 +20,7 @@ public class MunitResourceTest
     @Test
     public void testMunitResourceAsStream() throws IOException
     {
-        String path = "/testFile.txt";
+        String path = "testFile.txt";
         MunitResource file = new MunitResource(path);
 
         InputStream is = file.asStream();
@@ -30,7 +30,7 @@ public class MunitResourceTest
     @Test
     public void testMunitResourceAsString()
     {
-        String path = "/testFile.txt";
+        String path = "testFile.txt";
         MunitResource file = new MunitResource(path);
         String result = file.asString();
         assertEquals("Hello World!", result);
@@ -45,7 +45,7 @@ public class MunitResourceTest
     @Test
     public void testMunitResourceAsByteArray() throws IOException
     {
-        String path = "/testFile.txt";
+        String path = "testFile.txt";
         MunitResource file = new MunitResource(path);
         byte[] result = file.asByteArray();
         assertEquals("Hello World!", new String(result));
