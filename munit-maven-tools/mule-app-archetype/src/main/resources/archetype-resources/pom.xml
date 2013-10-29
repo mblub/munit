@@ -349,7 +349,7 @@
         </repository>
         <repository>
             <id>mule-ee-releases</id>
-            <url>http://dev.ee.mulesource.com/repository/content/repositories/releases/</url>
+            <url>https://repository.mulesoft.org/nexus/content/repositories/ci-releases/</url>
         </repository>
         <repository>
             <id>oss-sonatype-snapshots</id>
