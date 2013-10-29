@@ -8,7 +8,6 @@ package org.mule.munit.common.mocking;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
@@ -18,10 +17,7 @@ import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.mp.MockedMessageProcessorManager;
 import org.mule.munit.common.mp.SpyAssertion;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -129,6 +125,17 @@ public class MunitSpyTest
         }
 
         assertEquals(2, spy.timesCalled);
+    }
+
+    @Test
+    public void testSpyWithAttributes()
+    {
+        new MunitSpy(muleContext).spyMessageProcessor("test")
+                .ofNamespace("testNamespace")
+                .withAttributes(new HashMap<String, Object>())
+                .before((List<SpyProcess>) null)
+                .after((List<SpyProcess>) null);
+        verify(manager, times(0)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
     }
 
     private class Spy implements SpyProcess

@@ -14,10 +14,7 @@ import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.mp.SpyAssertion;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -71,6 +68,15 @@ public class MunitSpy extends MunitMockingTool
         return this;
     }
 
+    public MunitSpy withAttributes(Map<String, Object> attributes) {
+        if(attributes != null)
+        {
+            this.messageProcessorAttributes = attributes;
+        }
+        return this;
+    }
+
+
     /**
      * The {@link SpyProcess} to run before the message processor
      *
@@ -81,7 +87,7 @@ public class MunitSpy extends MunitMockingTool
         if (withSpies != null && !withSpies.isEmpty())
         {
 
-            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace);
+            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace, messageProcessorAttributes);
             SpyAssertion spyAssertion = getManager().getSpyAssertions().get(messageProcessorId);
             if (spyAssertion == null)
             {
@@ -115,7 +121,7 @@ public class MunitSpy extends MunitMockingTool
     {
         if (withSpies != null && !withSpies.isEmpty())
         {
-            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace);
+            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace, messageProcessorAttributes);
             SpyAssertion spyAssertion = getManager().getSpyAssertions().get(messageProcessorId);
             if (spyAssertion == null)
             {

@@ -29,6 +29,7 @@ public class Attribute
      * @param whereValue <p>Its value</p>
      * @return <p>A new instance of the Attribute</p>
      */
+
     public static Attribute create(String name, String whereValue)
     {
         Attribute attribute = new Attribute();

@@ -154,6 +154,37 @@
         <munit:assert-on-equals expected-ref="#[string:afterCallValue]" value-ref="#[afterCallKey]"/>
     </munit:test>
 
+    <munit:test name="testMpWithSpyWithAttributes" description="Test that Spy filters MP's based on attributes">
+
+        <munit:set payload-ref="#[string:value]"/>
+
+        <mock:spy messageProcessor="set-variable">
+        	<mock:with-attributes>
+        		<mock:with-attribute name="variableName" whereValue-ref="#['myvar1']"/>
+        	</mock:with-attributes>
+            <mock:assertions-before-call>
+                <munit:assert-on-equals value-ref="#[flowVars['myvar1']]" expected-ref="#[null]"/>
+            </mock:assertions-before-call>
+            <mock:assertions-after-call>
+                <munit:assert-on-equals expected-ref="#[string:value]" value-ref="#[flowVars['myvar1']]"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        
+        <mock:spy messageProcessor="set-variable">
+        	<mock:with-attributes>
+        		<mock:with-attribute name="variableName" whereValue-ref="#['myvar2']"/>
+        	</mock:with-attributes>
+            <mock:assertions-before-call>
+                <munit:assert-on-equals value-ref="#[flowVars['myvar2']]" expected-ref="#[null]"/>
+            </mock:assertions-before-call>
+            <mock:assertions-after-call>
+                <munit:assert-on-equals expected-ref="#[string:valuevalue]" value-ref="#[flowVars['myvar2']]"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        
+        <flow-ref name="duplicateMessageProcessors"/>
+        
+    </munit:test>
 
     <munit:test name="demo_test"
 

@@ -6,24 +6,17 @@
  */
 package org.mule.munit.common.mp;
 
-import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.apache.commons.lang.StringUtils;
-
 import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
-import org.mule.api.expression.ExpressionManager;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.interceptor.processors.AbstractMessageProcessorInterceptor;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
-import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.MunitUtils;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,10 +29,8 @@ import java.util.Map;
  */
 public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorInterceptor
 {
-
     private String fileName;
     private String lineNumber;
-
 
     public Object process(Object obj, Object[] args, MethodProxy proxy) throws Throwable
     {
@@ -107,13 +98,39 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         {
             return null;
         }
-        SpyAssertion spyAssertion = assertions.get(id);
-        if (spyAssertion == null)
-        {
-            return null;
+
+        // Do not just pull from the IDs. Check every assertion to see if it applies
+        Integer maxWeight = 0;
+        SpyAssertion spyAssertion = null;
+
+        for(MessageProcessorId assertionId: assertions.keySet()) {
+            if(assertionId.getFullName().equals(id.getFullName())) {
+                if (assertionId.getAttributes().isEmpty() && id.getAttributes().isEmpty()) {
+                    spyAssertion = assertions.get(assertionId);
+                } else {
+                    Integer matchingWeight = this.getMatchingWeight(assertionId, attributes);
+                    if(matchingWeight > maxWeight) {
+                        spyAssertion = assertions.get(assertionId);
+                    }
+                }
+            }
         }
+
         return spyAssertion;
     }
+
+    private Integer getMatchingWeight(MessageProcessorId assertionId, Map<String, String> attributes) {
+        int matchingWeight = 0;
+        for(String attribute: assertionId.getAttributes().keySet()) {
+            if(attributes.containsKey(attribute) &&
+                    attributes.get(attribute).equals(assertionId.getAttributes().get(attribute))) {
+                matchingWeight++;
+            }
+        }
+
+        return matchingWeight;
+    }
+
 
     private MunitMessageProcessorCall buildCall(MuleEvent event)
     {

@@ -6,34 +6,22 @@
  */
 package org.mule.munit;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import org.mule.api.MuleContext;
-import org.mule.api.MuleEvent;
-import org.mule.api.MuleException;
-import org.mule.api.MuleMessage;
-import org.mule.api.NestedProcessor;
+import org.junit.Test;
+import org.mule.api.*;
 import org.mule.api.processor.MessageProcessor;
-import org.mule.munit.common.mocking.EndpointMocker;
-import org.mule.munit.common.mocking.MessageProcessorMocker;
-import org.mule.munit.common.mocking.MunitSpy;
-import org.mule.munit.common.mocking.MunitVerifier;
-import org.mule.munit.common.mocking.SpyProcess;
+import org.mule.munit.common.mocking.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Mulesoft Inc.
@@ -176,7 +164,7 @@ public class MockModuleTest
     {
         spyBehavior();
 
-        module().spy(FULL_NAME, null, null);
+        module().spy(FULL_NAME, null, null, null);
 
         verify(spy, times(1)).spyMessageProcessor(MESSAGE_PROCESSOR);
         verify(spy, times(1)).ofNamespace(NAMESPACE);
@@ -189,7 +177,7 @@ public class MockModuleTest
     {
         spyBehavior();
 
-        module().spy(FULL_NAME, createAssertions(), createAssertions());
+        module().spy(FULL_NAME, null, createAssertions(), createAssertions());
 
         verify(spy, times(1)).spyMessageProcessor(MESSAGE_PROCESSOR);
         verify(spy, times(1)).ofNamespace(NAMESPACE);
@@ -265,6 +253,7 @@ public class MockModuleTest
     {
         when(spy.ofNamespace(NAMESPACE)).thenReturn(spy);
         when(spy.spyMessageProcessor(MESSAGE_PROCESSOR)).thenReturn(spy);
+        when(spy.withAttributes(anyMap())).thenReturn(spy);
         when(spy.before(anyList())).thenReturn(spy);
         when(spy.after(anyList())).thenReturn(spy);
     }
