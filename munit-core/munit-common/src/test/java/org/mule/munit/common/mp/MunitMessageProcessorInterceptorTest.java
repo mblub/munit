@@ -6,10 +6,14 @@
  */
 package org.mule.munit.common.mp;
 
-import net.sf.cglib.proxy.MethodProxy;
-import org.junit.Before;
-import org.junit.Test;
-
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -26,9 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static junit.framework.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import net.sf.cglib.proxy.MethodProxy;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Mulesoft Inc.
@@ -90,7 +94,6 @@ public class MunitMessageProcessorInterceptorTest
         MunitMessageProcessorInterceptor interceptor = interceptor();
         interceptor.setAttributes(new HashMap<String, String>());
 
-        when(manager.getSpyAssertions()).thenReturn(new HashMap<MessageProcessorId, SpyAssertion>());
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(EXCEPTION_BEHAVIOR);
 
         try
@@ -125,7 +128,6 @@ public class MunitMessageProcessorInterceptorTest
 
         MuleMessage expectedMessage = muleMessage();
 
-        when(manager.getSpyAssertions()).thenReturn(new HashMap<MessageProcessorId, SpyAssertion>());
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
         when(event.getMessage()).thenReturn(expectedMessage);
 
@@ -153,7 +155,8 @@ public class MunitMessageProcessorInterceptorTest
 
         MuleMessage expectedMessage = muleMessage();
 
-        when(manager.getSpyAssertions()).thenReturn(spyAssertions(createAssertions(beforeAssertionMp), createAssertions(afterAssertionMp)));
+        when(manager.getBetterMatchingBeforeSpyAssertion(any(MessageProcessorCall.class))).thenReturn(spyAssertion(createAssertions(beforeAssertionMp)));
+        when(manager.getBetterMatchingAfterSpyAssertion(any(MessageProcessorCall.class))).thenReturn(spyAssertion(createAssertions(afterAssertionMp)));
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
         when(event.getMessage()).thenReturn(expectedMessage);
 
@@ -165,78 +168,6 @@ public class MunitMessageProcessorInterceptorTest
         assertTrue(afterAssertionMp.called);
     }
 
-
-    /**
-     * <p>
-     * Scenario:
-     * Spy with Attributes on the Message Processor
-     * With Spy before assertion.
-     * With Spy after assertion.
-     * Return Event.
-     * No attributes in the message.
-     * </p>
-     */
-    @Test
-    public void interceptWithSpyWithAttributesBeforeAssertion() throws Throwable
-    {
-        MunitMessageProcessorInterceptor interceptor = interceptor();
-        HashMap<String, String> attributes = new HashMap<String, String>();
-        attributes.put("attributeName", "attributeValue");
-        interceptor.setAttributes(attributes);
-
-        // Add attributes
-        MESSAGE_PROCESSOR_ID.getAttributes().put("attributeName", "attributeValue");
-
-        MuleMessage expectedMessage = muleMessage();
-
-        when(manager.getSpyAssertions()).thenReturn(spyAssertions(createAssertions(beforeAssertionMp), createAssertions(afterAssertionMp)));
-        when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
-        when(event.getMessage()).thenReturn(expectedMessage);
-
-        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[] {event}, proxy);
-
-        verify(manager).addCall(any(MunitMessageProcessorCall.class));
-        assertEquals(expectedMessage, processed.getMessage());
-        assertTrue(beforeAssertionMp.called);
-        assertTrue(afterAssertionMp.called);
-        MESSAGE_PROCESSOR_ID.getAttributes().clear();
-    }
-
-    /**
-     * <p>
-     * Scenario:
-     * Spy with Attributes on the Message Processor
-     * With Spy before assertion.
-     * With Spy after assertion.
-     * Return Event.
-     * No attributes in the message.
-     * </p>
-     */
-    @Test
-    public void interceptWithSpyWithAttributesBeforeAssertionNotCalled() throws Throwable
-    {
-        MunitMessageProcessorInterceptor interceptor = interceptor();
-        HashMap<String, String> attributes = new HashMap<String, String>();
-        attributes.put("attributeName", "attributeValue");
-        interceptor.setAttributes(attributes);
-
-        // Add attributes
-        MESSAGE_PROCESSOR_ID.getAttributes().put("attributeName", "notAttributeValue");
-
-        MuleMessage expectedMessage = muleMessage();
-
-        when(manager.getSpyAssertions()).thenReturn(spyAssertions(createAssertions(beforeAssertionMp), createAssertions(afterAssertionMp)));
-        when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
-        when(event.getMessage()).thenReturn(expectedMessage);
-
-        MuleEvent processed = (MuleEvent) interceptor.process(new Object(), new Object[] {event}, proxy);
-
-        verify(manager).addCall(any(MunitMessageProcessorCall.class));
-        assertEquals(expectedMessage, processed.getMessage());
-        assertFalse(beforeAssertionMp.called);
-        assertFalse(afterAssertionMp.called);
-        MESSAGE_PROCESSOR_ID.getAttributes().clear();
-    }
 
 
 
@@ -261,7 +192,8 @@ public class MunitMessageProcessorInterceptorTest
         when(muleContext.getExpressionManager()).thenReturn(expressionManager);
         when(expressionManager.isExpression(ATTR_VALUE)).thenReturn(true);
         when(expressionManager.parse(ATTR_VALUE, event)).thenReturn("any");
-        when(manager.getSpyAssertions()).thenReturn(spyAssertions(createAssertions(beforeAssertionMp), createAssertions(afterAssertionMp)));
+        when(manager.getBetterMatchingBeforeSpyAssertion(any(MessageProcessorCall.class))).thenReturn(spyAssertion(createAssertions(beforeAssertionMp)));
+        when(manager.getBetterMatchingAfterSpyAssertion(any(MessageProcessorCall.class))).thenReturn(spyAssertion(createAssertions(afterAssertionMp)));
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(returnValueBehavior());
         when(event.getMessage()).thenReturn(expectedMessage);
 
@@ -285,7 +217,6 @@ public class MunitMessageProcessorInterceptorTest
         MunitMessageProcessorInterceptor interceptor = interceptor();
         interceptor.setAttributes(new HashMap<String, String>());
 
-        when(manager.getSpyAssertions()).thenReturn(new HashMap<MessageProcessorId, SpyAssertion>());
         when(manager.getBetterMatchingBehavior(any(MessageProcessorCall.class))).thenReturn(null);
 
         Object[] args = {event};
@@ -321,11 +252,9 @@ public class MunitMessageProcessorInterceptorTest
         assertEquals(OBJECT, intercept);
     }
 
-    private HashMap<MessageProcessorId, SpyAssertion> spyAssertions(List<MessageProcessor> before, List<MessageProcessor> after)
+    private SpyAssertion spyAssertion(List<MessageProcessor> mp)
     {
-        HashMap<MessageProcessorId, SpyAssertion> map = new HashMap<MessageProcessorId, SpyAssertion>();
-        map.put(MESSAGE_PROCESSOR_ID, new SpyAssertion(before, after));
-        return map;
+        return new SpyAssertion(new MessageProcessorCall(MESSAGE_PROCESSOR_ID), mp);
     }
 
     private ArrayList<MessageProcessor> createAssertions(MessageProcessor messageProcessor)

@@ -154,6 +154,63 @@
         <munit:assert-on-equals expected-ref="#[string:afterCallValue]" value-ref="#[afterCallKey]"/>
     </munit:test>
 
+
+    <munit:test name="testMpWithParametersAndSpyWithFail" description="
+    If the Message Processor is not mocked then do not change its behavior">
+
+        <mock:when messageProcessor="jira:create-group">
+            <mock:with-attributes>
+                <mock:with-attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
+                <mock:with-attribute name="userName" whereValue-ref='#[anyString()]'/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#[string:expectedPayload]">
+                <mock:inbound-properties>
+                    <mock:inbound-property/>
+                </mock:inbound-properties>
+            </mock:then-return>
+        </mock:when>
+
+        <mock:spy messageProcessor="jira:create-group">
+
+            <mock:with-attributes>
+                <mock:with-attribute name="groupName" whereValue-ref="#[string:notAGroupName]"/>
+                <mock:with-attribute name="userName" whereValue-ref='#[anyString()]'/>
+            </mock:with-attributes>
+
+            <mock:assertions-before-call>
+                <munit:assert-not-null/>
+                <munit:assert-that payloadIs-ref='#[resultOfScript("mockPayload")]'/>
+                <set-variable variableName="beforeCallKey" value="#[string:beforeCallValue]"/>
+
+            </mock:assertions-before-call>
+
+            <mock:assertions-after-call>
+                <munit:assert-not-null/>
+                <munit:assert-that payloadIs-ref="#[string:expectedPayload]"/>
+                <set-variable variableName="afterCallKey" value="#[string:afterCallValue]"/>
+
+            </mock:assertions-after-call>
+        </mock:spy>
+
+        <munit:set payload-ref="#[string:anotherString]"/>
+
+        <flow-ref name="callingJira"/>
+
+        <mock:verify-call messageProcessor="jira:create-group" atLeast="1">
+            <mock:attributes>
+                <mock:attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
+                <mock:attribute name="userName" whereValue-ref='#[anyString()]'/>
+            </mock:attributes>
+        </mock:verify-call>
+
+        <mock:verify-call messageProcessor="jira:create-group" times="1"/>
+        <mock:verify-call messageProcessor="jira:create-group" atMost="1"/>
+        <munit:assert-that payloadIs-ref="#[string:expectedPayload]"/>
+        <munit:assert-on-equals expected-ref="#[null]" value-ref="#[flowVars['beforeCallKey']]"/>
+        <munit:assert-on-equals expected-ref="#[null]" value-ref="#[flowVars['afterCallKey']]"/>
+    </munit:test>
+
+
     <munit:test name="testMpWithSpyWithAttributes" description="Test that Spy filters MP's based on attributes">
 
         <munit:set payload-ref="#[string:value]"/>
