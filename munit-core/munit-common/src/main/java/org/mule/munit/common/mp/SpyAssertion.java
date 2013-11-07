@@ -7,6 +7,8 @@
 package org.mule.munit.common.mp;
 
 import org.mule.api.processor.MessageProcessor;
+import org.mule.modules.interceptor.processors.MessageProcessorCall;
+import org.mule.modules.interceptor.processors.MessageProcessorCallAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,46 +22,31 @@ import java.util.List;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class SpyAssertion
+public class SpyAssertion extends MessageProcessorCallAction
 {
 
     /**
      * <p>
-     * The Message processors to be executed before the call
+     * The Message processors to be executed for the call
      * </p>
      */
-    private List<MessageProcessor> beforeMessageProcessors = new ArrayList<MessageProcessor>();
+    private List<MessageProcessor> messageProcessors = new ArrayList<MessageProcessor>();
 
-    /**
-     * <p>
-     * The Message processors to be executed after the call
-     * </p>
-     */
-    private List<MessageProcessor> afterMessageProcessors = new ArrayList<MessageProcessor>();
 
-    public SpyAssertion(List<MessageProcessor> beforeMessageProcessors, List<MessageProcessor> afterMessageProcessors)
+    public SpyAssertion(MessageProcessorCall messageProcessorCall, List<MessageProcessor> messageProcessors)
     {
-        this.beforeMessageProcessors = beforeMessageProcessors;
-        this.afterMessageProcessors = afterMessageProcessors;
+        super(messageProcessorCall);
+        this.messageProcessors = messageProcessors;
     }
 
-    public List<MessageProcessor> getBeforeMessageProcessors()
+    public List<MessageProcessor> getMessageProcessors()
     {
-        return beforeMessageProcessors;
+        return messageProcessors;
     }
 
-    public List<MessageProcessor> getAfterMessageProcessors()
+    public void setMessageProcessors(List<MessageProcessor> messageProcessors)
     {
-        return afterMessageProcessors;
+        this.messageProcessors = messageProcessors;
     }
 
-    public void setBeforeMessageProcessors(List<MessageProcessor> beforeMessageProcessors)
-    {
-        this.beforeMessageProcessors = beforeMessageProcessors;
-    }
-
-    public void setAfterMessageProcessors(List<MessageProcessor> afterMessageProcessors)
-    {
-        this.afterMessageProcessors = afterMessageProcessors;
-    }
 }

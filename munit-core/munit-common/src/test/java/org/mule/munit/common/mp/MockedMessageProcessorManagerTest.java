@@ -6,9 +6,10 @@
  */
 package org.mule.munit.common.mp;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import org.mule.api.MuleMessage;
 import org.mule.modules.interceptor.matchers.EqMatcher;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
@@ -19,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Mulesoft Inc.
@@ -98,11 +99,13 @@ public class MockedMessageProcessorManagerTest
         MockedMessageProcessorManager manager = new MockedMessageProcessorManager();
         manager.addCall(createCall());
         manager.addBehavior(new MessageProcessorBehavior(createCall(), muleMessage));
-        manager.addSpyAssertion(MESSAGE_PROCESSOR_ID, new SpyAssertion(null, null));
+        manager.addBeforeCallSpyAssertion(new SpyAssertion(null, null));
+        manager.addAfterCallSpyAssertion(new SpyAssertion(null, null));
 
         manager.reset();
 
-        assertTrue(manager.spyAssertions.isEmpty());
+        assertTrue(manager.beforeCallSpyAssertions.isEmpty());
+        assertTrue(manager.afterCallSpyAssertions.isEmpty());
         assertTrue(manager.calls.isEmpty());
     }
 

@@ -6,18 +6,16 @@
  */
 package org.mule.munit.common.mp;
 
-import net.sf.cglib.proxy.MethodProxy;
 import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.interceptor.processors.AbstractMessageProcessorInterceptor;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
-import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.MunitUtils;
 
-import java.util.Map;
+import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * <p>
@@ -39,7 +37,7 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         MockedMessageProcessorManager manager = getMockedMessageProcessorManager();
 
         MunitMessageProcessorCall messageProcessorCall = buildCall(event);
-        runSpyBeforeAssertions(manager, event);
+        runSpyAssertion(manager.getBetterMatchingBeforeSpyAssertion(messageProcessorCall), event);
 
         registerCall(manager, messageProcessorCall);
         MessageProcessorBehavior behavior = manager.getBetterMatchingBehavior(messageProcessorCall);
@@ -47,19 +45,19 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         {
             if (behavior.getExceptionToThrow() != null)
             {
-                runSpyAfterAssertions(manager, event);
+                runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
                 throw behavior.getExceptionToThrow();
             }
 
             MunitUtils.copyMessage((DefaultMuleMessage) behavior.getReturnMuleMessage(), (DefaultMuleMessage) event.getMessage());
 
-            runSpyAfterAssertions(manager, event);
+            runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
             return event;
         }
 
 
         Object o = proxy.invokeSuper(obj, args);
-        runSpyAfterAssertions(manager, (MuleEvent) o);
+        runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), (MuleEvent) o);
         return o;
     }
 
@@ -69,68 +67,15 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         manager.addCall(messageProcessorCall);
     }
 
-    private void runSpyAfterAssertions(MockedMessageProcessorManager manager, MuleEvent event)
+    private void runSpyAssertion(SpyAssertion spyAssertion, MuleEvent event)
     {
-        SpyAssertion spyAssertion = getAssertionFrom(manager);
         if (spyAssertion == null)
         {
             return;
         }
 
-        MunitUtils.verifyAssertions(event, spyAssertion.getAfterMessageProcessors());
+        MunitUtils.verifyAssertions(event, spyAssertion.getMessageProcessors());
     }
-
-    private void runSpyBeforeAssertions(MockedMessageProcessorManager manager, MuleEvent event)
-    {
-        SpyAssertion spyAssertion = getAssertionFrom(manager);
-        if (spyAssertion == null)
-        {
-            return;
-        }
-
-        MunitUtils.verifyAssertions(event, spyAssertion.getBeforeMessageProcessors());
-    }
-
-    private SpyAssertion getAssertionFrom(MockedMessageProcessorManager manager)
-    {
-        Map<MessageProcessorId, SpyAssertion> assertions = manager.getSpyAssertions();
-        if (assertions.isEmpty())
-        {
-            return null;
-        }
-
-        // Do not just pull from the IDs. Check every assertion to see if it applies
-        Integer maxWeight = 0;
-        SpyAssertion spyAssertion = null;
-
-        for(MessageProcessorId assertionId: assertions.keySet()) {
-            if(assertionId.getFullName().equals(id.getFullName())) {
-                if (assertionId.getAttributes().isEmpty() && id.getAttributes().isEmpty()) {
-                    spyAssertion = assertions.get(assertionId);
-                } else {
-                    Integer matchingWeight = this.getMatchingWeight(assertionId, attributes);
-                    if(matchingWeight > maxWeight) {
-                        spyAssertion = assertions.get(assertionId);
-                    }
-                }
-            }
-        }
-
-        return spyAssertion;
-    }
-
-    private Integer getMatchingWeight(MessageProcessorId assertionId, Map<String, String> attributes) {
-        int matchingWeight = 0;
-        for(String attribute: assertionId.getAttributes().keySet()) {
-            if(attributes.containsKey(attribute) &&
-                    attributes.get(attribute).equals(assertionId.getAttributes().get(attribute))) {
-                matchingWeight++;
-            }
-        }
-
-        return matchingWeight;
-    }
-
 
     private MunitMessageProcessorCall buildCall(MuleEvent event)
     {
