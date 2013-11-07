@@ -10,7 +10,10 @@ import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.modules.interceptor.processors.MessageProcessorManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -33,13 +36,20 @@ public class MockedMessageProcessorManager extends MessageProcessorManager
      */
     protected List<MunitMessageProcessorCall> calls = new LinkedList<MunitMessageProcessorCall>();
 
+
     /**
      * <p>
-     * The spy process per message processor
+     * The spy assertions that are ran before a message processor call
      * </p>
      */
-    protected Map<MessageProcessorId, SpyAssertion> spyAssertions = new HashMap<MessageProcessorId, SpyAssertion>();
+    protected List<SpyAssertion> beforeCallSpyAssertions = new LinkedList<SpyAssertion>();
 
+    /**
+     * <p>
+     * The spy assertions that are ran after a message processor call
+     * </p>
+     */
+    protected List<SpyAssertion> afterCallSpyAssertions = new LinkedList<SpyAssertion>();
 
     /**
      * <p>
@@ -50,7 +60,8 @@ public class MockedMessageProcessorManager extends MessageProcessorManager
     {
         behaviors.clear();
         calls.clear();
-        spyAssertions.clear();
+        beforeCallSpyAssertions.clear();
+        afterCallSpyAssertions.clear();
     }
 
     /**
@@ -77,9 +88,31 @@ public class MockedMessageProcessorManager extends MessageProcessorManager
         return expected;
     }
 
-    public Map<MessageProcessorId, SpyAssertion> getSpyAssertions()
+    /**
+     * <p>
+     * Gets the best matching Before Spy assertion.
+     * </p>
+     *
+     * @param messageProcessorCall The comparing call
+     * @return The best matching Before spy assertion
+     */
+    public SpyAssertion getBetterMatchingBeforeSpyAssertion(MessageProcessorCall messageProcessorCall)
     {
-        return spyAssertions;
+        return getBetterMatchingAction(messageProcessorCall, beforeCallSpyAssertions);
+    }
+
+
+    /**
+     * <p>
+     * Gets the best matching After Spy assertion.
+     * </p>
+     *
+     * @param messageProcessorCall The comparing call
+     * @return The best matching After spy assertion
+     */
+    public SpyAssertion getBetterMatchingAfterSpyAssertion(MessageProcessorCall messageProcessorCall)
+    {
+        return getBetterMatchingAction(messageProcessorCall, afterCallSpyAssertions);
     }
 
     public synchronized void addCall(MunitMessageProcessorCall call)
@@ -87,9 +120,14 @@ public class MockedMessageProcessorManager extends MessageProcessorManager
         calls.add(call);
     }
 
-    public synchronized void addSpyAssertion(MessageProcessorId messageProcessor, SpyAssertion assertionMessageProcessor)
+    public synchronized void addBeforeCallSpyAssertion(SpyAssertion spyAssertion)
     {
-        spyAssertions.put(messageProcessor, assertionMessageProcessor);
+        beforeCallSpyAssertions.add(spyAssertion);
+    }
+
+    public synchronized void addAfterCallSpyAssertion(SpyAssertion spyAssertion)
+    {
+        afterCallSpyAssertions.add(spyAssertion);
     }
 
     public List<MunitMessageProcessorCall> getCalls()

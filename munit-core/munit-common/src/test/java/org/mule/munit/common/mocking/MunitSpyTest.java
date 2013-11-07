@@ -6,14 +6,18 @@
  */
 package org.mule.munit.common.mocking;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.api.registry.MuleRegistry;
+import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.mp.MockedMessageProcessorManager;
 import org.mule.munit.common.mp.SpyAssertion;
@@ -21,11 +25,11 @@ import org.mule.munit.common.mp.SpyAssertion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Mulesoft Inc.
@@ -56,7 +60,7 @@ public class MunitSpyTest
         new MunitSpy(muleContext).spyMessageProcessor("test")
                 .ofNamespace("testNamespace")
                 .before(Collections.<SpyProcess>emptyList());
-        verify(manager, times(0)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+        verify(manager, times(0)).addBeforeCallSpyAssertion(any(SpyAssertion.class));
     }
 
     @Test
@@ -65,7 +69,7 @@ public class MunitSpyTest
         new MunitSpy(muleContext).spyMessageProcessor("test")
                 .ofNamespace("testNamespace")
                 .before(Arrays.asList(mock(SpyProcess.class)));
-        verify(manager, times(1)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+        verify(manager, times(1)).addBeforeCallSpyAssertion(any(SpyAssertion.class));
     }
 
     @Test
@@ -74,7 +78,7 @@ public class MunitSpyTest
         new MunitSpy(muleContext).spyMessageProcessor("test")
                 .ofNamespace("testNamespace")
                 .after(Arrays.asList(mock(SpyProcess.class)));
-        verify(manager, times(1)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+        verify(manager, times(1)).addAfterCallSpyAssertion(any(SpyAssertion.class));
     }
 
 
@@ -85,7 +89,8 @@ public class MunitSpyTest
                 .ofNamespace("testNamespace")
                 .before(Arrays.asList(mock(SpyProcess.class)))
                 .after(Arrays.asList(mock(SpyProcess.class)));
-        verify(manager, times(2)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+        verify(manager, times(1)).addAfterCallSpyAssertion(any(SpyAssertion.class));
+        verify(manager, times(1)).addBeforeCallSpyAssertion(any(SpyAssertion.class));
     }
 
     @Test
@@ -95,7 +100,9 @@ public class MunitSpyTest
                 .ofNamespace("testNamespace")
                 .before(mock(SpyProcess.class))
                 .after(mock(SpyProcess.class));
-        verify(manager, times(2)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+        verify(manager, times(1)).addAfterCallSpyAssertion(any(SpyAssertion.class));
+        verify(manager, times(1)).addBeforeCallSpyAssertion(any(SpyAssertion.class));
+
     }
 
     @Test
@@ -105,7 +112,8 @@ public class MunitSpyTest
                 .ofNamespace("testNamespace")
                 .before((List<SpyProcess>) null)
                 .after((List<SpyProcess>) null);
-        verify(manager, times(0)).addSpyAssertion(any(MessageProcessorId.class), any(SpyAssertion.class));
+        verify(manager, times(0)).addAfterCallSpyAssertion(any(SpyAssertion.class));
+        verify(manager, times(0)).addBeforeCallSpyAssertion(any(SpyAssertion.class));
     }
 
     @Test
@@ -116,19 +124,26 @@ public class MunitSpyTest
         calls.add(spy);
         SpyAssertion spyAssertion = new MunitSpy(muleContext).spyMessageProcessor("test")
                 .ofNamespace("testNamespace")
-                .createSpyAssertion(calls, calls);
+                .createSpyAssertion(new MessageProcessorCall(new MessageProcessorId("test", "testNamespace")), calls);
 
-        for (MessageProcessor mp : spyAssertion.getAfterMessageProcessors())
+        for (MessageProcessor mp : spyAssertion.getMessageProcessors())
         {
             mp.process(null);
         }
 
-        for (MessageProcessor mp : spyAssertion.getBeforeMessageProcessors())
-        {
-            mp.process(null);
-        }
+        assertEquals(1, spy.timesCalled);
+    }
 
-        assertEquals(2, spy.timesCalled);
+    @Test
+    public void testSpyWithAttributes()
+    {
+        new MunitSpy(muleContext).spyMessageProcessor("test")
+                .ofNamespace("testNamespace")
+                .withAttributes(new HashMap<String, Object>())
+                .before((List<SpyProcess>) null)
+                .after((List<SpyProcess>) null);
+        verify(manager, times(0)).addAfterCallSpyAssertion(any(SpyAssertion.class));
+        verify(manager, times(0)).addBeforeCallSpyAssertion(any(SpyAssertion.class));
     }
 
     private class Spy implements SpyProcess

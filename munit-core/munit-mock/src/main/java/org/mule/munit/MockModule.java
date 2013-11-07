@@ -88,16 +88,19 @@ public class MockModule implements MuleContextAware
      * {@sample.xml ../../../doc/mock-connector.xml.sample mock:spy}
      *
      * @param messageProcessor     Message processor name.
+     * @param withAttributes Sets of attributes to narrow-down a specific message processor
      * @param assertionsBeforeCall Expected return value.
      * @param assertionsAfterCall  Message processor parameters.
      */
     @Processor
     public void spy(String messageProcessor,
+                    @Optional List<Attribute> withAttributes,
                     @Optional List<NestedProcessor> assertionsBeforeCall,
                     @Optional List<NestedProcessor> assertionsAfterCall)
     {
         spy().spyMessageProcessor(getName(messageProcessor))
                 .ofNamespace(getNamespace(messageProcessor))
+                .withAttributes(createAttributes(withAttributes))
                 .before(createSpyAssertion(createMessageProcessorsFrom(assertionsBeforeCall)))
                 .after(createSpyAssertion(createMessageProcessorsFrom(assertionsAfterCall)));
     }

@@ -233,6 +233,7 @@ public class MUnitMojo
     private NotificationListener buildFileNotificationListener(String fileName)
     {
         String name = fileName.replace(".xml", ".txt");
+        fileName = fileName.replace('/', '.');
         try
         {
             return new StreamNotificationListener(new PrintStream(new FileOutputStream(new File(project.getBasedir() + TARGET_SUREFIRE_REPORTS_MUNIT_TXT + name))));
@@ -245,6 +246,7 @@ public class MUnitMojo
 
     private NotificationListener buildXmlNotificationListener(String fileName)
     {
+    	fileName = fileName.replace('/', '.');
         try
         {
             return new XmlNotificationListener(fileName, new PrintStream(new FileOutputStream(new File(project.getBasedir() + TARGET_SUREFIRE_REPORTS_TEST_MUNIT_XML + fileName))));

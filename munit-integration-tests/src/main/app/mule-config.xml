@@ -139,7 +139,11 @@
         <echo-component/>
     </flow>
 
-
+    <flow name="duplicateMessageProcessors">
+        <set-variable variableName="myvar1" value="#[message.payload]" doc:name="Variable1"/>
+        <set-variable variableName="myvar2" value="#[message.payload + flowVars['myvar1']]" doc:name="Variable2"/>
+        <echo-component/>
+    </flow>	
 
     <flow name="echo">
         <inbound-endpoint ref="foo"/>

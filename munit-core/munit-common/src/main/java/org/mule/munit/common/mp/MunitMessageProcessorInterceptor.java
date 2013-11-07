@@ -6,25 +6,16 @@
  */
 package org.mule.munit.common.mp;
 
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-import org.apache.commons.lang.StringUtils;
-
 import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
-import org.mule.api.expression.ExpressionManager;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.interceptor.processors.AbstractMessageProcessorInterceptor;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
-import org.mule.modules.interceptor.processors.MessageProcessorCall;
-import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.MunitUtils;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * <p>
@@ -36,10 +27,8 @@ import java.util.Map;
  */
 public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorInterceptor
 {
-
     private String fileName;
     private String lineNumber;
-
 
     public Object process(Object obj, Object[] args, MethodProxy proxy) throws Throwable
     {
@@ -48,7 +37,7 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         MockedMessageProcessorManager manager = getMockedMessageProcessorManager();
 
         MunitMessageProcessorCall messageProcessorCall = buildCall(event);
-        runSpyBeforeAssertions(manager, event);
+        runSpyAssertion(manager.getBetterMatchingBeforeSpyAssertion(messageProcessorCall), event);
 
         registerCall(manager, messageProcessorCall);
         MessageProcessorBehavior behavior = manager.getBetterMatchingBehavior(messageProcessorCall);
@@ -56,19 +45,19 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         {
             if (behavior.getExceptionToThrow() != null)
             {
-                runSpyAfterAssertions(manager, event);
+                runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
                 throw behavior.getExceptionToThrow();
             }
 
             MunitUtils.copyMessage((DefaultMuleMessage) behavior.getReturnMuleMessage(), (DefaultMuleMessage) event.getMessage());
 
-            runSpyAfterAssertions(manager, event);
+            runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
             return event;
         }
 
 
         Object o = proxy.invokeSuper(obj, args);
-        runSpyAfterAssertions(manager, (MuleEvent) o);
+        runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), (MuleEvent) o);
         return o;
     }
 
@@ -78,41 +67,14 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         manager.addCall(messageProcessorCall);
     }
 
-    private void runSpyAfterAssertions(MockedMessageProcessorManager manager, MuleEvent event)
+    private void runSpyAssertion(SpyAssertion spyAssertion, MuleEvent event)
     {
-        SpyAssertion spyAssertion = getAssertionFrom(manager);
         if (spyAssertion == null)
         {
             return;
         }
 
-        MunitUtils.verifyAssertions(event, spyAssertion.getAfterMessageProcessors());
-    }
-
-    private void runSpyBeforeAssertions(MockedMessageProcessorManager manager, MuleEvent event)
-    {
-        SpyAssertion spyAssertion = getAssertionFrom(manager);
-        if (spyAssertion == null)
-        {
-            return;
-        }
-
-        MunitUtils.verifyAssertions(event, spyAssertion.getBeforeMessageProcessors());
-    }
-
-    private SpyAssertion getAssertionFrom(MockedMessageProcessorManager manager)
-    {
-        Map<MessageProcessorId, SpyAssertion> assertions = manager.getSpyAssertions();
-        if (assertions.isEmpty())
-        {
-            return null;
-        }
-        SpyAssertion spyAssertion = assertions.get(id);
-        if (spyAssertion == null)
-        {
-            return null;
-        }
-        return spyAssertion;
+        MunitUtils.verifyAssertions(event, spyAssertion.getMessageProcessors());
     }
 
     private MunitMessageProcessorCall buildCall(MuleEvent event)

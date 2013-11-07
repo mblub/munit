@@ -11,13 +11,14 @@ import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.processor.MessageProcessor;
+import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.mp.SpyAssertion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -71,6 +72,16 @@ public class MunitSpy extends MunitMockingTool
         return this;
     }
 
+    public MunitSpy withAttributes(Map<String, Object> attributes)
+    {
+        if (attributes != null)
+        {
+            this.messageProcessorAttributes = attributes;
+        }
+        return this;
+    }
+
+
     /**
      * The {@link SpyProcess} to run before the message processor
      *
@@ -80,20 +91,18 @@ public class MunitSpy extends MunitMockingTool
     {
         if (withSpies != null && !withSpies.isEmpty())
         {
-
-            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace);
-            SpyAssertion spyAssertion = getManager().getSpyAssertions().get(messageProcessorId);
-            if (spyAssertion == null)
-            {
-                getManager().addSpyAssertion(messageProcessorId,
-                                             createSpyAssertion(withSpies, Collections.<SpyProcess>emptyList()));
-            }
-            else
-            {
-                spyAssertion.setBeforeMessageProcessors(createMessageProcessors(withSpies));
-            }
+            MessageProcessorCall messageProcessorCall = createMessageProcessorCall();
+            getManager().addBeforeCallSpyAssertion(createSpyAssertion(messageProcessorCall, withSpies));
         }
+
         return this;
+    }
+
+    private MessageProcessorCall createMessageProcessorCall()
+    {
+        MessageProcessorCall messageProcessorCall = new MessageProcessorCall(new MessageProcessorId(messageProcessorName, messageProcessorNamespace));
+        messageProcessorCall.setAttributes(messageProcessorAttributes);
+        return messageProcessorCall;
     }
 
     /**
@@ -115,17 +124,8 @@ public class MunitSpy extends MunitMockingTool
     {
         if (withSpies != null && !withSpies.isEmpty())
         {
-            MessageProcessorId messageProcessorId = new MessageProcessorId(messageProcessorName, messageProcessorNamespace);
-            SpyAssertion spyAssertion = getManager().getSpyAssertions().get(messageProcessorId);
-            if (spyAssertion == null)
-            {
-                getManager().addSpyAssertion(new MessageProcessorId(messageProcessorName, messageProcessorNamespace),
-                                             createSpyAssertion(Collections.<SpyProcess>emptyList(), withSpies));
-            }
-            else
-            {
-                spyAssertion.setAfterMessageProcessors(createMessageProcessors(withSpies));
-            }
+            MessageProcessorCall messageProcessorCall = createMessageProcessorCall();
+            getManager().addAfterCallSpyAssertion(createSpyAssertion(messageProcessorCall, withSpies));
         }
         return this;
     }
@@ -140,9 +140,9 @@ public class MunitSpy extends MunitMockingTool
         return after(Arrays.asList(withSpy));
     }
 
-    protected SpyAssertion createSpyAssertion(List<SpyProcess> beforeCall, List<SpyProcess> afterCall)
+    protected SpyAssertion createSpyAssertion(MessageProcessorCall call, List<SpyProcess> spyProcesses)
     {
-        return new SpyAssertion(createMessageProcessors(beforeCall), createMessageProcessors(afterCall));
+        return new SpyAssertion(call, createMessageProcessors(spyProcesses));
     }
 
     private ArrayList<MessageProcessor> createMessageProcessors(List<SpyProcess> beforeCall)
