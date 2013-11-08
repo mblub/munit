@@ -6,11 +6,6 @@
  */
 package org.mule.munit.runner;
 
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
-
 import org.mule.api.MuleContext;
 import org.mule.api.config.ConfigurationBuilder;
 import org.mule.api.config.MuleProperties;
@@ -31,6 +26,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 
 
 /**
@@ -114,7 +114,10 @@ public class MuleContextManager
         {
             properties = new Properties();
         }
-        properties.setProperty(MuleProperties.APP_HOME_DIRECTORY_PROPERTY, new File(getClass().getResource("/").getPath()).getAbsolutePath());
+        if  ( properties.get(MuleProperties.APP_HOME_DIRECTORY_PROPERTY) == null )
+        {
+            properties.setProperty(MuleProperties.APP_HOME_DIRECTORY_PROPERTY, new File(getClass().getResource("/").getPath()).getAbsolutePath());
+        }
         return properties;
     }
 
