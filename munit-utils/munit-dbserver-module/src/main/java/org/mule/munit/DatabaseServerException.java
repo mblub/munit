@@ -6,6 +6,12 @@
  */
 package org.mule.munit;
 
+/**
+ * Exception for failing database server startup and queries.
+ * 
+ * @since 3.4-M4
+ *
+ */
 public class DatabaseServerException extends RuntimeException {
 
 	/**
@@ -17,16 +23,16 @@ public class DatabaseServerException extends RuntimeException {
 		super();
 	}
 
-	public DatabaseServerException(final String arg0, final Throwable arg1) {
-		super(arg0, arg1);
+	public DatabaseServerException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 
-	public DatabaseServerException(final String arg0) {
-		super(arg0);
+	public DatabaseServerException(final String message) {
+		super(message);
 	}
 
-	public DatabaseServerException(final Throwable arg0) {
-		super(arg0);
+	public DatabaseServerException(final Throwable cause) {
+		super(cause);
 	}
 
 }
