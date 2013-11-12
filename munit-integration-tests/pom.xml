@@ -96,10 +96,6 @@
 					<inclusions>
                         <inclusion>
                             <groupId>org.mule.modules</groupId>
-                            <artifactId>mule-module-peoplematter</artifactId>
-                        </inclusion>
-                        <inclusion>
-                            <groupId>org.mule.modules</groupId>
                             <artifactId>mule-module-jira</artifactId>
                         </inclusion>
 					</inclusions>

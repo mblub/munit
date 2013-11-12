@@ -46,9 +46,9 @@
     </munit:test>
 
     <munit:test name="testExecuteSelectFromANonExistentTable"
-                description="A Select query is executed returning null when the table is not found in the database">
+                description="A Select query is executed returning null when the table is not found in the database"
+                expectExceptionThatSatisfies="#[exception.causedBy(org.mule.munit.DatabaseServerException)]">
         <dbserver:execute sql="SELECT * FROM nonExistentTable;" config-ref="configSQL"/>
-        <munit:assert-null/>
     </munit:test>
 
     <munit:test name="testValidateThatResultsAreWhatExpectedFromSQL"

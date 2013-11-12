@@ -83,7 +83,7 @@ public class DatabaseServer
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Could not start the database server", e);
+            throw new DatabaseServerException("Could not start the database server", e);
         }
     }
 
@@ -104,7 +104,7 @@ public class DatabaseServer
         catch (SQLException e)
         {
             logger.error("There has been a problem while executing the SQL statement", e);
-            return null;
+            throw new DatabaseServerException("There has been a problem while executing the SQL statement",e);
         }
     }
 
@@ -123,7 +123,7 @@ public class DatabaseServer
         catch (SQLException e)
         {
             logger.error("There has been a problem while executing the SQL statement", e);
-            return null;
+            throw new DatabaseServerException("There has been a problem while executing the SQL statement",e);
         }
     }
 
