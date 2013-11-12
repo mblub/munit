@@ -178,7 +178,7 @@ public class MUnitMojo
         {
             List<MunitResult> failingTests = run.getFailingTests();
             List<MunitResult> errorTests = run.getErrorTests();
-            System.out.println("\t >> " + FilenameUtils.getName(run.getTestName()) + " test result: Errors: " + errorTests.size() + ", Failures:" + failingTests.size());
+            System.out.println("\t >> " + FilenameUtils.getName(run.getTestName()) + " test result: Errors: " + errorTests.size() + ", Failures:" + failingTests.size() + ", Skipped: " + run.getNumberOfSkipped());
 
             showFailures(failingTests);
             showError(errorTests);
@@ -197,26 +197,22 @@ public class MUnitMojo
 
     private void showFailures(List<MunitResult> failingTests)
     {
-        if (!failingTests.isEmpty())
-        {
-            for (MunitResult result : failingTests)
-            {
-                System.out.println("\t\t ---" + result.getTestName() + " <<< FAILED");
-            }
-        }
+        showUnsuccessfulTests(failingTests, "FAILED");
     }
 
     private void showError(List<MunitResult> errorTests)
     {
-        if (!errorTests.isEmpty())
+        showUnsuccessfulTests(errorTests, "ERROR");
+    }
+
+    private void showUnsuccessfulTests(List<MunitResult> unsuccessfulTests, String unsuccessfulTag) {
+        if (!unsuccessfulTests.isEmpty())
         {
-            for (MunitResult result : errorTests)
+            for (MunitResult result : unsuccessfulTests)
             {
-                System.out.println("\t\t ---" + result.getTestName() + " <<< ERROR");
+                System.out.println("\t\t --- " + result.getTestName() + " <<< " + unsuccessfulTag);
             }
         }
-
-
     }
 
     private MunitSuiteRunner buildRunnerFor(String fileName)

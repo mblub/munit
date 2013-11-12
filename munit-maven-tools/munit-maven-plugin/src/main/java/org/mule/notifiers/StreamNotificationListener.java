@@ -57,6 +57,11 @@ public class StreamNotificationListener implements NotificationListener
             }
             out.flush();
         }
+        else if (testResult.isSkipped())
+        {
+            out.println("SKIPPED - Test " + testResult.getTestName() + " was Skipped.");
+            out.flush();
+        }
         else
         {
             out.println("SUCCESS - Test " + testResult.getTestName() + " finished Successfully.");
@@ -69,7 +74,7 @@ public class StreamNotificationListener implements NotificationListener
     {
         out.println();
         out.println("===========================================================================");
-        out.println("Number of tests run: " + result.getNumberOfTests() + " - Failed: " + result.getNumberOfFailures() + " - Errors: " + result.getNumberOfErrors() + " - Skipped: " + result.getNumberOfSkipped());
+        out.println("Number of tests run: " + result.getNumberOfTests() + " - Failed: " + result.getNumberOfFailures() + " - Errors: " + result.getNumberOfErrors() + " - Skipped: " + result.getNumberOfSkipped() + " - Time elapsed: " + result.getTime() + "ms");
         out.println("===========================================================================");
         out.flush();
     }

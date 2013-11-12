@@ -120,7 +120,7 @@ public abstract class MunitRunner<T>
         }
     }
 
-    private List<MunitFlow> lookupFlows(Class munitClass)
+    private List<MunitFlow> lookupFlows(Class<? extends MunitFlow> munitClass)
     {
         return new ArrayList<MunitFlow>(muleContext.getRegistry()
                                                 .lookupObjects(munitClass));
