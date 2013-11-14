@@ -33,10 +33,12 @@ public abstract class FunctionalMunitSuite
 {
 
     protected MuleContext muleContext;
+    
+    private MuleContextManager muleContextManager;
 
-    public FunctionalMunitSuite()
+	public FunctionalMunitSuite()
     {
-        MuleContextManager muleContextManager = new MuleContextManager(createConfiguration());
+        muleContextManager = new MuleContextManager(createConfiguration());
         try
         {
             String resources = getConfigResources();
@@ -315,5 +317,11 @@ public abstract class FunctionalMunitSuite
             return null;
         }
     }
+    
+    @Override
+	protected void finalize() throws Throwable {
+    	muleContextManager.killMule(muleContext);
+		super.finalize();
+	}
 
 }
