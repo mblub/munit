@@ -9,6 +9,7 @@ package org.mule.munit.runner.functional;
 import org.junit.After;
 import org.junit.Before;
 
+import org.mule.DefaultMuleEvent;
 import org.mule.DefaultMuleMessage;
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleContext;
@@ -170,7 +171,7 @@ public abstract class FunctionalMunitSuite
      */
     protected final MuleEvent testEvent(Object payload) throws Exception
     {
-        return MuleTestUtils.getTestEvent(payload, MessageExchangePattern.REQUEST_RESPONSE, muleContext);
+        return new DefaultMuleEvent(muleMessageWithPayload(payload), MessageExchangePattern.REQUEST_RESPONSE, MuleTestUtils.getTestFlow(muleContext));
     }
 
     /**
