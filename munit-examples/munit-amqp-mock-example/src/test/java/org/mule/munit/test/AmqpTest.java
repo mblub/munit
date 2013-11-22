@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file.
+ */
 package org.mule.munit.test;
 
 import java.util.ArrayList;
@@ -22,23 +28,23 @@ public class AmqpTest extends FunctionalMunitSuite {
 	{
 		ArrayList<SpyProcess> spy = new ArrayList<SpyProcess>();
 		spy.add(new SpyProcess() {
-			
+
 			@Override
 			public void spy(MuleEvent event) throws MuleException {
 				try {
 					Assert.assertEquals(ORIGINAL_PAYLOAD, event.getMessage().getPayloadAsString());
 				} catch (Exception e) {
 					throw new DefaultMuleException(e);
-				}			
+				}
 			}
 		});
-		
+
 		whenEndpointWithAddress(AMQP_ADDRESS)
 		.withIncomingMessageSatisfying(spy)
         .thenReturn(muleMessageWithPayload("OK"));
-		
+
 		MuleEvent resultEvent = runFlow("queueMessageFlow", testEvent(ORIGINAL_PAYLOAD));
-		
+
 		Assert.assertEquals("OK", resultEvent.getMessage().getPayloadAsString());
 	}
 }
