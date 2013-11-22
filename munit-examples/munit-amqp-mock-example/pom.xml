@@ -415,7 +415,7 @@
 		<dependency>
 	       <groupId>org.mule.munit</groupId>
             <artifactId>munit-runner</artifactId>
-            <version>3.4-M4-SNAPSHOT</version>
+            <version>3.4-M4-SFDC-1.0.10</version>
             <scope>test</scope>
 		</dependency>
 	<dependency>
