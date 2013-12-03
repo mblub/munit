@@ -59,7 +59,8 @@ public class XmlNotificationListener implements NotificationListener
     @Override
     public void notifyEnd(SuiteResult result)
     {
-        XStream xStream = new XStream();
+        CdataAwareXppDriver xppDriver = new CdataAwareXppDriver();
+        XStream xStream = new XStream(xppDriver);
         xStream.autodetectAnnotations(true);
         suite.setErrors(result.getNumberOfErrors());
         suite.setFailures(result.getNumberOfFailures());
