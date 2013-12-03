@@ -244,10 +244,8 @@
     </munit:test>
 
     <munit:test name="demo_test"
-
                 description="
         This is the demo test">
-
 
         <mock:outbound-endpoint address="jdbc://lookupJob" returnPayload-ref='#[resultOfScript("mockJdbcOutbound")]'/>
 
@@ -258,7 +256,6 @@
             </mock:with-attributes>
             <mock:then-return payload-ref="#[string:createGroupResult]"/>
         </mock:when>
-
 
         <munit:set payload-ref="#[string: Hello world!]"/>
 
@@ -288,6 +285,38 @@
         </mock:spy>
         <munit:set payload-ref="#[string:Hello world!]"/>
         <flow-ref name="setVariable"/>
+    </munit:test>
+
+    <munit:test name="mockingFlowsTest" description="This test shows how to mock a flow">
+        <mock:when messageProcessor="flow">
+            <mock:with-attributes>
+                <mock:with-attribute name="name" whereValue-ref="callingJira"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#[string:The Flow is mocked]"/>
+        </mock:when>
+
+        <munit:set payload-ref="#[string:Hello world!]"/>
+
+        <flow-ref name="callingFlow"/>
+
+        <munit:assert-that payloadIs-ref="#[string:The Flow is mocked]"/>
+
+    </munit:test>
+
+    <munit:test name="mockingSubFlowsTest" description="This test shows how to mock a sub flow">
+        <mock:when messageProcessor="sub-flow">
+            <mock:with-attributes>
+                <mock:with-attribute name="name" whereValue-ref="#[contains('callingJiraSubFlow')]"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#[string:The Flow is mocked]"/>
+        </mock:when>
+
+        <munit:set payload-ref="#[string:Hello world!]"/>
+
+        <flow-ref name="callingSubFlow"/>
+
+        <munit:assert-that payloadIs-ref="#[string:The Flow is mocked]"/>
+
     </munit:test>
 
 </mule>

@@ -7,10 +7,11 @@
 package org.mule.java;
 
 import static junit.framework.Assert.assertEquals;
-
+import org.mule.modules.interceptor.matchers.AnyClassMatcher;
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.junit.Test;
 
@@ -35,6 +36,31 @@ public class JavaMunitTest extends FunctionalMunitSuite
 
         assertEquals("expected", payload);
     }
+
+    @Test
+    public void testMockingOfSubFlowRef() throws Exception
+    {
+        HashMap<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put("name", new AnyClassMatcher(String.class));
+        whenMessageProcessor("sub-flow")
+                .withAttributes(attributes)
+                .thenReturn(muleMessageWithPayload("fefe"));
+
+        assertEquals(runFlow("callingSubFlow", testEvent("something")).getMessage().getPayload(), "fefe");
+    }
+
+    @Test
+    public void testMockingOfFlowRef() throws Exception
+    {
+        HashMap<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put("name", new AnyClassMatcher(String.class));
+        whenMessageProcessor("flow")
+                .withAttributes(attributes)
+                .thenReturn(muleMessageWithPayload("fefe"));
+
+        assertEquals(runFlow("callingFlow", testEvent("something")).getMessage().getPayload(), "fefe");
+    }
+
 
     @Test
     public void testSetMuleAppHome() throws Exception

@@ -56,9 +56,14 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         }
 
 
-        Object o = proxy.invokeSuper(obj, args);
+        Object o = invokeSuper(obj, args, proxy);
         runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), (MuleEvent) o);
         return o;
+    }
+
+    protected Object invokeSuper(Object obj, Object[] args, MethodProxy proxy) throws Throwable
+    {
+        return proxy.invokeSuper(obj, args);
     }
 
 

@@ -133,6 +133,17 @@
         </mulexml:xml-to-object-transformer>
     </flow>
 
+     <sub-flow name="callingJiraSubFlow">
+         <jira:create-group groupName="someGroupName" userName="someUserName"/>
+     </sub-flow>
+
+    <flow name="callingFlow">
+        <flow-ref name="callingJira"/>
+    </flow>
+
+    <flow name="callingSubFlow">
+        <flow-ref name="callingJiraSubFlow"/>
+    </flow>
 
     <flow name="setVariable">
         <set-variable variableName="myvar" value="#[message.payload]" doc:name="Variable"/>
@@ -143,7 +154,7 @@
         <set-variable variableName="myvar1" value="#[message.payload]" doc:name="Variable1"/>
         <set-variable variableName="myvar2" value="#[message.payload + flowVars['myvar1']]" doc:name="Variable2"/>
         <echo-component/>
-    </flow>	
+    </flow>
 
     <flow name="echo">
         <inbound-endpoint ref="foo"/>

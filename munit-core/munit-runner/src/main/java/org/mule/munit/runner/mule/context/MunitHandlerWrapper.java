@@ -6,14 +6,16 @@
  */
 package org.mule.munit.runner.mule.context;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.mule.api.processor.MessageProcessor;
-import org.mule.construct.Flow;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.mp.MunitMessageProcessorInterceptorFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -22,9 +24,6 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MunitHandlerWrapper implements NamespaceHandler
 {
@@ -59,7 +58,7 @@ public class MunitHandlerWrapper implements NamespaceHandler
             {
                 String tagName = element.getTagName();
 
-                if (!StringUtils.isEmpty(tagName))
+                if (!StringUtils.isEmpty(tagName) && beanDefinition.getConstructorArgumentValues().getArgumentCount() <= 2)
                 {
                     String filename = parserContext.getReaderContext().getResource().getFilename();
                     MunitMessageProcessorInterceptorFactory.addFactoryDefinitionTo((AbstractBeanDefinition) beanDefinition)
@@ -123,7 +122,7 @@ public class MunitHandlerWrapper implements NamespaceHandler
     private boolean isMessageProcessor(Class<?> beanType)
     {
         return MessageProcessor.class.isAssignableFrom(beanType)
-               && !Flow.class.isAssignableFrom(beanType);
+               || FactoryBean.class.isAssignableFrom(beanType);
     }
 
     @Override

@@ -101,4 +101,49 @@
 
     </munit:test>
 
+
+    <munit:test name="mockingOutboundEndpointsAsMessageProcessors"
+                description="
+        We want to validate that the endpoints can be mocked the same way message processors are mocked">
+
+
+        <mock:when messageProcessor="http:outbound-endpoint">
+            <mock:then-return payload-ref="#[string:localhost3]"/>
+        </mock:when>
+        <munit:set payload-ref="#[string:anything]"/>
+
+
+        <flow-ref name="outboundEndPointFlowOneWay"/>
+
+        <munit:assert-not-null/>
+
+        <munit:assert-that payloadIs-ref="#[string:localhost3]"/>
+
+    </munit:test>
+
+    <munit:test name="mockingOutboundEndpointsAsMessageProcessorsWithAttributes"
+                description="
+        We want to validate that the endpoints can be mocked the same way message processors are mocked">
+
+
+        <mock:when messageProcessor="http:outbound-endpoint">
+            <mock:with-attributes>
+                <mock:with-attribute name="method" whereValue-ref="#[string:GET]"/>
+                <mock:with-attribute name="host" whereValue-ref="#[string:anything]"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#[string:localhost3]"/>
+        </mock:when>
+        <munit:set payload-ref="#[string:anything]"/>
+
+
+        <flow-ref name="outboundEndPointFlowOneWay"/>
+
+        <munit:assert-not-null/>
+
+        <munit:assert-that payloadIs-ref="#[string:localhost3]"/>
+
+    </munit:test>
+
+
+
 </mule>

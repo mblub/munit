@@ -14,9 +14,11 @@ import org.mule.api.el.ExpressionLanguageExtension;
 import org.mule.api.transport.PropertyScope;
 import org.mule.modules.interceptor.matchers.mel.AnyClassMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.AnyMatcherFunction;
+import org.mule.modules.interceptor.matchers.mel.ContainsMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.EqMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.NotNullMatcherFunction;
 import org.mule.modules.interceptor.matchers.mel.NullMatcherFunction;
+import org.mule.modules.interceptor.matchers.mel.RegexMatcherFunction;
 import org.mule.munit.common.endpoint.MunitSpringFactoryPostProcessor;
 import org.mule.munit.mel.assertions.ElementMatcher;
 import org.mule.munit.mel.assertions.ElementMatcherFactory;
@@ -281,9 +283,10 @@ public class AssertModule extends MunitSpringFactoryPostProcessor implements Exp
         context.declareFunction("isNull", new NullMatcherFunction());
         context.declareFunction("isNotNull", new NotNullMatcherFunction());
         context.declareFunction("any", new AnyClassMatcherFunction());
+        context.declareFunction("matchRegex", new RegexMatcherFunction());
+        context.declareFunction("contains", new ContainsMatcherFunction());
         context.declareFunction("resultOfScript", new FlowResultFunction());
         context.declareFunction("getResource", new GetResourceFunction());
-
     }
 
 
