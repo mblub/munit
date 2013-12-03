@@ -6,9 +6,6 @@
  */
 package org.mule.munit.runner.functional;
 
-import org.junit.After;
-import org.junit.Before;
-
 import org.mule.DefaultMuleEvent;
 import org.mule.DefaultMuleMessage;
 import org.mule.MessageExchangePattern;
@@ -16,8 +13,12 @@ import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
-import org.mule.construct.Flow;
-import org.mule.modules.interceptor.matchers.*;
+import org.mule.api.processor.MessageProcessor;
+import org.mule.modules.interceptor.matchers.AnyClassMatcher;
+import org.mule.modules.interceptor.matchers.EqMatcher;
+import org.mule.modules.interceptor.matchers.Matcher;
+import org.mule.modules.interceptor.matchers.NotNullMatcher;
+import org.mule.modules.interceptor.matchers.NullMatcher;
 import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.mocking.EndpointMocker;
 import org.mule.munit.common.mocking.MessageProcessorMocker;
@@ -28,7 +29,15 @@ import org.mule.munit.runner.mule.context.MockingConfiguration;
 import org.mule.tck.MuleTestUtils;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import org.junit.After;
+import org.junit.Before;
 
 public abstract class FunctionalMunitSuite
 {
@@ -204,7 +213,7 @@ public abstract class FunctionalMunitSuite
 
     protected final MuleEvent runFlow(String name, MuleEvent event) throws MuleException
     {
-        Flow flow = (Flow) muleContext.getRegistry().lookupFlowConstruct(name);
+        MessageProcessor flow = (MessageProcessor) muleContext.getRegistry().get(name);
         if (flow == null)
         {
             throw new IllegalArgumentException("Flow " + name + " does not exist");

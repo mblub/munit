@@ -7,7 +7,7 @@
 package org.mule.java;
 
 import static junit.framework.Assert.assertEquals;
-import org.mule.modules.interceptor.matchers.AnyClassMatcher;
+import static org.mule.modules.interceptor.matchers.Matchers.contains;
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class JavaMunitTest extends FunctionalMunitSuite
                 .ofNamespace("jira")
                 .thenReturn(muleMessageWithPayload("expected"));
 
-        Object payload = runFlow("callingJira", testEvent("something")).getMessage().getPayload();
+        Object payload = runFlow("callingJiraSubFlow", testEvent("something")).getMessage().getPayload();
 
         assertEquals("expected", payload);
     }
@@ -41,7 +41,7 @@ public class JavaMunitTest extends FunctionalMunitSuite
     public void testMockingOfSubFlowRef() throws Exception
     {
         HashMap<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put("name", new AnyClassMatcher(String.class));
+        attributes.put("name", contains("callingJiraSubFlow"));
         whenMessageProcessor("sub-flow")
                 .withAttributes(attributes)
                 .thenReturn(muleMessageWithPayload("fefe"));
@@ -53,7 +53,7 @@ public class JavaMunitTest extends FunctionalMunitSuite
     public void testMockingOfFlowRef() throws Exception
     {
         HashMap<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put("name", new AnyClassMatcher(String.class));
+        attributes.put("name", "callingJira");
         whenMessageProcessor("flow")
                 .withAttributes(attributes)
                 .thenReturn(muleMessageWithPayload("fefe"));
