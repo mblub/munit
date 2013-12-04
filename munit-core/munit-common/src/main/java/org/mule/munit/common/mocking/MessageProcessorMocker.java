@@ -14,6 +14,7 @@ import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.mp.MockedMessageProcessorManager;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -90,6 +91,29 @@ public class MessageProcessorMocker extends MunitMockingTool
     public MessageProcessorMocker withAttributes(Map<String, Object> attributes)
     {
         this.messageProcessorAttributes = attributes;
+        return this;
+    }
+
+    /**
+     * <p>
+     * Defines the attributes of the message processor to be mocked
+     * </p>
+     *
+     * @param attributes <p>
+     *                   The attributes of the message processor to be mocked
+     *                   </p>
+     * @return <p>
+     *         The MessageProcessorMocker
+     *         </p>
+     */
+    public MessageProcessorMocker withAttributes(Attribute ... attributes)
+    {
+        Map<String, Object> mapOfAttributes = new HashMap<String, Object>();
+        for ( Attribute attribute : attributes )
+        {
+            mapOfAttributes.put(attribute.getId(), attribute.getValue());
+        }
+        this.messageProcessorAttributes = mapOfAttributes;
         return this;
     }
 

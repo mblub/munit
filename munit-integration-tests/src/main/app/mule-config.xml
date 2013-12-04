@@ -99,7 +99,7 @@
     </flow>
 
     <flow name="callingJira">
-        <jira:create-group groupName="someGroupName" userName="someUserName"/>
+        <jira:create-group groupName="someGroupName" userName="someUserName" doc:name="jiraMp"/>
     </flow>
 
     <flow name="FinishDataLoadJobsFlow" doc:name="FinishDataLoadJobsFlow">

@@ -8,6 +8,7 @@ package org.mule.java;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mule.modules.interceptor.matchers.Matchers.contains;
+import static org.mule.munit.common.mocking.Attribute.attribute;
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
 import java.io.File;
@@ -28,11 +29,12 @@ public class JavaMunitTest extends FunctionalMunitSuite
     @Test
     public void test() throws Exception
     {
-        whenMessageProcessor("create-group")
-                .ofNamespace("jira")
+        whenMessageProcessor("create.*")
+                .ofNamespace("ji.*")
+                .withAttributes(attribute("name").ofNamespace("doc").withValue("jiraMp"))
                 .thenReturn(muleMessageWithPayload("expected"));
 
-        Object payload = runFlow("callingJiraSubFlow", testEvent("something")).getMessage().getPayload();
+        Object payload = runFlow("callingJira", testEvent("something")).getMessage().getPayload();
 
         assertEquals("expected", payload);
     }
@@ -40,13 +42,11 @@ public class JavaMunitTest extends FunctionalMunitSuite
     @Test
     public void testMockingOfSubFlowRef() throws Exception
     {
-        HashMap<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put("name", contains("callingJiraSubFlow"));
         whenMessageProcessor("sub-flow")
-                .withAttributes(attributes)
-                .thenReturn(muleMessageWithPayload("fefe"));
+                .withAttributes(attribute("name").withValue(contains("callingJiraSubFlow")))
+                .thenReturn(muleMessageWithPayload("hello world"));
 
-        assertEquals(runFlow("callingSubFlow", testEvent("something")).getMessage().getPayload(), "fefe");
+        assertEquals(runFlow("callingSubFlow", testEvent("something")).getMessage().getPayload(),"hello world");
     }
 
     @Test
@@ -55,10 +55,10 @@ public class JavaMunitTest extends FunctionalMunitSuite
         HashMap<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("name", "callingJira");
         whenMessageProcessor("flow")
-                .withAttributes(attributes)
-                .thenReturn(muleMessageWithPayload("fefe"));
+                .withAttributes(attribute("name").withValue("callingJira"))
+                .thenReturn(muleMessageWithPayload("hello world"));
 
-        assertEquals(runFlow("callingFlow", testEvent("something")).getMessage().getPayload(), "fefe");
+        assertEquals(runFlow("callingFlow", testEvent("something")).getMessage().getPayload(), "hello world");
     }
 
 
