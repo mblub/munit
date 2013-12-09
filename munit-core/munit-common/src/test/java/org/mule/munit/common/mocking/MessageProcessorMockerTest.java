@@ -6,9 +6,10 @@
  */
 package org.mule.munit.common.mocking;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleMessage;
 import org.mule.api.registry.MuleRegistry;
@@ -17,10 +18,8 @@ import org.mule.munit.common.mp.MockedMessageProcessorManager;
 
 import java.util.HashMap;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Mulesoft Inc.
@@ -53,6 +52,17 @@ public class MessageProcessorMockerTest
         mocker().when("testMp")
                 .ofNamespace("testNamespace")
                 .withAttributes(new HashMap<String, Object>())
+                .thenReturn(message);
+
+        verify(manager).addBehavior(any(MessageProcessorBehavior.class));
+    }
+
+    @Test
+    public void addBehaviorWithAttributes()
+    {
+        mocker().when("testMp")
+                .ofNamespace("testNamespace")
+                .withAttributes(Attribute.attribute("any"))
                 .thenReturn(message);
 
         verify(manager).addBehavior(any(MessageProcessorBehavior.class));
