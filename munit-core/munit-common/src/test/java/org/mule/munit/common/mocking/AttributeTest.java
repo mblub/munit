@@ -31,6 +31,6 @@ public class AttributeTest
     @Test
     public void withNamespaceIdIsNamespacePlusName()
     {
-        assertEquals(NAME, attribute(NAME).ofNamespace(NAMESPACE).getId());
+        assertEquals(NAMESPACE +":"+NAME, attribute(NAME).ofNamespace(NAMESPACE).getId());
     }
 }
