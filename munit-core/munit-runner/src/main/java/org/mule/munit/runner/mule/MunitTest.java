@@ -7,7 +7,11 @@
 package org.mule.munit.runner.mule;
 
 import static junit.framework.Assert.fail;
+import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
+import org.mule.DefaultMuleEvent;
+import org.mule.DefaultMuleMessage;
 import org.mule.MessageExchangePattern;
+import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.munit.common.MunitCore;
@@ -23,8 +27,6 @@ import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
-import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
 
 /**
  * <p>MUnit Test</p>
@@ -54,6 +56,7 @@ public class MunitTest
      * <p>The Output handler to be use.</p>
      */
     private TestOutputHandler outputHandler;
+    private MuleContext muleContext;
 
     private static String stack2string(Throwable e)
     {
@@ -73,12 +76,13 @@ public class MunitTest
     public MunitTest(List<MunitFlow> before,
                      MunitTestFlow test,
                      List<MunitFlow> after,
-                     TestOutputHandler outputHandler)
+                     TestOutputHandler outputHandler, MuleContext muleContext)
     {
         this.before = before;
         this.after = after;
         this.test = test;
         this.outputHandler = outputHandler;
+        this.muleContext = muleContext;
     }
 
     public String getName()
@@ -182,9 +186,8 @@ public class MunitTest
     {
         try
         {
-            return MuleTestUtils.getTestEvent(null,
-                                              MessageExchangePattern.REQUEST_RESPONSE,
-                                              test.getMuleContext());
+            return new DefaultMuleEvent(new DefaultMuleMessage(null, muleContext), MessageExchangePattern.REQUEST_RESPONSE, MuleTestUtils.getTestFlow(muleContext));
+
         }
         catch (Exception e)
         {

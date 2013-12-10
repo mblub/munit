@@ -30,7 +30,7 @@ import java.util.List;
 public abstract class SuiteBuilder<T, E>
 {
 
-    private MuleContext muleContext;
+    protected MuleContext muleContext;
 
     /**
      * <p>The list of tests to be added in the suit</p>

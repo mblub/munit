@@ -6,8 +6,9 @@
  */
 package org.mule.munit.runner.java;
 
-import junit.framework.TestCase;
-
+import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
+import org.mule.DefaultMuleEvent;
+import org.mule.DefaultMuleMessage;
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -21,7 +22,7 @@ import org.mule.tck.MuleTestUtils;
 
 import java.util.List;
 
-import static org.mule.munit.common.MunitCore.buildMuleStackTrace;
+import junit.framework.TestCase;
 
 
 /**
@@ -149,9 +150,7 @@ public class MunitTest extends TestCase
     {
         try
         {
-            return MuleTestUtils.getTestEvent(null,
-                                              MessageExchangePattern.REQUEST_RESPONSE,
-                                              muleContext);
+            return new DefaultMuleEvent(new DefaultMuleMessage(null, muleContext), MessageExchangePattern.REQUEST_RESPONSE, MuleTestUtils.getTestFlow(muleContext));
         }
         catch (Exception e)
         {

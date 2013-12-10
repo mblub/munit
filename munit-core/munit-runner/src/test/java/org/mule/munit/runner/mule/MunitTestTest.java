@@ -178,7 +178,7 @@ public class MunitTestTest
 
         public MockedTest(List<MunitFlow> before, MunitTestFlow test, List<MunitFlow> after, TestOutputHandler outputHandler)
         {
-            super(before, test, after, outputHandler);
+            super(before, test, after, outputHandler, muleContext);
         }
 
         @Override

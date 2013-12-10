@@ -61,6 +61,6 @@ public class MunitSuiteBuilder extends SuiteBuilder<MunitSuite, MunitTest>
     @Override
     protected MunitTest test(List<MunitFlow> beforeTest, MunitTestFlow test, List<MunitFlow> afterTest)
     {
-        return new MunitTest(beforeTest, test, afterTest, handler);
+        return new MunitTest(beforeTest, test, afterTest, handler, muleContext);
     }
 }
