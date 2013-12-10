@@ -353,4 +353,21 @@
 
     </munit:test>
 
+    <munit:test name="mockingByRegexAndMatcher" description="This test shows how to mock with a Regex">
+        <mock:when messageProcessor=".*:create-group">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue-ref="#[matchRegex('.*jira.*')]"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#[string:createGroupResult]"/>
+        </mock:when>
+
+        <munit:set payload-ref="#[string: Hello world!]"/>
+
+        <flow-ref name="callingJira"/>
+
+        <munit:assert-not-null/>
+        <munit:assert-that payloadIs-ref="#[string:createGroupResult]"/>
+
+    </munit:test>
+
 </mule>
