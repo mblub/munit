@@ -37,23 +37,28 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 
 public abstract class FunctionalMunitSuite
 {
 
-    protected MuleContext muleContext;
+    protected static MuleContext muleContext;
     
     private MuleContextManager muleContextManager;
+
 
 	public FunctionalMunitSuite()
     {
         muleContextManager = new MuleContextManager(createConfiguration());
         try
         {
-            String resources = getConfigResources();
+            if ( muleContext == null || muleContext.isDisposed())
+            {
+                String resources = getConfigResources();
 
-            muleContext = muleContextManager.startMule(resources);
+                muleContext = muleContextManager.startMule(resources);
+            }
 
         }
         catch (Exception e)
@@ -62,7 +67,6 @@ public abstract class FunctionalMunitSuite
             throw new RuntimeException(e);
         }
     }
-
 
     private MockingConfiguration createConfiguration()
     {
@@ -327,11 +331,10 @@ public abstract class FunctionalMunitSuite
             return null;
         }
     }
-    
-    @Override
-	protected void finalize() throws Throwable {
-    	muleContextManager.killMule(muleContext);
-		super.finalize();
+
+    @AfterClass
+	public static void killMule() throws Throwable {
+    	new MuleContextManager(null).killMule(muleContext);
 	}
 
 }
