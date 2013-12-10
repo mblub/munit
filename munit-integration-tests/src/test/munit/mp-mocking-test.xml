@@ -319,4 +319,21 @@
 
     </munit:test>
 
+    <munit:test name="mockingByDocName" description="This test shows how to mock with a doc name">
+        <mock:when messageProcessor="jira:create-group">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue-ref="#[string:jiraMp]"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#[string:createGroupResult]"/>
+        </mock:when>
+
+        <munit:set payload-ref="#[string: Hello world!]"/>
+
+        <flow-ref name="callingJira"/>
+
+        <munit:assert-not-null/>
+        <munit:assert-that payloadIs-ref="#[string:createGroupResult]"/>
+
+    </munit:test>
+
 </mule>
