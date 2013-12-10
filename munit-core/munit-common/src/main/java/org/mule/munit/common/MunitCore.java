@@ -38,43 +38,6 @@ public class MunitCore
 
     /**
      * <p>
-     * The Mule context for the Munit test.
-     * </p>
-     * <p/>
-     * <p>
-     * This static value makes Munit test not able to run in parallel, which might be a good feature in the future.
-     * but it make no sense when transports are declared (i.e. flows with ports declared)
-     * </p>
-     * <p/>
-     * <p>
-     * Check out that most of the methods of this class receives the {@link MuleContext} as parameter. This is because
-     * we want to get rid off this static reference.
-     * </p>
-     */
-    private static MuleContext context;
-
-    /**
-     * <p>
-     * Sets the mule context for the Munit run
-     * </p>
-     *
-     * @param muleContext <p>The Mule Context</p>
-     */
-    public static synchronized void setMuleContext(MuleContext muleContext)
-    {
-        context = muleContext;
-    }
-
-    /**
-     * @return <p>Returns the stored mule context</p>
-     */
-    public static MuleContext getMuleContext()
-    {
-        return context;
-    }
-
-    /**
-     * <p>
      * Resets the status of Munit. Used after each test.
      * </p>
      *

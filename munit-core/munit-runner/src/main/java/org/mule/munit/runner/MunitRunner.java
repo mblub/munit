@@ -78,7 +78,6 @@ public abstract class MunitRunner<T>
         }
         catch (Exception e)
         {
-            muleContextManager.killMule(muleContext);
             throw new RuntimeException("Could not Run the suite", e);
         }
         finally
@@ -91,8 +90,10 @@ public abstract class MunitRunner<T>
             {
                 throw new RuntimeException("After Suite process could not be executed", e);
             }
-
-            muleContextManager.killMule(muleContext);
+            finally
+            {
+                muleContextManager.killMule(muleContext);
+            }
         }
 
     }

@@ -6,9 +6,9 @@
  */
 package org.mule.munit.common.mp;
 
-import net.sf.cglib.proxy.MethodProxy;
-
 import org.mule.api.MuleContext;
+
+import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * <p>
@@ -41,16 +41,11 @@ public class MockMunitMessageProcessorInterceptor extends MunitMessageProcessorI
     }
 
     @Override
-    protected MockedMessageProcessorManager getMockedMessageProcessorManager()
+    protected MockedMessageProcessorManager getMockedMessageProcessorManager(MuleContext muleContext)
     {
         return manager;
     }
 
-    @Override
-    public MuleContext getMuleContext()
-    {
-        return context;
-    }
 
     public void setMockProcess(boolean mockProcess)
     {

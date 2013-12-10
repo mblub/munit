@@ -12,7 +12,6 @@ import org.mule.api.MuleEvent;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.interceptor.processors.AbstractMessageProcessorInterceptor;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
-import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.MunitUtils;
 
 import net.sf.cglib.proxy.MethodProxy;
@@ -34,7 +33,7 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
     {
         MuleEvent event = (MuleEvent) args[0];
 
-        MockedMessageProcessorManager manager = getMockedMessageProcessorManager();
+        MockedMessageProcessorManager manager = getMockedMessageProcessorManager(event.getMuleContext());
 
         MunitMessageProcessorCall messageProcessorCall = buildCall(event);
         runSpyAssertion(manager.getBetterMatchingBeforeSpyAssertion(messageProcessorCall), event);
@@ -93,15 +92,11 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
     }
 
 
-    protected MockedMessageProcessorManager getMockedMessageProcessorManager()
+    protected MockedMessageProcessorManager getMockedMessageProcessorManager(MuleContext muleContext)
     {
-        return ((MockedMessageProcessorManager) getMuleContext().getRegistry().lookupObject(MockedMessageProcessorManager.ID));
+        return ((MockedMessageProcessorManager) muleContext.getRegistry().lookupObject(MockedMessageProcessorManager.ID));
     }
 
-    public MuleContext getMuleContext()
-    {
-        return MunitCore.getMuleContext();
-    }
 
     public String getFileName()
     {

@@ -14,7 +14,6 @@ import org.mule.config.DefaultMuleConfiguration;
 import org.mule.config.builders.SimpleConfigurationBuilder;
 import org.mule.context.DefaultMuleContextBuilder;
 import org.mule.context.DefaultMuleContextFactory;
-import org.mule.munit.common.MunitCore;
 import org.mule.munit.runner.mule.context.MockingConfiguration;
 import org.mule.munit.runner.mule.context.MunitSpringXmlConfigurationBuilder;
 import org.mule.munit.runner.output.DefaultOutputHandler;
@@ -41,7 +40,6 @@ import org.apache.log4j.SimpleLayout;
  */
 public class MuleContextManager
 {
-
     public static final String CLASSNAME_ANNOTATIONS_CONFIG_BUILDER = "org.mule.org.mule.munit.config.AnnotationsConfigurationBuilder";
 
     private MockingConfiguration configuration;
@@ -55,8 +53,6 @@ public class MuleContextManager
     {
         MuleContext context = createMule(resources);
         context.start();
-
-        MunitCore.setMuleContext(context);
 
         return context;
     }

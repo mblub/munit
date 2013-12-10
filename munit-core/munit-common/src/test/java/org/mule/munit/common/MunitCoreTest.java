@@ -6,15 +6,18 @@
  */
 package org.mule.munit.common;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mule.api.MuleContext;
 import org.mule.api.config.MuleProperties;
 import org.mule.api.construct.FlowConstruct;
 import org.mule.api.registry.MuleRegistry;
 import org.mule.api.registry.RegistrationException;
-import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
 import org.mule.munit.common.endpoint.MockEndpointManager;
 import org.mule.munit.common.mp.MockedMessageProcessorManager;
@@ -24,8 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Mulesoft Inc.
@@ -96,15 +99,6 @@ public class MunitCoreTest
 
         verify(muleRegistry).registerObject(eq(MockedMessageProcessorManager.ID), isA(MockedMessageProcessorManager.class));
     }
-
-    @Test
-    public void testSetContext()
-    {
-        MunitCore.setMuleContext(muleContext);
-
-        assertEquals(muleContext, MunitCore.getMuleContext());
-    }
-
 
     @Test
     public void buildStackTrace()
