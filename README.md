@@ -35,7 +35,7 @@ mvn clean install
 with the following maven opts
 
 ```console
-MAVEN_OPTS="-Xmx1G -XX:MaxPermSize=512m"
+MAVEN_OPTS="-XX:MaxPermSize=128m"
 ```
 
 
