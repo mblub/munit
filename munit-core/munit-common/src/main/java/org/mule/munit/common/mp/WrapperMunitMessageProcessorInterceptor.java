@@ -46,7 +46,23 @@ public class WrapperMunitMessageProcessorInterceptor extends MunitMessageProcess
             return process(obj, args, proxy);
         }
 
-        return invokeSuper(obj, args, proxy);
+        return invokeSuper(obj, args, proxy, method);
+    }
+
+    private Object invokeSuper(Object obj, Object[] args, MethodProxy proxy, Method method) throws Throwable
+    {
+        try
+        {
+            if(!method.isAccessible()) {
+                method.setAccessible(true);
+            }
+            return method.invoke(realMp, args);
+        }
+        catch (Throwable e)
+        {
+            return invokeSuper(obj, args, proxy);
+        }
+
     }
 
     @Override

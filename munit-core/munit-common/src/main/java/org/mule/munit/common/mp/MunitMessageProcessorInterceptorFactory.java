@@ -48,6 +48,32 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
     {
     };
 
+    private static CallbackFilter FACTORY_BEAN_FILTER = new CallbackFilter(){
+
+        @Override
+        public int accept(Method method)
+        {
+            if ("getObject".equals(method.getName()))
+            {
+                return 0;
+            }
+            return 1;
+        }
+    };
+
+    private static CallbackFilter MESSAGE_PROCESSOR_FILTER = new CallbackFilter(){
+
+        @Override
+        public int accept(Method method)
+        {
+            if ("process".equals(method.getName()))
+            {
+                return 0;
+            }
+            return 1;
+        }
+    };
+
     /**
      * <p>
      * The Id in the spring registry of Mule
@@ -209,13 +235,14 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
 
     protected Enhancer createEnhancer(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber)
     {
-        Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(Enhancer.class);
 
         Enhancer e = new Enhancer();
         e.setSuperclass(realMpClass);
-        e.setUseFactory(true);
+        e.setUseCache(false);
+        e.setAttemptLoad(true);
         e.setInterceptDuringConstruction(true);
+        e.setNamingPolicy(new MunitNamingPolicy());
+
         if (FactoryBean.class.isAssignableFrom(realMpClass))
         {
             createFactoryBeanCallback(id, attributes, fileName, lineNumber, e);
@@ -236,7 +263,7 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
         callback.setFileName(fileName);
         callback.setLineNumber(lineNumber);
         e.setCallbacks(new Callback[] {callback, NULL_METHOD_INTERCEPTOR});
-        e.setCallbackFilter(new MunitCallbackFilter("process"));
+        e.setCallbackFilter(MESSAGE_PROCESSOR_FILTER);
     }
 
     private void createFactoryBeanCallback(MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber, Enhancer e)
@@ -247,7 +274,7 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
         callback.setFileName(fileName);
         callback.setLineNumber(lineNumber);
         e.setCallbacks(new Callback[] {callback, NULL_METHOD_INTERCEPTOR});
-        e.setCallbackFilter(new MunitCallbackFilter("getObject"));
+        e.setCallbackFilter(FACTORY_BEAN_FILTER);
     }
 
     /**
@@ -266,24 +293,5 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
     }
 
 
-    private class MunitCallbackFilter implements CallbackFilter
-    {
 
-        String methodName;
-
-        private MunitCallbackFilter(String methodName)
-        {
-            this.methodName = methodName;
-        }
-
-        @Override
-        public int accept(Method method)
-        {
-            if (methodName.equals(method.getName()))
-            {
-                return 0;
-            }
-            return 1;
-        }
-    }
 }

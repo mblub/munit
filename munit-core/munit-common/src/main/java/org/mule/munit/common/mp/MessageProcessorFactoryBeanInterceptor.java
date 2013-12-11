@@ -38,9 +38,8 @@ public class MessageProcessorFactoryBeanInterceptor extends AbstractMunitMessage
 
         try
         {
-            if (MessageProcessor.class.isAssignableFrom(o.getClass()) && !Enhancer.isEnhanced(o.getClass()))
+            if ( MessageProcessor.class.isAssignableFrom(o.getClass()) && !Enhancer.isEnhanced(o.getClass()))
             {
-
                 MunitMessageProcessorInterceptor callback = new WrapperMunitMessageProcessorInterceptor((MessageProcessor) o);
                 callback.setId(id);
                 callback.setAttributes(attributes);
@@ -51,7 +50,9 @@ public class MessageProcessorFactoryBeanInterceptor extends AbstractMunitMessage
                 Enhancer e = new Enhancer();
                 e.setSuperclass(o.getClass());
                 e.setInterceptDuringConstruction(true);
-                e.setUseFactory(true);
+                e.setUseCache(false);
+                e.setAttemptLoad(true);
+                e.setNamingPolicy(new MunitNamingPolicy());
                 e.setCallbackTypes(new Class[] {WrapperMunitMessageProcessorInterceptor.class});
 
                 return createProxy(e.createClass(), callback);
@@ -84,6 +85,5 @@ public class MessageProcessorFactoryBeanInterceptor extends AbstractMunitMessage
                                                                                       new Callback[] {interceptor}});
         return proxy;
     }
-
 
 }
