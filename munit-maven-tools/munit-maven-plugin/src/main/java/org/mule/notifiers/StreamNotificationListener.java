@@ -7,6 +7,7 @@
 package org.mule.notifiers;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.mule.munit.runner.mule.MunitTest;
 import org.mule.munit.runner.mule.result.SuiteResult;
 import org.mule.munit.runner.mule.result.TestResult;
@@ -73,9 +74,11 @@ public class StreamNotificationListener implements NotificationListener
     public void notifyEnd(SuiteResult result)
     {
         out.println();
-        out.println("===========================================================================");
-        out.println("Number of tests run: " + result.getNumberOfTests() + " - Failed: " + result.getNumberOfFailures() + " - Errors: " + result.getNumberOfErrors() + " - Skipped: " + result.getNumberOfSkipped() + " - Time elapsed: " + result.getTime() + "ms");
-        out.println("===========================================================================");
+        String title = "Number of tests run: " + result.getNumberOfTests() + " - Failed: " + result.getNumberOfFailures() + " - Errors: " + result.getNumberOfErrors() + " - Skipped: " + result.getNumberOfSkipped() + " - Time elapsed: " + result.getTime() + "ms";
+        String titleFrame = StringUtils.repeat("=", title.length());
+        out.println(titleFrame);
+        out.println(title);
+        out.println(titleFrame);
         out.flush();
     }
 

@@ -126,7 +126,6 @@ public class MUnitMojo
                 Collection<File> allFiles = FileUtils.listFiles(testFolder, null, true);
                 for (File file : allFiles)
                 {
-
                     String fileName = file.getPath().replace(testFolder.getPath() + File.separator, "");
                     if (fileName.endsWith(".xml") && validateFilter(fileName))
                     {
@@ -228,14 +227,20 @@ public class MUnitMojo
 
     private NotificationListener buildFileNotificationListener(String fileName)
     {
-        String name = fileName.replace(".xml", ".txt");
+    	fileName = fileName.replace(".xml", ".txt");
         fileName = fileName.replace('/', '.');
         try
         {
-            return new StreamNotificationListener(new PrintStream(new FileOutputStream(new File(project.getBasedir() + TARGET_SUREFIRE_REPORTS_MUNIT_TXT + name))));
+            return new StreamNotificationListener(new PrintStream(new FileOutputStream(getFile(project.getBasedir() + TARGET_SUREFIRE_REPORTS_MUNIT_TXT + fileName))));
         }
         catch (FileNotFoundException e)
         {
+        	e.printStackTrace();
+            return new DummyNotificationListener();
+        }
+        catch (IOException e)
+        {
+        	e.printStackTrace();
             return new DummyNotificationListener();
         }
     }
@@ -245,10 +250,16 @@ public class MUnitMojo
     	fileName = fileName.replace('/', '.');
         try
         {
-            return new XmlNotificationListener(fileName, new PrintStream(new FileOutputStream(new File(project.getBasedir() + TARGET_SUREFIRE_REPORTS_TEST_MUNIT_XML + fileName))));
+            return new XmlNotificationListener(fileName, new PrintStream(new FileOutputStream(getFile(project.getBasedir() + TARGET_SUREFIRE_REPORTS_TEST_MUNIT_XML + fileName))));
         }
         catch (FileNotFoundException e)
         {
+        	e.printStackTrace();
+            return new DummyNotificationListener();
+        }
+        catch (IOException e)
+        {
+        	e.printStackTrace();
             return new DummyNotificationListener();
         }
     }
@@ -298,5 +309,27 @@ public class MUnitMojo
             URL url = (URL) it.next();
             methodAddUrl.invoke(sysCl, url);
         }
+    }
+    
+    private File getFile(String fullPath) throws IOException {
+    	File file = new File(fullPath);
+    	
+    	if(!file.getParentFile().exists())
+    	{
+        	if (!file.getParentFile().mkdir()) 
+        	{
+        		throw new IOException("Failed to create directory " + file.getParent());
+        	}
+        }
+    	
+    	if (!file.exists()) 
+    	{
+    		if (!file.createNewFile())
+    		{
+    			throw new IOException("Failed to create file " + file.getName());
+    		}
+    	} 
+
+    	return file;
     }
 }
