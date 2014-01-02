@@ -603,6 +603,7 @@
                 <xs:sequence>
                     <xs:group xmlns:mule="http://www.mulesoft.org/schema/mule/core"
                               ref="mule:messageProcessorOrOutboundEndpoint" maxOccurs="unbounded"/>
+                    <xs:element ref="mule:legacy-abstract-exception-strategy" minOccurs="0"/>
                 </xs:sequence>
                 <xs:attribute name="description" use="required" type="xs:string">
                     <xs:annotation>
