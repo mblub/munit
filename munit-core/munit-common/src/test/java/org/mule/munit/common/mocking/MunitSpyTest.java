@@ -135,7 +135,7 @@ public class MunitSpyTest
     }
 
     @Test
-    public void testSpyWithAttributes()
+    public void testSpyWithAttributesMapParameter()
     {
         new MunitSpy(muleContext).spyMessageProcessor("test")
                 .ofNamespace("testNamespace")
