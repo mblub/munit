@@ -12,15 +12,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.mule.api.MuleContext;
-import org.mule.api.MuleEvent;
-import org.mule.api.MuleException;
-import org.mule.api.processor.MessageProcessor;
-import org.mule.api.registry.MuleRegistry;
-import org.mule.modules.interceptor.processors.MessageProcessorCall;
-import org.mule.modules.interceptor.processors.MessageProcessorId;
-import org.mule.munit.common.mp.MockedMessageProcessorManager;
-import org.mule.munit.common.mp.SpyAssertion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +21,15 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mule.api.MuleContext;
+import org.mule.api.MuleEvent;
+import org.mule.api.MuleException;
+import org.mule.api.processor.MessageProcessor;
+import org.mule.api.registry.MuleRegistry;
+import org.mule.modules.interceptor.processors.MessageProcessorCall;
+import org.mule.modules.interceptor.processors.MessageProcessorId;
+import org.mule.munit.common.mp.MockedMessageProcessorManager;
+import org.mule.munit.common.mp.SpyAssertion;
 
 /**
  * @author Mulesoft Inc.
@@ -140,6 +140,18 @@ public class MunitSpyTest
         new MunitSpy(muleContext).spyMessageProcessor("test")
                 .ofNamespace("testNamespace")
                 .withAttributes(new HashMap<String, Object>())
+                .before((List<SpyProcess>) null)
+                .after((List<SpyProcess>) null);
+        verify(manager, times(0)).addAfterCallSpyAssertion(any(SpyAssertion.class));
+        verify(manager, times(0)).addBeforeCallSpyAssertion(any(SpyAssertion.class));
+    }
+    
+    @Test
+    public void testSpyWithAttributesObjectParameter()
+    {
+        new MunitSpy(muleContext).spyMessageProcessor("test")
+                .ofNamespace("testNamespace")
+                .withAttributes(Attribute.attribute("any"))
                 .before((List<SpyProcess>) null)
                 .after((List<SpyProcess>) null);
         verify(manager, times(0)).addAfterCallSpyAssertion(any(SpyAssertion.class));

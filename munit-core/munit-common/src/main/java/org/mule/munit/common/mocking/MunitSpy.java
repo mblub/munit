@@ -17,6 +17,7 @@ import org.mule.munit.common.mp.SpyAssertion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,17 @@ public class MunitSpy extends MunitMockingTool
         {
             this.messageProcessorAttributes = attributes;
         }
+        return this;
+    }
+    
+    public MunitSpy withAttributes(Attribute ... attributes)
+    {
+        Map<String, Object> mapOfAttributes = new HashMap<String, Object>();
+        for ( Attribute attribute : attributes )
+        {
+            mapOfAttributes.put(attribute.getId(), attribute.getValue());
+        }
+        this.messageProcessorAttributes = mapOfAttributes;
         return this;
     }
 
