@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.munit</groupId>
     <artifactId>munit-mock</artifactId>
-    <version>3.4-M4-SNAPSHOT</version>
+    <version>3.4-M5-SNAPSHOT</version>
     <packaging>mule-module</packaging>
     <name>Module for Mocking</name>
 
@@ -286,13 +286,13 @@
     <distributionManagement>
         <repository>
             <id>mulesoft-releases</id>
-            <name>MuleForge Snapshot Repository</name>
-            <url>http://repository.mulesoft.org/releases/</url>
+            <name>MuleSoft Releases Repository</name>
+            <url>https://repository-master.mulesoft.org/releases/</url>
         </repository>
         <snapshotRepository>
             <id>mulesoft-snapshots</id>
-            <name>MuleForge Repository</name>
-            <url>https://repository.mulesoft.org/nexus/content/repositories/snapshots</url>
+            <name>MuleSoft Snapshots Repository</name>
+            <url>https://repository-master.mulesoft.org/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
