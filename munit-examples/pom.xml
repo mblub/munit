@@ -5,7 +5,7 @@
     <parent>
         <artifactId>munit</artifactId>
         <groupId>org.mule</groupId>
-        <version>3.4-M5-SNAPSHOT</version>
+        <version>3.5.0-SNAPSHOT</version>
     </parent>
     <groupId>org.mule.munit.examples</groupId>
     <artifactId>munit-examples</artifactId>
@@ -15,9 +15,9 @@
 
     <modules>
         <module>munit-first-test-example</module>
-        <module>munit-jira-mock-example</module>
+        <!--<module>munit-jira-mock-example</module>-->
         <module>munit-mongo-spy-example</module>
-        <module>munit-outbound-endpoint-mocking-example</module>
+        <!--<module>munit-outbound-endpoint-mocking-example</module>-->
     </modules>
 
     <build>

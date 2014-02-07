@@ -303,7 +303,7 @@
 
     </munit:test>
 
-    <munit:test name="mockingSubFlowsTest" description="This test shows how to mock a sub flow">
+    <!--<munit:test name="mockingSubFlowsTest" description="This test shows how to mock a sub flow">
         <mock:when messageProcessor="sub-flow">
             <mock:with-attributes>
                 <mock:with-attribute name="name" whereValue-ref="#[contains('callingJiraSubFlow')]"/>
@@ -317,7 +317,7 @@
 
         <munit:assert-that payloadIs-ref="#[string:The Flow is mocked]"/>
 
-    </munit:test>
+    </munit:test>-->
 
     <munit:test name="mockingByDocName" description="This test shows how to mock with a doc name">
         <mock:when messageProcessor="jira:create-group">

@@ -6,12 +6,15 @@ import java.util.List;
 
 import org.junit.Test;
 
+import org.mule.MessageExchangePattern;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
+import org.mule.construct.Flow;
 import org.mule.module.google.task.model.TaskList;
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
-public class JiraMockingTest extends FunctionalMunitSuite
+//public class JiraMockingTest extends FunctionalMunitSuite
+public class JiraMockingTest extends org.mule.tck.junit4.FunctionalTestCase
 {
 
     @Override

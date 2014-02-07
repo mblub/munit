@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.munit</groupId>
     <artifactId>munit-mock</artifactId>
-    <version>3.4-M5-SNAPSHOT</version>
+    <version>3.5.0-SNAPSHOT</version>
     <packaging>mule-module</packaging>
     <name>Module for Mocking</name>
 
     <properties>
-        <mule.version>3.4.0</mule.version>
-        <mule.devkit.version>3.4.0</mule.devkit.version>
+        <mule.version>3.5.0-M4-SNAPSHOT</mule.version>
+        <mule.devkit.version>3.5.0-SNAPSHOT</mule.devkit.version>
         <junit.version>4.9</junit.version>
         <mockito.version>1.8.2</mockito.version>
         <skip.javadoc>true</skip.javadoc>

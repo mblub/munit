@@ -9,14 +9,10 @@ package org.mule.munit.runner.mule.context;
 import org.mule.api.MuleContext;
 import org.mule.config.ConfigResource;
 import org.mule.config.spring.MissingParserProblemReporter;
-import org.mule.config.spring.MuleApplicationContext;
+import org.mule.config.spring.MuleArtifactContext;
 import org.mule.modules.interceptor.connectors.ConnectorMethodInterceptorFactory;
 import org.mule.munit.common.endpoint.MunitSpringFactoryPostProcessor;
 import org.mule.munit.common.mp.MunitMessageProcessorInterceptorFactory;
-
-import java.io.IOException;
-import java.util.List;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -25,6 +21,9 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
+import java.io.IOException;
+import java.util.List;
+
 
 /**
  * <p>
@@ -32,7 +31,7 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
  * </p>
  * <p/>
  * <p>
- * The main difference between {@link MunitApplicationContext} and {@link MuleApplicationContext} is that
+ * The main difference between {@link MunitApplicationContext} and {@link MuleArtifactContext} is that
  * it changes the bean definition reader in order to make the Mule stacktrace work and also registers the Bean definition
  * of the {@link MockingConfiguration}
  * </p>
@@ -40,7 +39,7 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class MunitApplicationContext extends MuleApplicationContext
+public class MunitApplicationContext extends MuleArtifactContext
 {
 
     /**

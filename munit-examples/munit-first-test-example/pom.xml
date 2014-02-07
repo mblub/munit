@@ -13,13 +13,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <mule.version>3.4.0</mule.version>
+        <mule.version>3.5.0-M4-SNAPSHOT</mule.version>
+        <munit.version>3.5.0-SNAPSHOT</munit.version>
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
         <jdkName>JavaSE-1.6</jdkName>
         <jdk.version>1.6</jdk.version>
         <junit.version>4.9</junit.version>
-        <munit.version>3.4-M5-SNAPSHOT</munit.version>
     </properties>
 
     <build>
