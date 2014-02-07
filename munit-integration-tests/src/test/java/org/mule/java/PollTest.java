@@ -9,6 +9,7 @@ package org.mule.java;
 
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -16,13 +17,25 @@ import org.junit.Test;
 public class PollTest extends FunctionalMunitSuite
 {
 
+//    @Override
+//    protected boolean haveToMockMuleConnectors() {
+//        return false;
+//    }
+//
+//    @Override
+//    protected boolean haveToDisableInboundEndpoints() {
+//        return false;
+//    }
+
     @Test
     public void test() throws Exception
     {
         whenMessageProcessor("create-issue")
                 .ofNamespace("jira")
                 .thenReturn(muleMessageWithPayload("OK"));
+//        whenMessageProcessor("logger").thenReturn(muleMessageWithPayload(Arrays.asList("Something")));
 
+//        runSchedulersOnce("jira-mock-exampleFlow");
         runFlow("jira-mock-exampleFlow", testEvent(Arrays.asList("Something"))).getMessage().getPayload();
 
         verifyCallOfMessageProcessor("create-issue").ofNamespace("jira").times(1);

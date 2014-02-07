@@ -17,6 +17,8 @@ import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.processor.MessageProcessor;
+import org.mule.api.schedule.Scheduler;
+import org.mule.api.schedule.Schedulers;
 import org.mule.modules.interceptor.matchers.*;
 import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.mocking.EndpointMocker;
@@ -213,6 +215,23 @@ public abstract class FunctionalMunitSuite
             throw new IllegalArgumentException("Flow " + name + " does not exist");
         }
         return flow.process(event);
+    }
+
+    protected final void runSchedulersOnce(final String flowName) throws Exception {
+
+        final Collection<Scheduler> schedulers = muleContext.getRegistry().lookupScheduler(Schedulers.flowPollingSchedulers(flowName));
+
+        for (final Scheduler scheduler : schedulers) {
+
+            scheduler.schedule();
+        }
+    }
+
+    protected final void stopFlowSchedulers(String flowName) throws MuleException {
+        final Collection<Scheduler> schedulers = muleContext.getRegistry().lookupScheduler(Schedulers.flowPollingSchedulers(flowName));
+        for (final Scheduler scheduler : schedulers) {
+            scheduler.stop();
+        }
     }
 
     protected final EndpointMocker whenEndpointWithAddress(String address)
