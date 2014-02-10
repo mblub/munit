@@ -37,6 +37,8 @@ munit-utils/munit-ftpserver-module/target
 munit-utils/munit-synchronize-module/.idea
 munit-utils/munit-synchronize-module/.settings
 munit-utils/munit-synchronize-module/target
+munit-utils/munit-utils-update-site/target
+munit-utils/munit-utils-update-site/.idea
 munit-utils/common
 tooling/munit-eclipse-plugin/.idea
 tooling/munit-eclipse-plugin/.settings
