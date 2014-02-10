@@ -1,9 +1,3 @@
-/*
- * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
- * The software in this package is published under the terms of the CPAL v1.0
- * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
- */
 package org.mule;
 
 
@@ -12,14 +6,12 @@ import org.mule.api.context.notification.AsyncMessageNotificationListener;
 import org.mule.context.notification.AsyncMessageNotification;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class AsyncSynchronizeListener implements AsyncMessageNotificationListener<AsyncMessageNotification>, Synchronize
 {
 
     AtomicInteger asyncCount = new AtomicInteger(0);
     private String messageRootId;
-
 
     public AsyncSynchronizeListener(String messageRootId)
     {
@@ -30,8 +22,8 @@ public class AsyncSynchronizeListener implements AsyncMessageNotificationListene
     public void onNotification(AsyncMessageNotification notification)
     {
         String notificationRootId = ((MuleEvent) notification.getSource()).getMessage().getMessageRootId();
-
-
+        
+        
         if (notificationRootId.equals(messageRootId))
         {
             if (notification.getAction() == AsyncMessageNotification.PROCESS_ASYNC_SCHEDULED)
@@ -55,5 +47,4 @@ public class AsyncSynchronizeListener implements AsyncMessageNotificationListene
     {
         return asyncCount.get() <= 0;
     }
-
 }

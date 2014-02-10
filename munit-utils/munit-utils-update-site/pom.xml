@@ -36,6 +36,10 @@
                             <url>${project.basedir}/../munit-ftpserver-module/target/update-site</url>
                             <layout>p2</layout>
                         </repository>
+                        <repository>
+                            <url>${project.basedir}/../munit-synchronize-module/target/update-site</url>
+                            <layout>p2</layout>
+                        </repository>
                     </source>
                     <destination>${project.build.directory}/repository</destination>
                     <followStrictOnly>false</followStrictOnly>

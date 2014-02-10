@@ -1,19 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <artifactId>munit-synchronize-module</artifactId>
+  <groupId>org.mule.modules</groupId>
+  <version>3.5.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-    <parent>
-        <groupId>org.mule.munit.utils</groupId>
-        <artifactId>munit-utils</artifactId>
-        <version>3.5.0-SNAPSHOT</version>
-    </parent>
-    <artifactId>munit-synchronize-module</artifactId>
-    <packaging>mule-module</packaging>
-    <name>Synchronizer Module for testing</name>
+  <description>Project for Mule AOP</description>
+  <name>Mule Synchronize project</name>
 
-    <properties>
-        <licensePath>../../LICENSE_HEADER.txt</licensePath>
-    </properties>
+  <properties>
+      <tycho-version>0.14.1</tycho-version>
 
+      <jarsigner.tsa>https://timestamp.geotrust.com/tsa</jarsigner.tsa>
+
+      <jarsigner.plugin.groupId>org.apache.maven.plugins</jarsigner.plugin.groupId>
+      <jarsigner.plugin.artifactId>maven-jarsigner-plugin</jarsigner.plugin.artifactId>
+      <jarsigner.plugin.version>1.2</jarsigner.plugin.version>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>${jarsigner.plugin.groupId}</groupId>
+            <artifactId>${jarsigner.plugin.artifactId}</artifactId>
+            <version>${jarsigner.plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>verify</id>
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <certs>true</certs>
+              <verbose>false</verbose>
+              <arguments>
+                <argument>-tsa</argument>
+                <argument>${jarsigner.tsa}</argument>
+              </arguments>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <activation>
+        <property>
+          <name>release</name>
+        </property>
+      </activation>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+
+
+
+  <repositories>
+    <repository>
+      <id>studio</id>
+      <layout>p2</layout>
+      <url>http://studio.mulesoft.org/ee/updater</url>
+    </repository>
+    <repository>
+      <id>helios</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/releases/helios</url>
+    </repository>
+  </repositories>
+
+	
+  <modules>
+    <module>mule-module-synchronize</module>
+    <module>studio/org.mule.tooling.ui.contribution.mule-synchronize</module>
+    <module>studio/org.mule.tooling.ui.extension.synchronize.simple</module>
+  </modules>
 </project>
