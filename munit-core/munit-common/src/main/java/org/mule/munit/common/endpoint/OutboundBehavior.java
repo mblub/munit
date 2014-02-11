@@ -8,8 +8,9 @@
  */
 package org.mule.munit.common.endpoint;
 
-import org.mule.api.MuleMessage;
+import org.mule.api.MuleException;
 import org.mule.api.processor.MessageProcessor;
+import org.mule.modules.interceptor.processors.MuleMessageTransformer;
 
 import java.util.List;
 
@@ -27,10 +28,17 @@ public class OutboundBehavior
 
     /**
      * <p>
-     * The expected mule message to be returned
+     * Tranformer of the mule message
      * </p>
      */
-    private MuleMessage muleMessage;
+    private MuleMessageTransformer muleMessageTransformer;
+
+    /**
+     * <p>
+     * Exception to be thrown by the outbound endpoint
+     * </p>
+     */
+    private MuleException exception;
 
     /**
      * <p>
@@ -40,9 +48,15 @@ public class OutboundBehavior
      */
     private List<MessageProcessor> assertions;
 
-    public OutboundBehavior(MuleMessage muleMessage, List<MessageProcessor> assertions)
+    public OutboundBehavior(MuleMessageTransformer muleMessageTransformer, List<MessageProcessor> assertions)
     {
-        this.muleMessage = muleMessage;
+        this.muleMessageTransformer = muleMessageTransformer;
+        this.assertions = assertions;
+    }
+
+    public OutboundBehavior(MuleException exception, List<MessageProcessor> assertions)
+    {
+        this.exception = exception;
         this.assertions = assertions;
     }
 
@@ -52,8 +66,13 @@ public class OutboundBehavior
         return assertions;
     }
 
-    public MuleMessage getMessage()
+    public MuleMessageTransformer getMuleMessageTransformer()
     {
-        return muleMessage;
+        return muleMessageTransformer;
+    }
+
+    public MuleException getException()
+    {
+        return exception;
     }
 }

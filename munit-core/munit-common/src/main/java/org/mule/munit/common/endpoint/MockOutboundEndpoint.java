@@ -8,7 +8,6 @@
  */
 package org.mule.munit.common.endpoint;
 
-import org.mule.DefaultMuleMessage;
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -234,8 +233,14 @@ public class MockOutboundEndpoint implements OutboundEndpoint
                 return realEndpoint.process(event);
             }
 
+            if (behavior.getException() !=null ){
+                throw behavior.getException();
+            }
+
             MunitUtils.verifyAssertions(event, behavior.getAssertions());
-            MunitUtils.copyMessage((DefaultMuleMessage) behavior.getMessage(), (DefaultMuleMessage) event.getMessage());
+            if ( behavior.getMuleMessageTransformer() != null ){
+                event.setMessage(behavior.getMuleMessageTransformer().transform(event.getMessage()));
+            }
         }
 
         return event;
