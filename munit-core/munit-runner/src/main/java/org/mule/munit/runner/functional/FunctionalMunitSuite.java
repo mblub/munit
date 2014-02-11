@@ -16,6 +16,7 @@ import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
+import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.api.schedule.Scheduler;
 import org.mule.api.schedule.Schedulers;
@@ -27,6 +28,7 @@ import org.mule.munit.common.mocking.MunitSpy;
 import org.mule.munit.common.mocking.MunitVerifier;
 import org.mule.munit.runner.MuleContextManager;
 import org.mule.munit.runner.mule.context.MockingConfiguration;
+import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
 import org.mule.tck.MuleTestUtils;
 
 import java.io.InputStream;
@@ -36,16 +38,16 @@ public abstract class FunctionalMunitSuite
 {
 
     protected static MuleContext muleContext;
-    
+
     private static MuleContextManager muleContextManager;
 
 
-	public FunctionalMunitSuite()
+    public FunctionalMunitSuite()
     {
 
         try
         {
-            if ( muleContext == null || muleContext.isDisposed())
+            if (muleContext == null || muleContext.isDisposed())
             {
                 String resources = getConfigResources();
                 muleContextManager = new MuleContextManager(createConfiguration());
@@ -215,23 +217,17 @@ public abstract class FunctionalMunitSuite
         {
             throw new IllegalArgumentException("Flow " + name + " does not exist");
         }
+
+        initialiseSubFlow(flow);
+
         return flow.process(event);
     }
 
-    protected final void runSchedulersOnce(final String flowName) throws Exception {
-
-        final Collection<Scheduler> schedulers = muleContext.getRegistry().lookupScheduler(Schedulers.flowPollingSchedulers(flowName));
-
-        for (final Scheduler scheduler : schedulers) {
-
-            scheduler.schedule();
-        }
-    }
-
-    protected final void stopFlowSchedulers(String flowName) throws MuleException {
-        final Collection<Scheduler> schedulers = muleContext.getRegistry().lookupScheduler(Schedulers.flowPollingSchedulers(flowName));
-        for (final Scheduler scheduler : schedulers) {
-            scheduler.stop();
+    private void initialiseSubFlow(MessageProcessor flow) throws InitialisationException
+    {
+        if (flow instanceof SubflowInterceptingChainLifecycleWrapper)
+        {
+            ((SubflowInterceptingChainLifecycleWrapper) flow).initialise();
         }
     }
 
@@ -343,8 +339,9 @@ public abstract class FunctionalMunitSuite
     }
 
     @AfterClass
-	public static void killMule() throws Throwable {
-    	muleContextManager.killMule(muleContext);
-	}
+    public static void killMule() throws Throwable
+    {
+        muleContextManager.killMule(muleContext);
+    }
 
 }
