@@ -7,36 +7,35 @@
 package org.mule.java;
 
 
+import org.junit.Test;
+import org.mule.Synchronizer;
+import org.mule.api.MuleEvent;
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.junit.Test;
+public class PollTest extends FunctionalMunitSuite {
 
-public class PollTest extends FunctionalMunitSuite
-{
-
-//    @Override
-//    protected boolean haveToMockMuleConnectors() {
-//        return false;
-//    }
-//
-//    @Override
-//    protected boolean haveToDisableInboundEndpoints() {
-//        return false;
-//    }
 
     @Test
-    public void test() throws Exception
-    {
+    public void test() throws Exception {
         whenMessageProcessor("create-issue")
                 .ofNamespace("jira")
                 .thenReturn(muleMessageWithPayload("OK"));
+
+        Synchronizer synchronizer = new Synchronizer(muleContext, 5000L) {
+            @Override
+            protected MuleEvent process(MuleEvent event) throws Exception {
+                MuleEvent returnedEvent = runFlow("jira-mock-exampleFlow", testEvent(Arrays.asList("Something")));
+                returnedEvent.getMessage().getPayload();
+                return returnedEvent;
+            }
+        };
+
 //        whenMessageProcessor("logger").thenReturn(muleMessageWithPayload(Arrays.asList("Something")));
 
 //        runSchedulersOnce("jira-mock-exampleFlow");
-        runFlow("jira-mock-exampleFlow", testEvent(Arrays.asList("Something"))).getMessage().getPayload();
+//        runFlow("jira-mock-exampleFlow", testEvent(Arrays.asList("Something"))).getMessage().getPayload();
 
         verifyCallOfMessageProcessor("create-issue").ofNamespace("jira").times(1);
     }
