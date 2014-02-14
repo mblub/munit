@@ -14,6 +14,8 @@ import org.mule.api.annotations.Module;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.context.MuleContextAware;
+import org.mule.api.schedule.Scheduler;
+import org.mule.api.schedule.SchedulerFactoryPostProcessor;
 
 import java.util.List;
 import java.util.Map;
@@ -25,11 +27,10 @@ import java.util.Map;
  */
 @Module(name = "mclient", schemaVersion = "1.0", minMuleVersion = "3.4.0", friendlyName = "Mule Client")
 @Category(name = "org.mule.tooling.category.munit.utils", description = "Munit tools")
-public class MClient implements MuleContextAware
-{
-
+public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor {
 
     private MuleContext muleContext;
+    private Boolean mockPolls;
 
 
     /**
@@ -46,16 +47,13 @@ public class MClient implements MuleContextAware
      */
     @Processor
     public Object call(String path, @Optional Map<String, Object> parameters, @Optional Object payload,
-                       @Optional List<NestedProcessor> responseProcessing) throws Exception
-    {
+                       @Optional List<NestedProcessor> responseProcessing) throws Exception {
 
         MuleMessage response = muleContext.getClient().send(path, payload, parameters);
 
         Object processedResponse = response;
-        if (responseProcessing != null)
-        {
-            for (NestedProcessor processor : responseProcessing)
-            {
+        if (responseProcessing != null) {
+            for (NestedProcessor processor : responseProcessing) {
                 processedResponse = processor.process(processedResponse);
             }
 
@@ -76,8 +74,7 @@ public class MClient implements MuleContextAware
      * @throws Exception an Exception
      */
     @Processor
-    public void dispatch(String path, @Optional Map<String, Object> parameters, @Optional Object payload) throws Exception
-    {
+    public void dispatch(String path, @Optional Map<String, Object> parameters, @Optional Object payload) throws Exception {
 
         muleContext.getClient().dispatch(path, payload, parameters);
     }
@@ -94,16 +91,13 @@ public class MClient implements MuleContextAware
      * @throws Exception an Exception
      */
     @Processor
-    public Object request(String url, Long timeout, @Optional List<NestedProcessor> responseProcessing) throws Exception
-    {
+    public Object request(String url, Long timeout, @Optional List<NestedProcessor> responseProcessing) throws Exception {
 
         MuleMessage response = muleContext.getClient().request(url, timeout);
 
         Object processedResponse = response;
-        if (responseProcessing != null)
-        {
-            for (NestedProcessor processor : responseProcessing)
-            {
+        if (responseProcessing != null) {
+            for (NestedProcessor processor : responseProcessing) {
                 processedResponse = processor.process(processedResponse);
             }
 
@@ -128,16 +122,13 @@ public class MClient implements MuleContextAware
     @Processor
     public Object send(String url, Object payload, @Optional Long timeout,
                        @Optional Map<String, Object> messageProperties,
-                       @Optional List<NestedProcessor> responseProcessing) throws Exception
-    {
+                       @Optional List<NestedProcessor> responseProcessing) throws Exception {
 
         MuleMessage response = muleContext.getClient().send(url, payload, messageProperties, timeout);
 
         Object processedResponse = response;
-        if (responseProcessing != null)
-        {
-            for (NestedProcessor processor : responseProcessing)
-            {
+        if (responseProcessing != null) {
+            for (NestedProcessor processor : responseProcessing) {
                 processedResponse = processor.process(processedResponse);
             }
 
@@ -147,8 +138,20 @@ public class MClient implements MuleContextAware
     }
 
     @Override
-    public void setMuleContext(MuleContext context)
-    {
+    public Scheduler process(Object o, Scheduler scheduler) {
+        return new MScheduler(scheduler);
+    }
+
+    @Override
+    public void setMuleContext(MuleContext context) {
         this.muleContext = context;
+    }
+
+    public void setMockPolls(Boolean mockPolls) {
+        this.mockPolls = mockPolls;
+    }
+
+    public Boolean getMockPolls() {
+        return mockPolls;
     }
 }

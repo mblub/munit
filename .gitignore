@@ -58,3 +58,12 @@ tooling/munit-eclipse-plugin/org.mule.tooling.munit.updatesite/.classpath
 tooling/munit-eclipse-plugin/org.mule.tooling.munit/target
 tooling/munit-eclipse-plugin/org.mule.tooling.munit.feature/target
 tooling/munit-eclipse-plugin/org.mule.tooling.munit.updatesite/target
+munit-utils/munit-synchronize-module/mule-module-synchronize/.idea
+munit-utils/munit-synchronize-module/mule-module-synchronize/.settings
+munit-utils/munit-synchronize-module/mule-module-synchronize/target
+munit-utils/munit-synchronize-module/studio/org.mule.tooling.ui.contribution.mule-synchronize/.idea
+munit-utils/munit-synchronize-module/studio/org.mule.tooling.ui.contribution.mule-synchronize/.settings
+munit-utils/munit-synchronize-module/studio/org.mule.tooling.ui.contribution.mule-synchronize/target
+munit-utils/munit-synchronize-module/studio/org.mule.tooling.ui.extension.synchronize.simple/.idea
+munit-utils/munit-synchronize-module/studio/org.mule.tooling.ui.extension.synchronize.simple/.settings
+munit-utils/munit-synchronize-module/studio/org.mule.tooling.ui.extension.synchronize.simple/target
