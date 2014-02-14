@@ -10,6 +10,7 @@ import org.mule.api.MuleContext;
 import org.mule.api.MuleMessage;
 import org.mule.api.NestedProcessor;
 import org.mule.api.annotations.Category;
+import org.mule.api.annotations.Configurable;
 import org.mule.api.annotations.Module;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.param.Optional;
@@ -30,6 +31,8 @@ import java.util.Map;
 public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor {
 
     private MuleContext muleContext;
+
+    @Configurable
     private Boolean mockPolls;
 
 
@@ -139,7 +142,11 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor 
 
     @Override
     public Scheduler process(Object o, Scheduler scheduler) {
-        return new MScheduler(scheduler);
+        if (mockPolls) {
+            return new MScheduler(scheduler);
+        } else {
+            return scheduler;
+        }
     }
 
     @Override
