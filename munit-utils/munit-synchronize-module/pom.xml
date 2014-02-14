@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.modules</groupId>
     <artifactId>munit-synchronize-module</artifactId>
-    <version>3.4-M5-SNAPSHOT</version>
+    <version>3.5-M1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Mule Synchronize connector</name>
 
     <properties>
-        <mule.version>3.4.2</mule.version>
+        <mule.version>3.5.0-M4-SNAPSHOT</mule.version>
         <junit.version>4.9</junit.version>
         <mockito.version>1.8.2</mockito.version>
         <jdk.version>1.6</jdk.version>
