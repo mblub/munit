@@ -4,15 +4,21 @@
       xmlns:script="http://www.mulesoft.org/schema/mule/scripting"
       xmlns:mock="http://www.mulesoft.org/schema/mule/mock"
       xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:mclient="http://www.mulesoft.org/schema/mule/mclient"
+      xmlns:synchronize="http://www.mulesoft.org/schema/mule/synchronize"
       xsi:schemaLocation="
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
             http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
             http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
             http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
-            http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+            http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd
+            http://www.mulesoft.org/schema/mule/mclient http://www.mulesoft.org/schema/mule/mclient/current/mule-mclient.xsd
+             http://www.mulesoft.org/schema/mule/synchronize http://www.mulesoft.org/schema/mule/synchronize/current/mule-synchronize.xsd">
 
-    <munit:config/>
-    <mock:config/>
+    <munit:config mock-connectors="false" mock-inbounds="false"/>
+    <mclient:config stopPollsByDefault="true"/>
+
+
 
     <spring:beans>
         <spring:import resource="poll-config.xml"/>
@@ -36,11 +42,11 @@
             <mock:then-return payload-ref="#[string:OK]"/>
         </mock:when>
 
-        <munit:set
-                payload-ref="#[resultOfScript('mockTaskList')]"/>
+        <synchronize:run-and-wait timeout="4000" runAsyc="true">
+        <mclient:schedule-poll ofFlow="jira-mock-exampleFlow2"/>
+        </synchronize:run-and-wait>
 
-        <flow-ref name="jira-mock-exampleFlow"/>
-
+        <mock:verify-call messageProcessor="jira:create-issue"/>
 
     </munit:test>
 

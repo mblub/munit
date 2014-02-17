@@ -22,6 +22,7 @@
 
     <munit:config mock-inbounds="false" mock-connectors="false"/>
     <mock:config/>
+    <mclient:config stopPollsByDefault="false"/>
 
     <munit:test name="testingMClientCallWithSimpleFlow"
                 description="We want to validate that calling a real flow using MClient works without problems for a simple flow that has only a logger">

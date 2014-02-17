@@ -9,23 +9,25 @@ package org.mule.munit;
 import org.mule.api.MuleException;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.schedule.Scheduler;
+import org.mule.transport.polling.MessageProcessorPollingMessageReceiver;
 
 /**
  * Created by  on 2/14/14.
  *
  * @author Mulesoft Inc.
  */
-public class MScheduler implements Scheduler {
-
+public class MunitScheduler implements Scheduler {
+    private MessageProcessorPollingMessageReceiver job;
     private Scheduler wrappedScheduler;
 
-    public MScheduler(Scheduler scheduler) {
+    public MunitScheduler(Scheduler scheduler, MessageProcessorPollingMessageReceiver job) {
         this.wrappedScheduler = scheduler;
+        this.job = job;
     }
 
     @Override
     public void schedule() throws Exception {
-        this.wrappedScheduler.schedule();
+        job.poll();
     }
 
     @Override

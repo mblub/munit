@@ -6,7 +6,6 @@
  */
 package org.mule;
 
-import org.mule.api.MuleEvent;
 import org.mule.api.context.notification.PipelineMessageNotificationListener;
 import org.mule.context.notification.PipelineMessageNotification;
 
@@ -24,28 +23,18 @@ public class PipelineSynchronizeListener implements PipelineMessageNotificationL
 {
 
     AtomicInteger count = new AtomicInteger(0);
-    private String messageRootId;
-
-    public PipelineSynchronizeListener(String messageRootId)
-    {
-        this.messageRootId = messageRootId;
-    }
 
 
     @Override
     public void onNotification(PipelineMessageNotification notification)
     {
-        String notificationRootId = ((MuleEvent) notification.getSource()).getMessage().getMessageRootId();
-        if (notificationRootId.equals(messageRootId))
+        if (notification.getAction() == PipelineMessageNotification.PROCESS_START)
         {
-            if (notification.getAction() == PipelineMessageNotification.PROCESS_START)
-            {
-                count.incrementAndGet();
-            }
-            if (notification.getAction() == PipelineMessageNotification.PROCESS_END)
-            {
-                count.decrementAndGet();
-            }
+            count.incrementAndGet();
+        }
+        if (notification.getAction() == PipelineMessageNotification.PROCESS_END)
+        {
+            count.decrementAndGet();
         }
     }
 

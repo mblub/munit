@@ -5,7 +5,7 @@
       xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
       xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-      xmlns:mclient="http://www.mulesoft.org/schema/mule/mclient"
+
       xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/jira http://www.mulesoft.org/schema/mule/jira/2.0/mule-jira.xsd
@@ -13,15 +13,12 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/mclient http://www.mulesoft.org/schema/mule/mclient/current/mule-mclient.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
     <jira:config name="Jira" doc:name="Jira">
         <jira:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
     </jira:config>
 
-    <mclient:config mockPolls="true"/>
-
-    <flow name="jira-mock-exampleFlow" doc:name="jira-mock-exampleFlow">
+    <flow name="jira-mock-exampleFlow" doc:name="jira-mock-exampleFlow" processingStrategy="synchronous">
         <poll frequency="1000" doc:name="Poll">
             <logger message="JIRA FAILED" level="ERROR" doc:name="Logger"/>
         </poll>
@@ -38,5 +35,14 @@ http://www.mulesoft.org/schema/mule/mclient http://www.mulesoft.org/schema/mule/
                 </otherwise>
             </choice>
         </foreach>
+    </flow>
+
+    <flow name="jira-mock-exampleFlow2" doc:name="jira-mock-exampleFlow">
+        <poll frequency="1000" doc:name="Poll">
+            <logger message="JIRA FAILED" level="ERROR" doc:name="Logger"/>
+        </poll>
+        <jira:create-issue config-ref="Jira" doc:name="Jira" project="test-project" summary="#[string:hello]"
+                           type="bug"/>
+
     </flow>
 </mule>

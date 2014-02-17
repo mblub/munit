@@ -33,8 +33,8 @@ public abstract class Synchronizer
 
     public MuleEvent runAndWait(MuleEvent event) throws Exception
     {
-        final AsyncSynchronizeListener asyncListener = new AsyncSynchronizeListener(event.getMessage().getMessageRootId());
-        final PipelineSynchronizeListener pipelineListener = new PipelineSynchronizeListener(event.getMessage().getMessageRootId());
+        final AsyncSynchronizeListener asyncListener = new AsyncSynchronizeListener();
+        final PipelineSynchronizeListener pipelineListener = new PipelineSynchronizeListener();
         muleContext.registerListener(asyncListener);
         muleContext.registerListener(pipelineListener);
 

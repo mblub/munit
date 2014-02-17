@@ -13,3 +13,7 @@
  <!-- BEGIN_INCLUDE(mclient:send) -->
  <mclient:send url="http://localhost:10443/campaignInfo" payload-ref="#[string:something]" timeout="100"/>
  <!-- END_INCLUDE(mclient:send) -->
+
+<!-- BEGIN_INCLUDE(mclient:schedulePoll) -->
+<mclient:schedulePoll of-flow="flowName"/>
+<!-- END_INCLUDE(mclient:schedulePoll) -->
