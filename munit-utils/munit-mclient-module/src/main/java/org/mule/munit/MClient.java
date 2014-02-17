@@ -17,11 +17,7 @@ import org.mule.api.annotations.param.Optional;
 import org.mule.api.context.MuleContextAware;
 import org.mule.api.schedule.Scheduler;
 import org.mule.api.schedule.SchedulerFactoryPostProcessor;
-import org.mule.api.schedule.Schedulers;
-import org.mule.transport.PollingReceiverWorker;
-import org.mule.transport.polling.MessageProcessorPollingMessageReceiver;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +25,7 @@ import java.util.Map;
  * <p>Module used to call mule transports.</p>
  *
  * @author Mulesoft Inc.
+ * @since 3.4.0
  */
 @Module(name = "mclient", schemaVersion = "1.0", minMuleVersion = "3.4.0", friendlyName = "Mule Client")
 @Category(name = "org.mule.tooling.category.munit.utils", description = "Munit tools")
@@ -44,6 +41,13 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
      */
     @Configurable
     private Boolean stopPollsByDefault;
+
+    /**
+     * <p>
+     * The poll manager to stop and run polls
+     * </p>
+     */
+    private MunitPollManager pollManager;
 
 
     /**
@@ -172,32 +176,23 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
     public void schedulePoll(String ofFlow) throws Exception
     {
 
-        Collection<Scheduler> schedulers = muleContext.getRegistry().lookupScheduler(Schedulers.flowPollingSchedulers(ofFlow));
-        if ( schedulers.isEmpty() ){
-            throw new Exception("Flow " + ofFlow +" does not exist");
-        }
-
-        Scheduler scheduler = schedulers.iterator().next();
-        scheduler.schedule();
+        pollManager.schedulePoll(ofFlow);
     }
 
     @Override
     public Scheduler process(Object o, Scheduler scheduler)
     {
-        if (stopPollsByDefault && o instanceof PollingReceiverWorker)
-        {
-            return new MunitScheduler(scheduler, (MessageProcessorPollingMessageReceiver) ((PollingReceiverWorker) o).getReceiver());
+        if (stopPollsByDefault ) {
+           return MunitPollManager.postProcessSchedulerFactory(o, scheduler);
         }
-        else
-        {
-            return scheduler;
-        }
+        return scheduler;
     }
 
     @Override
     public void setMuleContext(MuleContext context)
     {
         this.muleContext = context;
+        this.pollManager = new MunitPollManager(context);
     }
 
     public void setStopPollsByDefault(Boolean stopPollsByDefault)

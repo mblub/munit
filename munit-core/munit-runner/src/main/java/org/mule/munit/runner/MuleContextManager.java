@@ -60,6 +60,11 @@ public class MuleContextManager
     public MuleContext startMule(String resources) throws Exception
     {
         MuleContext context = createMule(resources);
+        return startMule(context);
+    }
+
+    public MuleContext startMule(MuleContext context) throws MuleException
+    {
         context.start();
         startPlugins();
 
@@ -87,7 +92,7 @@ public class MuleContextManager
         }
     }
 
-    private MuleContext createMule(String resources) throws Exception
+    public MuleContext createMule(String resources) throws Exception
     {
         defineLogOutput(resources);
 

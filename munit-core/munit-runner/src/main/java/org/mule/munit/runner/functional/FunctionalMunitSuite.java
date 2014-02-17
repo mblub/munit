@@ -6,9 +6,6 @@
  */
 package org.mule.munit.runner.functional;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.mule.DefaultMuleEvent;
 import org.mule.DefaultMuleMessage;
 import org.mule.MessageExchangePattern;
@@ -18,9 +15,11 @@ import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.api.processor.MessageProcessor;
-import org.mule.api.schedule.Scheduler;
-import org.mule.api.schedule.Schedulers;
-import org.mule.modules.interceptor.matchers.*;
+import org.mule.modules.interceptor.matchers.AnyClassMatcher;
+import org.mule.modules.interceptor.matchers.EqMatcher;
+import org.mule.modules.interceptor.matchers.Matcher;
+import org.mule.modules.interceptor.matchers.NotNullMatcher;
+import org.mule.modules.interceptor.matchers.NullMatcher;
 import org.mule.munit.common.MunitCore;
 import org.mule.munit.common.mocking.EndpointMocker;
 import org.mule.munit.common.mocking.MessageProcessorMocker;
@@ -32,7 +31,16 @@ import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
 import org.mule.tck.MuleTestUtils;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
 
 public abstract class FunctionalMunitSuite
 {
@@ -52,7 +60,11 @@ public abstract class FunctionalMunitSuite
                 String resources = getConfigResources();
                 muleContextManager = new MuleContextManager(createConfiguration());
 
-                muleContext = muleContextManager.startMule(resources);
+                muleContext = muleContextManager.createMule(resources);
+                muleContextCreated(muleContext);
+                muleContext = muleContextManager.startMule(muleContext);
+                muleContextStarted(muleContext);
+
             }
 
         }
@@ -61,6 +73,32 @@ public abstract class FunctionalMunitSuite
             muleContextManager.killMule(muleContext);
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * <p>
+     * Define the actions you want your test to perform after the {@link MuleContext} is started
+     * </p>
+     *
+     * @param muleContext <p>
+     *                    Reference to the {@link MuleContext} that has been started
+     *                    </p>
+     */
+    protected void muleContextStarted(MuleContext muleContext)
+    {
+    }
+
+    /**
+     * <p>
+     * Define the actions you want your test to perform after the {@link MuleContext} is created
+     * </p>
+     *
+     * @param muleContext <p>
+     *                    Reference to the {@link MuleContext} that has been created
+     *                    </p>
+     */
+    protected void muleContextCreated(MuleContext muleContext)
+    {
     }
 
     private MockingConfiguration createConfiguration()

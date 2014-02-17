@@ -18,12 +18,9 @@
     <munit:config mock-connectors="false" mock-inbounds="false"/>
     <mclient:config stopPollsByDefault="true"/>
 
-
-
     <spring:beans>
         <spring:import resource="poll-config.xml"/>
     </spring:beans>
-
 
     <script:script name="mockTaskList" engine="groovy"><![CDATA[
 
@@ -43,7 +40,7 @@
         </mock:when>
 
         <synchronize:run-and-wait timeout="4000" runAsyc="true">
-        <mclient:schedule-poll ofFlow="jira-mock-exampleFlow2"/>
+            <mclient:schedule-poll ofFlow="jira-mock-exampleFlow2"/>
         </synchronize:run-and-wait>
 
         <mock:verify-call messageProcessor="jira:create-issue"/>
