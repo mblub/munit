@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Mulesoft Inc.
  * @since 3.4.0
  */
-@Module(name = "mclient", schemaVersion = "1.0", minMuleVersion = "3.4.0", friendlyName = "Mule Client")
+@Module(name = "mclient", schemaVersion = "1.0", minMuleVersion = "3.5.0", friendlyName = "Mule Client")
 @Category(name = "org.mule.tooling.category.munit.utils", description = "Munit tools")
 public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
 {
