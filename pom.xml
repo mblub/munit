@@ -5,7 +5,7 @@
 
     <groupId>org.mule</groupId>
     <artifactId>munit</artifactId>
-    <version>3.5-M1-SNAPSHOT</version>
+    <version>3.5-M2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>The Munit Project</name>
@@ -13,7 +13,7 @@
     <properties>
         <mule.version>3.5.0-M4</mule.version>
         <mule.devkit.version>3.5.0-M4</mule.devkit.version>
-        <interceptor.api.version>3.5-M1-SNAPSHOT</interceptor.api.version>
+        <interceptor.api.version>3.5-M2-SNAPSHOT</interceptor.api.version>
         <junit.version>4.8.2</junit.version>
         <mockito.version>1.8.2</mockito.version>
         <eclipsePluginVersion>2.5</eclipsePluginVersion>
@@ -143,10 +143,15 @@
 
     <distributionManagement>
         <repository>
-            <id>mule-ee-snapshots</id>
-            <name>MuleEE Releases Repository</name>
-            <url>https://repository-master.mulesoft.org/nexus/content/repositories/ci-snapshots/</url>
+            <id>mulesoft-releases</id>
+            <name>MuleSoft Releases Repository</name>
+            <url>https://repository-master.mulesoft.org/releases/</url>
         </repository>
+        <snapshotRepository>
+            <id>mulesoft-snapshots</id>
+            <name>MuleSoft Snapshots Repository</name>
+            <url>https://repository-master.mulesoft.org/snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <repositories>

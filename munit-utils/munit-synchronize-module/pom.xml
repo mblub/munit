@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.modules</groupId>
     <artifactId>munit-synchronize-module</artifactId>
-    <version>3.5-M1-SNAPSHOT</version>
+    <version>3.5-M2-SNAPSHOT</version>
     <name>Mule Synchronize connector</name>
 
     <properties>
@@ -107,10 +107,15 @@
 
     <distributionManagement>
         <repository>
-            <id>mule-ee-snapshots</id>
-            <name>MuleEE Releases Repository</name>
-            <url>https://repository-master.mulesoft.org/nexus/content/repositories/ci-snapshots/</url>
+            <id>mulesoft-releases</id>
+            <name>MuleSoft Releases Repository</name>
+            <url>https://repository-master.mulesoft.org/releases/</url>
         </repository>
+        <snapshotRepository>
+            <id>mulesoft-snapshots</id>
+            <name>MuleSoft Snapshots Repository</name>
+            <url>https://repository-master.mulesoft.org/snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
 </project>
