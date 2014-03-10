@@ -156,7 +156,7 @@ public class MunitPollManager
 
     private Scheduler getScheduler(String flowName) throws Exception
     {
-        Collection<Scheduler> schedulers = muleContext.getRegistry().lookupScheduler(Schedulers.flowPollingSchedulers(flowName));
+        Collection<Scheduler> schedulers = muleContext.getRegistry().lookupScheduler(Schedulers.flowConstructPollingSchedulers(flowName));
         if (schedulers.isEmpty())
         {
             throw new Exception("Flow " + flowName + " does not exist");
