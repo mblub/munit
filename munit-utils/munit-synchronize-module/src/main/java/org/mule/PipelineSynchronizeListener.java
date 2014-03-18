@@ -6,9 +6,13 @@
  */
 package org.mule;
 
+import org.mule.api.MuleContext;
 import org.mule.api.context.notification.PipelineMessageNotificationListener;
 import org.mule.context.notification.PipelineMessageNotification;
+import org.mule.modules.interceptor.processors.MessageProcessorId;
+import org.mule.munit.common.mocking.MunitVerifier;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,7 +26,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PipelineSynchronizeListener implements PipelineMessageNotificationListener<PipelineMessageNotification>, Synchronize
 {
 
-    AtomicInteger count = new AtomicInteger(0);
+    private AtomicInteger count = new AtomicInteger(0);
+    private MuleContext muleContext;
+    private List<SynchronizedMessageProcessor> messageProcessors;
+
+    public PipelineSynchronizeListener(MuleContext muleContext, List<SynchronizedMessageProcessor> messageProcessors)
+    {
+        this.muleContext = muleContext;
+        this.messageProcessors = messageProcessors;
+    }
 
 
     @Override
@@ -41,6 +53,16 @@ public class PipelineSynchronizeListener implements PipelineMessageNotificationL
     @Override
     public synchronized boolean readyToContinue()
     {
+        MunitVerifier verifier = new MunitVerifier(muleContext);
+        for ( SynchronizedMessageProcessor messageProcessor : messageProcessors){
+            try{
+                verifier.verifyCallOfMessageProcessor(MessageProcessorId.getName(messageProcessor.getName())).ofNamespace(MessageProcessorId.getNamespace(messageProcessor.getName()))
+                        .times(messageProcessor.getTimes());
+            }
+            catch (Error error){
+                return false;
+            }
+        }
         return count.get() <= 0;
     }
 }

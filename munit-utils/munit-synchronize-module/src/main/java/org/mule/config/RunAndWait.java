@@ -8,12 +8,14 @@ package org.mule.config;
 
 import org.mule.DefaultMuleEvent;
 import org.mule.MessageExchangePattern;
+import org.mule.SynchronizedMessageProcessor;
 import org.mule.Synchronizer;
 import org.mule.api.DefaultMuleException;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.processor.MessageProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ public class RunAndWait implements MessageProcessor
 {
 
     private List<MessageProcessor> messageProcessors;
+    private List<SynchronizedMessageProcessor> synchronizedMessageProcessors = new ArrayList<SynchronizedMessageProcessor>();
     private boolean runAsyc;
     private long timeout;
 
@@ -41,7 +44,7 @@ public class RunAndWait implements MessageProcessor
                                                    event.getFlowConstruct(), event.getSession());
         }
 
-        Synchronizer synchronizer = new Synchronizer(event.getMuleContext(), timeout)
+        Synchronizer synchronizer = new Synchronizer(event.getMuleContext(), timeout, synchronizedMessageProcessors)
         {
 
             @Override
@@ -77,5 +80,10 @@ public class RunAndWait implements MessageProcessor
     public void setTimeout(long timeout)
     {
         this.timeout = timeout;
+    }
+
+    public void setSynchronizedMessageProcessors(List<SynchronizedMessageProcessor> synchronizedMessageProcessors)
+    {
+        this.synchronizedMessageProcessors = synchronizedMessageProcessors;
     }
 }

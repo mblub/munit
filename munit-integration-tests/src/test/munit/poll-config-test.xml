@@ -48,4 +48,21 @@
     </munit:test>
 
 
+    <munit:test name="waitForMessageProcessors"
+                description="If Jira Does not fail then we log the message Everything OK">
+
+
+        <mock:when messageProcessor="jira:create-issue">
+            <mock:then-return payload-ref="#[string:OK]"/>
+        </mock:when>
+
+        <synchronize:run-and-wait timeout="4000" runAsyc="true">
+            <synchronize:wait-for message-processor="jira:create-issue" times="1"/>
+            <mclient:schedule-poll ofFlow="jira-mock-exampleFlow2"/>
+        </synchronize:run-and-wait>
+
+        <mock:verify-call messageProcessor="jira:create-issue"/>
+
+    </munit:test>
+
 </mule>
