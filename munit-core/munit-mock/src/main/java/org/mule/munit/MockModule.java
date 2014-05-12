@@ -49,7 +49,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-@Module(name = "mock", schemaVersion = "3.4")
+@Module(name = "mock", schemaVersion = "3.4", friendlyName = "Mock")
 public class MockModule implements MuleContextAware
 {
 
