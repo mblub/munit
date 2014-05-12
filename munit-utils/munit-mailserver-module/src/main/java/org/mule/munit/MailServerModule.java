@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
  *
  * @author Mulesoft Inc.
  */
-@Module(name = "mail-server", schemaVersion = "1.0")
+@Module(name = "mail-server", schemaVersion = "1.0", friendlyName = "Mail Server")
 @Category(name = "org.mule.tooling.category.munit.utils", description = "Munit tools")
 public class MailServerModule
 {
