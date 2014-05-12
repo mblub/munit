@@ -11,8 +11,8 @@
     <name>The Munit Project</name>
 
     <properties>
-        <mule.version>3.5.0-M4</mule.version>
-        <mule.devkit.version>3.5.0-M4</mule.devkit.version>
+        <mule.version>3.5.0-RC1</mule.version>
+        <mule.devkit.version>3.5.0-RC1</mule.devkit.version>
         <interceptor.api.version>3.5-M2-SNAPSHOT</interceptor.api.version>
         <junit.version>4.8.2</junit.version>
         <mockito.version>1.8.2</mockito.version>
@@ -129,7 +129,6 @@
                 <artifactId>mule-interceptor-module</artifactId>
                 <groupId>org.mule.modules</groupId>
                 <version>${interceptor.api.version}</version>
-                <scope>runtime</scope>
             </dependency>
 			<dependency>
 				<groupId>commons-cli</groupId>
