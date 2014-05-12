@@ -100,17 +100,7 @@ public class JavaMunitTest extends FunctionalMunitSuite
         verifyCallOfMessageProcessor("flow").withAttributes(attribute("name").withValue("callingJira")).atLeastOnce();
     }
 
-    @Test
-    public void executeSubSFlowWithSetValue() throws Exception{
 
-        MuleEvent event = testEvent("");
-        event.setFlowVariable("uiUsername", "testPass");
-        event.setFlowVariable("requestUsername", "testPass");
-
-        MuleEvent resultEvent = runFlow("setValueFlow", event);
-
-        assertEquals(true, resultEvent.getMessage().getInvocationProperty("areCredentialsValid"));
-    }
 
     @Test
     public void testSetMuleAppHome() throws Exception
@@ -119,6 +109,18 @@ public class JavaMunitTest extends FunctionalMunitSuite
         Object payload = runFlow("setMuleAppHomeFlow", testEvent("something")).getMessage().getPayload();
 
         assertEquals(new File(getClass().getResource("/mule-config.xml").getPath()).getParentFile().getAbsolutePath(), payload);
+    }
+
+    @Test
+    public void executeSubSFlowWithSetValue() throws Exception{
+
+        MuleEvent event = testEvent("");
+        event.setFlowVariable("uiUsername", "testPass");
+        event.setFlowVariable("requestUsername", "testPass");
+
+       runFlow("setValueFlow", event);
+
+        assertEquals(true, event.getFlowVariable("areCredentialsValid"));
     }
 
 
