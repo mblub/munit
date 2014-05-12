@@ -10,7 +10,7 @@
     <packaging>mule</packaging>
     <properties>
         <jdk.version>1.6</jdk.version>
-        <mule.version>3.5.0-M4</mule.version>
+        <mule.version>3.5.0-RC1</mule.version>
         <munit.version>3.5-M2-SNAPSHOT</munit.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
