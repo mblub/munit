@@ -99,13 +99,11 @@
                 <groupId>org.mule</groupId>
                 <artifactId>mule-core</artifactId>
                 <version>${mule.version}</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>org.mule.modules</groupId>
                 <artifactId>mule-module-spring-config</artifactId>
                 <version>${mule.version}</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -131,6 +129,7 @@
                 <artifactId>mule-interceptor-module</artifactId>
                 <groupId>org.mule.modules</groupId>
                 <version>${interceptor.api.version}</version>
+                <scope>runtime</scope>
             </dependency>
 			<dependency>
 				<groupId>commons-cli</groupId>
