@@ -27,6 +27,10 @@
             <artifactId>mockito-all</artifactId>
         </dependency>
         <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mule</groupId>
             <artifactId>mule-core</artifactId>
         </dependency>
