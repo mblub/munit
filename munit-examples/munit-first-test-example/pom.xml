@@ -14,7 +14,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <mule.version>3.5.0</mule.version>
-        <munit.version>3.5-M2-SNAPSHOT</munit.version>
+        <munit.version>3.5-M3-SNAPSHOT</munit.version>
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
         <jdkName>JavaSE-1.6</jdkName>
