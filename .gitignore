@@ -9,6 +9,7 @@
 .idea
 .settings
 *.DS_Store
+*/*/.DS_Store
 munit-core/target
 munit-core/munit-assert/target
 munit-core/munit-runner/target

@@ -265,6 +265,7 @@ public abstract class FunctionalMunitSuite
     {
         if (flow instanceof SubflowInterceptingChainLifecycleWrapper)
         {
+            ((SubflowInterceptingChainLifecycleWrapper) flow).setMuleContext(muleContext);
             ((SubflowInterceptingChainLifecycleWrapper) flow).initialise();
         }
     }
