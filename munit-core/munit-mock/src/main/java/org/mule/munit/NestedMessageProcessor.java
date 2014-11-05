@@ -12,6 +12,9 @@ import org.mule.api.MuleException;
 import org.mule.api.NestedProcessor;
 import org.mule.api.processor.MessageProcessor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * The NestedMessageProcessor is a wrapper of the devkit Nested processor.
@@ -25,8 +28,7 @@ import org.mule.api.processor.MessageProcessor;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class NestedMessageProcessor implements MessageProcessor
-{
+public class NestedMessageProcessor implements MessageProcessor {
 
     /**
      * <p>
@@ -35,8 +37,7 @@ public class NestedMessageProcessor implements MessageProcessor
      */
     private NestedProcessor nestedProcessor;
 
-    public NestedMessageProcessor(NestedProcessor nestedProcessor)
-    {
+    public NestedMessageProcessor(NestedProcessor nestedProcessor) {
         this.nestedProcessor = nestedProcessor;
     }
 
@@ -51,15 +52,16 @@ public class NestedMessageProcessor implements MessageProcessor
      * @throws MuleException <p>If the mule nested processor fails</p>
      */
     @Override
-    public MuleEvent process(MuleEvent event) throws MuleException
-    {
+    public MuleEvent process(MuleEvent event) throws MuleException {
 
-        try
-        {
-            nestedProcessor.process();
-        }
-        catch (Exception e)
-        {
+        try {
+            Object payload = event.getMessage().getPayload();
+            Map<String, Object> invocationProperties = new HashMap<String, Object>();
+            for (String name : event.getMessage().getInvocationPropertyNames()) {
+                invocationProperties.put(name, event.getMessage().getInvocationProperty(name));
+            }
+            nestedProcessor.process(payload, invocationProperties);
+        } catch (Exception e) {
             throw new DefaultMuleException(e);
         }
 

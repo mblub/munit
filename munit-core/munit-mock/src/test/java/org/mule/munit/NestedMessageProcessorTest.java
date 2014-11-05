@@ -11,7 +11,11 @@ import org.junit.Test;
 
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
+import org.mule.api.MuleMessage;
 import org.mule.api.NestedProcessor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -31,10 +35,19 @@ public class NestedMessageProcessorTest
     @Test
     public void happyPath() throws Exception
     {
-        when(nestedProcessor.process()).thenReturn(outMuleEvent);
+
+        MuleMessage muleMessage = mock(MuleMessage.class);
+        when(muleMessage.getPayload()).thenReturn("");
+        Set<String> invocationProperties = new HashSet<String>();
+        invocationProperties.add("aVariableName");
+        when(muleMessage.getInvocationPropertyNames()).thenReturn(invocationProperties);
+        when(muleMessage.getInvocationProperty("aVariableName")).thenReturn(new Object());
+        when(inMuleEvent.getMessage()).thenReturn(muleMessage);
+        when(nestedProcessor.process(eq(""),anyMap())).thenReturn(outMuleEvent);
+
         assertEquals(inMuleEvent, mp().process(inMuleEvent));
 
-        verify(nestedProcessor, times(1)).process();
+        verify(nestedProcessor, times(1)).process(eq(""),anyMap());
     }
 
     @Test(expected = MuleException.class)

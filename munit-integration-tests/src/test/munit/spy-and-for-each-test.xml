@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" version="EE-3.5.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+    <munit:config/>
+    <spring:beans>
+        <spring:import resource="spy-and-for-each.xml"/>
+    </spring:beans>
+
+    <munit:test name="spy-and-for-each-assertions" description="Munit assertions">
+        <mock:when messageProcessor="jira:create-issue">
+            <mock:with-attributes>
+                <mock:with-attribute whereValue-ref="#[string:test-project]" name="project"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#['Mocked Jira']"/>
+        </mock:when>
+        <mock:spy messageProcessor="jira:create-issue">
+            <mock:with-attributes>
+                <mock:with-attribute whereValue-ref="#[string:test-project]" name="project"/>
+            </mock:with-attributes>
+            <mock:assertions-before-call>
+                <munit:assert-not-null doc:name="Assert Not Null Payload"/>
+            </mock:assertions-before-call>
+            <mock:assertions-after-call>
+                <munit:assert-that payloadIs-ref="#['Mocked Jira']" doc:name="Assert Payload"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+
+
+        <flow-ref name="jira-mock-exampleFlow"/>
+        <munit:assert-not-null doc:name="Assert Not Null Payload"/>
+    </munit:test>
+</mule>

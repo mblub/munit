@@ -14,6 +14,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.mule.DefaultMuleEvent;
 import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -24,6 +26,7 @@ import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
 import org.mule.modules.interceptor.processors.MessageProcessorCall;
 import org.mule.modules.interceptor.processors.MessageProcessorId;
+import org.mule.modules.interceptor.processors.MuleMessageTransformer;
 import org.mule.munit.common.mocking.CopyMessageTransformer;
 
 import java.lang.reflect.Method;
@@ -189,6 +192,7 @@ public class MunitMessageProcessorInterceptorTest
         interceptor.setContext(muleContext);
 
         MuleMessage expectedMessage = muleMessage();
+
 
         when(muleContext.getExpressionManager()).thenReturn(expressionManager);
         when(expressionManager.isExpression(ATTR_VALUE)).thenReturn(true);
