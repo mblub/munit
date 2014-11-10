@@ -42,7 +42,7 @@ public class AssertOnEqualsMessageProcessor extends MunitMessageProcessor
     @Override
     protected void doProcess(MuleMessage mulemessage, AssertModule module)
     {
-        module.assertOnEquals(message, evaluate(mulemessage, expected), evaluate(mulemessage, value));
+        module.assertOnEquals(evaluate(mulemessage, message).toString(), evaluate(mulemessage, expected), evaluate(mulemessage, value));
     }
 
     /**
