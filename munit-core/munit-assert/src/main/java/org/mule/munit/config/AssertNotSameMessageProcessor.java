@@ -42,7 +42,7 @@ public class AssertNotSameMessageProcessor extends MunitMessageProcessor
     @Override
     protected void doProcess(MuleMessage mulemessage, AssertModule module)
     {
-        module.assertNotSame(message, evaluate(mulemessage, expected), evaluate(mulemessage, value));
+        module.assertNotSame(evaluate(mulemessage, message).toString(), evaluate(mulemessage, expected), evaluate(mulemessage, value));
     }
 
     /**
