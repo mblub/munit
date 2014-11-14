@@ -9,6 +9,7 @@ package org.mule.java;
 
 import org.junit.Test;
 import org.mule.api.MuleEvent;
+import org.mule.construct.Flow;
 import org.mule.munit.runner.functional.FunctionalMunitSuite;
 
 public class SubFlowIsolatedTest extends FunctionalMunitSuite {
@@ -19,6 +20,7 @@ public class SubFlowIsolatedTest extends FunctionalMunitSuite {
 
     @Test
     public void test() throws Exception {
+
         MuleEvent event = testEvent("");
         event.setFlowVariable("test", 0);
 

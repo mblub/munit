@@ -173,7 +173,7 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
      * @param constructorArguments The Array of constructor arguments of the message processor
      * @return The Mocked object, if it fails mocking then the real object.
      */
-    public Object create(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber,
+    public Object create(Class  realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber,
                          Object[] constructorArguments)
     {
         try
@@ -293,5 +293,9 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
     }
 
 
+    @Override
+    public Object create(Class realMpClass, Object... objects) {
+        return super.create(realMpClass, objects);
+    }
 
 }

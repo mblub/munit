@@ -23,6 +23,7 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -39,8 +40,7 @@ import java.util.List;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class MunitApplicationContext extends MuleArtifactContext
-{
+public class MunitApplicationContext extends MuleArtifactContext {
 
     /**
      * <p>
@@ -59,15 +59,13 @@ public class MunitApplicationContext extends MuleArtifactContext
      */
     private MockingConfiguration configuration;
 
-    public MunitApplicationContext(MuleContext muleContext, ConfigResource[] configResources, MockingConfiguration configuration) throws BeansException
-    {
+    public MunitApplicationContext(MuleContext muleContext, ConfigResource[] configResources, MockingConfiguration configuration) throws BeansException {
         super(muleContext, configResources);
         this.configuration = configuration;
     }
 
     @Override
-    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException
-    {
+    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException {
         XmlBeanDefinitionReader beanDefinitionReader = getMunitXmlBeanDefinitionReader(beanFactory);
         //hook in our custom hierarchical reader
         beanDefinitionReader.setDocumentReaderClass(MunitBeanDefinitionDocumentReader.class);
@@ -77,8 +75,9 @@ public class MunitApplicationContext extends MuleArtifactContext
         beanFactory.registerBeanDefinition(ConnectorMethodInterceptorFactory.ID, new RootBeanDefinition(ConnectorMethodInterceptorFactory.class));
         beanDefinitionReader.setProblemReporter(new MissingParserProblemReporter());
 
-        if (configuration != null)
-        {
+
+        beanFactory.getBean(MunitMessageProcessorInterceptorFactory.ID);
+        if (configuration != null) {
             RootBeanDefinition beanDefinition = new RootBeanDefinition();
             beanDefinition.setBeanClass(MunitSpringFactoryPostProcessor.class);
             MutablePropertyValues propertyValues = new MutablePropertyValues();
@@ -96,15 +95,13 @@ public class MunitApplicationContext extends MuleArtifactContext
         getCurrentMuleContext().remove();
     }
 
-    protected MunitXmlBeanDefinitionReader getMunitXmlBeanDefinitionReader(DefaultListableBeanFactory beanFactory)
-    {
+    protected MunitXmlBeanDefinitionReader getMunitXmlBeanDefinitionReader(DefaultListableBeanFactory beanFactory) {
         return new MunitXmlBeanDefinitionReader(beanFactory);
     }
 
 
     @Override
-    protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory)
-    {
+    protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
         super.prepareBeanFactory(beanFactory);
         BeanDefinition beanDefinition = beanFactory.getBeanDefinition(MUNIT_FACTORY_POST_PROCESSOR);
         MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
@@ -114,6 +111,40 @@ public class MunitApplicationContext extends MuleArtifactContext
         postProcessor.setMockingExcludedFlows((List) propertyValues.getPropertyValue("mockingExcludedFlows").getValue());
         postProcessor.postProcessBeanFactory(beanFactory);
 
+    }
+
+
+    @Override
+    public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
+        return getBeansOfType(type, true, true);
+    }
+
+
+    @Override
+    public <T> Map<String, T> getBeansOfType(Class<T> type, boolean includeNonSingletons, boolean allowEagerInit) throws BeansException {
+        Map<String, T> result = super.getBeansOfType(type, includeNonSingletons, allowEagerInit);
+
+        if (result.isEmpty()) {
+            String[] beanDefinitionNames = super.getBeanDefinitionNames();
+            for (String beanDefinitionName : beanDefinitionNames) {
+                BeanDefinition beanDefinition = super.getBeanFactory().getBeanDefinition(beanDefinitionName);
+
+                if ("create".equals(beanDefinition.getFactoryMethodName()) && "__messageProcessorEnhancerFactory".equals(beanDefinition.getFactoryBeanName())) {
+
+                    try {
+                        Class beanClass = Class.forName(beanDefinition.getBeanClassName());
+                        if (type.isAssignableFrom(beanClass)) {
+                            result.put(beanDefinitionName, (T) getBean(beanDefinitionName));
+                        }
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }
+
+        return result;
     }
 
 }
