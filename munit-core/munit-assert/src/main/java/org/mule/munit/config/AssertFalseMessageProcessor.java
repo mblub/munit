@@ -37,7 +37,8 @@ public class AssertFalseMessageProcessor extends MunitMessageProcessor
     @Override
     protected void doProcess(MuleMessage mulemessage, AssertModule module)
     {
-        module.assertFalse(evaluate(mulemessage, message).toString(), (Boolean) evaluate(mulemessage, condition));
+        String message = this.message == null ? null : evaluate(mulemessage, this.message).toString();
+        module.assertFalse(message, (Boolean) evaluate(mulemessage, condition));
     }
 
     /**

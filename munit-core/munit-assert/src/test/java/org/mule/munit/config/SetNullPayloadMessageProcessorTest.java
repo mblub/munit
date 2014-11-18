@@ -33,14 +33,14 @@ public class SetNullPayloadMessageProcessorTest extends AbstractMessageProcessor
     @Test
     public void alwaysSetNullPayload()
     {
-        MunitMessageProcessor mp = buildMp();
+        MunitMessageProcessor mp = buildMp(null);
         mp.doProcess(muleMessage, null);
 
         verify(muleMessage, times(1)).setPayload(NullPayload.getInstance());
     }
 
     @Override
-    protected MunitMessageProcessor doBuildMp()
+    protected MunitMessageProcessor doBuildMp(String message)
     {
         return new SetNullPayloadMessageProcessor();
     }

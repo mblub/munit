@@ -24,6 +24,8 @@ import static org.mockito.Mockito.mock;
 public abstract class AbstractMessageProcessorTest
 {
 
+    public static final String NULL_TEST_MESSAGE = null;
+
     protected MuleMessage muleMessage;
     protected AssertModule module;
     protected ExpressionManager expressionManager;
@@ -39,20 +41,20 @@ public abstract class AbstractMessageProcessorTest
     @Test
     public void checkProcessorName()
     {
-        MunitMessageProcessor mp = buildMp();
+        MunitMessageProcessor mp = buildMp("");
         assertEquals(getExpectedName(), mp.getProcessor());
     }
 
-    protected MunitMessageProcessor buildMp()
+    protected MunitMessageProcessor buildMp(String message)
     {
-        MunitMessageProcessor mp = doBuildMp();
+        MunitMessageProcessor mp = doBuildMp( message);
         mp.expressionManager = this.expressionManager;
         mp.patternInfo = TemplateParser.createMuleStyleParser().getStyle();
 
         return mp;
     }
 
-    protected abstract MunitMessageProcessor doBuildMp();
+    protected abstract MunitMessageProcessor doBuildMp(String message);
 
     protected abstract String getExpectedName();
 }

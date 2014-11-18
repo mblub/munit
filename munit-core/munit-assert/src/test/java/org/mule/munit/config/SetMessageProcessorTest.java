@@ -40,7 +40,7 @@ public class SetMessageProcessorTest extends AbstractMessageProcessorTest
     @Test
     public void calledCorrectly()
     {
-        SetMessageProcessor mp = (SetMessageProcessor) buildMp();
+        SetMessageProcessor mp = (SetMessageProcessor) buildMp(null);
         mp.setPayload(EXP);
         mp.setInboundProperties(properties(INBOUND_KEY, INBOUND_VALUE));
         mp.setOutboundProperties(properties(OUTBOUND_KEY, OUTBOUND_VALUE));
@@ -69,7 +69,7 @@ public class SetMessageProcessorTest extends AbstractMessageProcessorTest
     }
 
     @Override
-    protected MunitMessageProcessor doBuildMp()
+    protected MunitMessageProcessor doBuildMp(String message)
     {
         return new SetMessageProcessor();
     }

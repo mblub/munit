@@ -42,7 +42,8 @@ public class AssertOnEqualsMessageProcessor extends MunitMessageProcessor
     @Override
     protected void doProcess(MuleMessage mulemessage, AssertModule module)
     {
-        module.assertOnEquals(evaluate(mulemessage, message).toString(), evaluate(mulemessage, expected), evaluate(mulemessage, value));
+        String message = this.message == null ? null : evaluate(mulemessage, this.message).toString();
+        module.assertOnEquals(message, evaluate(mulemessage, expected), evaluate(mulemessage, value));
     }
 
     /**

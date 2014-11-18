@@ -28,13 +28,14 @@ public class AssertOnEqualsMessageProcessorTest extends AbstractMessageProcessor
     @Test
     public void calledCorrectly()
     {
-        AssertOnEqualsMessageProcessor mp = (AssertOnEqualsMessageProcessor) buildMp();
+        AssertOnEqualsMessageProcessor mp = (AssertOnEqualsMessageProcessor) buildMp(TEST_MESSAGE);
 
         mp.setExpected(EXPECTED);
         mp.setValue(VALUE);
 
         when(expressionManager.evaluate(EXPECTED, muleMessage)).thenReturn(RETURN_VALUE1);
         when(expressionManager.evaluate(VALUE, muleMessage)).thenReturn(RETURN_VALUE2);
+        when(expressionManager.parse(TEST_MESSAGE, muleMessage)).thenReturn(TEST_MESSAGE);
 
 
         mp.doProcess(muleMessage, module);
@@ -43,11 +44,29 @@ public class AssertOnEqualsMessageProcessorTest extends AbstractMessageProcessor
     }
 
 
+    @Test
+    public void testDoNotSendMessage()
+    {
+        AssertOnEqualsMessageProcessor mp = (AssertOnEqualsMessageProcessor) buildMp(NULL_TEST_MESSAGE);
+
+        mp.setExpected(EXPECTED);
+        mp.setValue(VALUE);
+
+        when(expressionManager.evaluate(EXPECTED, muleMessage)).thenReturn(RETURN_VALUE1);
+        when(expressionManager.evaluate(VALUE, muleMessage)).thenReturn(RETURN_VALUE2);
+        when(expressionManager.parse(NULL_TEST_MESSAGE, muleMessage)).thenReturn(NULL_TEST_MESSAGE);
+
+
+        mp.doProcess(muleMessage, module);
+
+        verify(module).assertOnEquals(NULL_TEST_MESSAGE, RETURN_VALUE1, RETURN_VALUE2);
+    }
+
     @Override
-    protected MunitMessageProcessor doBuildMp()
+    protected MunitMessageProcessor doBuildMp(String message)
     {
         AssertOnEqualsMessageProcessor mp = new AssertOnEqualsMessageProcessor();
-        mp.setMessage(TEST_MESSAGE);
+        mp.setMessage(message);
         return mp;
     }
 

@@ -32,7 +32,8 @@ public class FailMessageProcessor extends MunitMessageProcessor
     @Override
     protected void doProcess(MuleMessage mulemessage, AssertModule module)
     {
-        module.fail(evaluate(mulemessage, message).toString());
+        String message = this.message == null ? null : evaluate(mulemessage, this.message).toString();
+        module.fail(message);
     }
 
     /**

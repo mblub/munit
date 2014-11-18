@@ -27,22 +27,38 @@ public class AssertThatMessageProcessorTest extends AbstractMessageProcessorTest
     @Test
     public void calledCorrectly()
     {
-        AssertThatMessageProcessor mp = (AssertThatMessageProcessor) buildMp();
+        AssertThatMessageProcessor mp = (AssertThatMessageProcessor) buildMp(TEST_MESSAGE);
         mp.setPayloadIs(EXP);
 
         when(expressionManager.evaluate(EXP, muleMessage)).thenReturn(RETURN_VALUE);
         when(muleMessage.getPayload()).thenReturn(NullPayload.getInstance());
+        when(expressionManager.parse(TEST_MESSAGE, muleMessage)).thenReturn(TEST_MESSAGE);
 
         mp.doProcess(muleMessage, module);
 
         verify(module).assertThat(TEST_MESSAGE, RETURN_VALUE, NullPayload.getInstance());
     }
 
+    @Test
+    public void testDoNotSendMessage()
+    {
+        AssertThatMessageProcessor mp = (AssertThatMessageProcessor) buildMp(NULL_TEST_MESSAGE);
+        mp.setPayloadIs(EXP);
+
+        when(expressionManager.evaluate(EXP, muleMessage)).thenReturn(RETURN_VALUE);
+        when(muleMessage.getPayload()).thenReturn(NullPayload.getInstance());
+        when(expressionManager.parse(NULL_TEST_MESSAGE, muleMessage)).thenReturn(NULL_TEST_MESSAGE);
+
+        mp.doProcess(muleMessage, module);
+
+        verify(module).assertThat(NULL_TEST_MESSAGE, RETURN_VALUE, NullPayload.getInstance());
+    }
+
     @Override
-    protected MunitMessageProcessor doBuildMp()
+    protected MunitMessageProcessor doBuildMp(String message)
     {
         AssertThatMessageProcessor mp = new AssertThatMessageProcessor();
-        mp.setMessage(TEST_MESSAGE);
+        mp.setMessage(message);
         return mp;
     }
 

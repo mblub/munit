@@ -32,7 +32,8 @@ public class AssertNullMessageProcessor extends MunitMessageProcessor
     @Override
     protected void doProcess(MuleMessage mulemessage, AssertModule module)
     {
-        module.assertNull(evaluate(mulemessage, message).toString(), mulemessage.getPayload());
+        String message = this.message == null ? null : evaluate(mulemessage, this.message).toString();
+        module.assertNull(message, mulemessage.getPayload());
     }
 
     /**

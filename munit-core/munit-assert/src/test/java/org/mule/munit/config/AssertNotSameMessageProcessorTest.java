@@ -15,8 +15,7 @@ import static org.mockito.Mockito.when;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorTest
-{
+public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorTest {
 
     public static final String TEST_MESSAGE = "testMessage";
     public static final String RETURN_VALUE1 = "r1";
@@ -26,15 +25,15 @@ public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorT
 
 
     @Test
-    public void callModuleCorrectly()
-    {
-        AssertNotSameMessageProcessor mp = (AssertNotSameMessageProcessor) buildMp();
+    public void callModuleCorrectly() {
+        AssertNotSameMessageProcessor mp = (AssertNotSameMessageProcessor) buildMp(TEST_MESSAGE);
 
         mp.setExpected(EXPECTED);
         mp.setValue(VALUE);
 
         when(expressionManager.evaluate(EXPECTED, muleMessage)).thenReturn(RETURN_VALUE1);
         when(expressionManager.evaluate(VALUE, muleMessage)).thenReturn(RETURN_VALUE2);
+        when(expressionManager.parse(TEST_MESSAGE, muleMessage)).thenReturn(TEST_MESSAGE);
 
 
         mp.doProcess(muleMessage, module);
@@ -42,17 +41,34 @@ public class AssertNotSameMessageProcessorTest extends AbstractMessageProcessorT
         verify(module).assertNotSame(TEST_MESSAGE, RETURN_VALUE1, RETURN_VALUE2);
     }
 
-    @Override
-    protected MunitMessageProcessor doBuildMp()
+    @Test
+    public void testDoNotSendMessage()
     {
+        AssertNotSameMessageProcessor mp = (AssertNotSameMessageProcessor) buildMp(NULL_TEST_MESSAGE);
+
+        mp.setExpected(EXPECTED);
+        mp.setValue(VALUE);
+
+        when(expressionManager.evaluate(EXPECTED, muleMessage)).thenReturn(RETURN_VALUE1);
+        when(expressionManager.evaluate(VALUE, muleMessage)).thenReturn(RETURN_VALUE2);
+        when(expressionManager.parse(NULL_TEST_MESSAGE, muleMessage)).thenReturn(NULL_TEST_MESSAGE);
+
+
+        mp.doProcess(muleMessage, module);
+
+        verify(module).assertNotSame(NULL_TEST_MESSAGE, RETURN_VALUE1, RETURN_VALUE2);
+
+    }
+
+    @Override
+    protected MunitMessageProcessor doBuildMp(String message) {
         AssertNotSameMessageProcessor mp = new AssertNotSameMessageProcessor();
-        mp.setMessage(TEST_MESSAGE);
+        mp.setMessage(message);
         return mp;
     }
 
     @Override
-    protected String getExpectedName()
-    {
+    protected String getExpectedName() {
         return "assertNotSame";
     }
 }

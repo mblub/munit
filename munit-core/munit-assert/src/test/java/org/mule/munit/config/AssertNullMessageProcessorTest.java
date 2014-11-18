@@ -27,9 +27,10 @@ public class AssertNullMessageProcessorTest extends AbstractMessageProcessorTest
     @Test
     public void testCallCorrectly()
     {
-        MunitMessageProcessor mp = buildMp();
+        MunitMessageProcessor mp = buildMp(TEST_MESSAGE);
 
         when(muleMessage.getPayload()).thenReturn(NullPayload.getInstance());
+        when(expressionManager.parse(TEST_MESSAGE, muleMessage)).thenReturn(TEST_MESSAGE);
 
         mp.doProcess(muleMessage, module);
 
@@ -37,11 +38,24 @@ public class AssertNullMessageProcessorTest extends AbstractMessageProcessorTest
     }
 
 
+    @Test
+    public void testDoNotSendMessage()
+    {
+        MunitMessageProcessor mp = buildMp(NULL_TEST_MESSAGE);
+
+        when(muleMessage.getPayload()).thenReturn(NullPayload.getInstance());
+        when(expressionManager.parse(NULL_TEST_MESSAGE, muleMessage)).thenReturn(NULL_TEST_MESSAGE);
+
+        mp.doProcess(muleMessage, module);
+
+        verify(module).assertNull(NULL_TEST_MESSAGE, NullPayload.getInstance());
+    }
+
     @Override
-    protected MunitMessageProcessor doBuildMp()
+    protected MunitMessageProcessor doBuildMp(String message)
     {
         AssertNullMessageProcessor mp = new AssertNullMessageProcessor();
-        mp.setMessage(TEST_MESSAGE);
+        mp.setMessage(message);
         return mp;
     }
 
