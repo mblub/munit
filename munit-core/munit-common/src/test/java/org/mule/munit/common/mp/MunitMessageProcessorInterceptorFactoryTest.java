@@ -115,12 +115,19 @@ public class MunitMessageProcessorInterceptorFactoryTest
     }
 
     @Test
-    public void testCreatWithPrimitiveTypesInConstructor(){
+    public void testCreateWithPrimitiveTypesInConstructor(){
         MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
 
         Object o = factory.create(EchoComponentWithPrimitiveTypeInConstructor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", 3);
 
         assertTrue(Enhancer.isEnhanced(o.getClass()));
+    }
+
+    @Test(expected = Error.class)
+    public void testCreateWithOneConstructorArgumentsButFailAndThenCreateRealFail(){
+        MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
+
+        factory.create(EchoComponentWithPrimitiveTypeInConstructor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", new Boolean(false));
     }
 
     @Test
