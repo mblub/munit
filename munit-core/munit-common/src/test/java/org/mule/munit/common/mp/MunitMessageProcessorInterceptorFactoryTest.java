@@ -22,6 +22,9 @@ import java.util.HashMap;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import org.junit.Test;
+import org.mule.munit.util.EchoComponentWithPrimitiveTypeInConstructor;
+import org.mule.munit.util.NotExtensibleEchoComponent;
+import org.mule.munit.util.NotExtensibleEchoComponentWithConstructor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 
 /**
@@ -89,6 +92,35 @@ public class MunitMessageProcessorInterceptorFactoryTest
         MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
 
         factory.create(Flow.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", "flowName");
+    }
+
+
+
+    @Test
+    public void testCreateNotExtensibleMpWithNoDefaultConstructor(){
+        MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
+
+        Object o = factory.create(NotExtensibleEchoComponentWithConstructor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", "flowName");
+
+        assertFalse(Enhancer.isEnhanced(o.getClass()));
+    }
+
+    @Test
+    public void testCreateNotExtensibleMpWithDefaultConstructor(){
+        MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
+
+        Object o = factory.create(NotExtensibleEchoComponent.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", "flowName");
+
+        assertFalse(Enhancer.isEnhanced(o.getClass()));
+    }
+
+    @Test
+    public void testCreatWithPrimitiveTypesInConstructor(){
+        MunitMessageProcessorInterceptorFactory factory = new MunitMessageProcessorInterceptorFactory();
+
+        Object o = factory.create(EchoComponentWithPrimitiveTypeInConstructor.class, new MessageProcessorId("name", "namespace"), new HashMap<String, String>(), "fileName", "2", 3);
+
+        assertTrue(Enhancer.isEnhanced(o.getClass()));
     }
 
     @Test

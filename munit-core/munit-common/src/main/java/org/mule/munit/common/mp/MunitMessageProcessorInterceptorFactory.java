@@ -248,7 +248,6 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
                     Class constructorArgumentClass = constructorArguments[i].getClass().isPrimitive() ? getPrimitiveWrapperClass(constructorArguments[i].getClass()) : constructorArguments[i].getClass();
 
                     mapsCorrectly &= parameterClass.isAssignableFrom(constructorArgumentClass);
-//                    mapsCorrectly &= parameterTypes[i].isAssignableFrom(constructorArguments[i].getClass());
                 }
                 if (mapsCorrectly) {
                     return parameterTypes;
