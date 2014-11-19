@@ -29,10 +29,10 @@
                 <configuration>
                     <skip>${skipTests}</skip>
                     <check>
-                        <branchRate>70</branchRate>
+                        <branchRate>60</branchRate>
                         <lineRate>70</lineRate>
                         <haltOnFailure>true</haltOnFailure>
-                        <totalBranchRate>70</totalBranchRate>
+                        <totalBranchRate>60</totalBranchRate>
                         <totalLineRate>70</totalLineRate>
                         <packageLineRate>70</packageLineRate>
                         <packageBranchRate>70</packageBranchRate>
