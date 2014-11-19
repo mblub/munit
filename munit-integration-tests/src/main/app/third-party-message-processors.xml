@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+        xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+        xmlns:encryption="http://www.jasypt.org/schema/encryption"
+        xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.jasypt.org/schema/encryption http://www.jasypt.org/schema/encryption/jasypt-spring31-encryption-1.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+    <spring:beans>
+        <encryption:encryptor-config id="encryptorConfig" password="secret" algorithm="PBEWITHMD5ANDDES"/>
+
+        <!--<encryption:string-encryptor id="stringEncryptor" config-bean="encryptorConfig"/>-->
+
+        <spring:bean id="stringEncryptor"   class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+            <spring:property name="config" ref="encryptorConfig"/>
+        </spring:bean>
+
+        <encryption:encryptable-property-placeholder encryptor="stringEncryptor" location="classpath:third-party-mp.properties"/>
+
+    </spring:beans>
+
+    <flow name="jasypt-munit-issue-flow" doc:name="jasypt-munit-issue-flow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9090" path="munit"  doc:name="HTTP"/>
+        <set-payload value="${response}" doc:name="Set Payload"/>
+    </flow>
+
+</mule>

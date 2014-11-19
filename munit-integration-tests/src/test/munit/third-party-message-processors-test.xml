@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd">
+
+    <munit:config doc:name="Munit configuration"/>
+    <spring:beans>
+        <spring:import resource="classpath*:third-party-message-processors.xml"/>
+    </spring:beans>
+
+    <munit:test  name="jasypt-munit-issue-munit-testTest1" description="666">
+        <flow-ref name="jasypt-munit-issue-flow" doc:name="Jasypt Flow"/>
+        <munit:assert-that payloadIs-ref="#['Hello World']" doc:name="Assert Payload"/>
+    </munit:test>
+</mule>
