@@ -440,7 +440,15 @@
 			<version>${mule.version}</version>
 			<scope>provided</scope>
 		</dependency>
-        <!--<dependency>-->
+
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-db</artifactId>
+			<version>${mule.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--<dependency>-->
             <!--<groupId>org.mule.modules</groupId>-->
             <!--<artifactId>mule-module-morphia</artifactId>-->
             <!--<version>${mule.morphia.version}</version>-->
@@ -463,6 +471,13 @@
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt-spring31</artifactId>
 			<version>1.9.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.13</version>
 			<scope>test</scope>
 		</dependency>
 

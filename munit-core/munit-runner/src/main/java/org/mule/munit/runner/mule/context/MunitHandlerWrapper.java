@@ -58,7 +58,9 @@ public class MunitHandlerWrapper implements NamespaceHandler
             {
                 String tagName = element.getTagName();
 
-                if (!StringUtils.isEmpty(tagName) && beanDefinition.getConstructorArgumentValues().getArgumentCount() <= 2)
+
+                int constArgCount = beanDefinition.getConstructorArgumentValues().getArgumentCount();
+                if (!StringUtils.isEmpty(tagName) && constArgCount <= 5)
                 {
                     String filename = parserContext.getReaderContext().getResource().getFilename();
                     MunitMessageProcessorInterceptorFactory.addFactoryDefinitionTo((AbstractBeanDefinition) beanDefinition)

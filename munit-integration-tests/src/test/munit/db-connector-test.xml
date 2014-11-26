@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule  	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.1"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+    <munit:config doc:name="Munit configuration"/>
+    <spring:beans>
+        <spring:import resource="classpath*:db-connector.xml"/>
+    </spring:beans>
+    <munit:test name="db-connector-testFlow1Test1" description="Test">
+        <mock:when messageProcessor="db:select" doc:name="Mock">
+            <mock:then-return payload-ref="#[[ {&quot;k&quot;:&quot;v&quot;} ]]"/>
+        </mock:when>
+        <flow-ref name="db-connector-testFlow1" doc:name="Flow-ref to db-connector-testFlow1"/>
+
+        <mock:verify-call messageProcessor=".*:.*" doc:name="Verify Call">
+            <mock:attributes>
+                <mock:attribute whereValue-ref="#[string:Echo]" name="doc:name"/>
+            </mock:attributes>
+        </mock:verify-call>
+        <munit:assert-on-equals message="this is so so wrong!!!" expected-ref="#[[ {&quot;k&quot;:&quot;v&quot;} ]]" value-ref="#[payload]" doc:name="Assert Equals"/>
+    </munit:test>
+</mule>

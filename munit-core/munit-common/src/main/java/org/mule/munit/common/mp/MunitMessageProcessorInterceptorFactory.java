@@ -114,6 +114,22 @@ public class MunitMessageProcessorInterceptorFactory extends MethodInterceptorFa
         return create(realMpClass, id, attributes, fileName, lineNumber, new Object[]{constructorArgument1, constructorArgument2});
     }
 
+    public Object create(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber,
+                         Object constructorArgument1, Object constructorArgument2, Object constructorArgument3) {
+        return create(realMpClass, id, attributes, fileName, lineNumber, new Object[]{constructorArgument1, constructorArgument2, constructorArgument3});
+    }
+
+    public Object create(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber,
+                         Object constructorArgument1, Object constructorArgument2, Object constructorArgument3, Object constructorArgument4) {
+        return create(realMpClass, id, attributes, fileName, lineNumber, new Object[]{constructorArgument1, constructorArgument2, constructorArgument3, constructorArgument4});
+    }
+
+    public Object create(Class realMpClass, MessageProcessorId id, Map<String, String> attributes, String fileName, String lineNumber,
+                         Object constructorArgument1, Object constructorArgument2, Object constructorArgument3, Object constructorArgument4, Object constructorArgument5) {
+        return create(realMpClass, id, attributes, fileName, lineNumber, new Object[]{constructorArgument1, constructorArgument2, constructorArgument3, constructorArgument4, constructorArgument5});
+    }
+
+
     /**
      * <p>
      * Factory method used to create Message Processors without constructor parameters.

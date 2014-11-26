@@ -11,6 +11,7 @@ import org.mule.api.processor.MessageProcessor;
 import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.MethodProxy;
+import org.mule.processor.AbstractInterceptingMessageProcessorBase;
 
 /**
  * <p/>

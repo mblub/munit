@@ -6,14 +6,17 @@
  */
 package org.mule.munit.common.mp;
 
+import net.sf.cglib.proxy.MethodProxy;
+import org.mule.api.MessagingException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.processor.MessageProcessor;
+import org.mule.api.processor.MessageProcessorChain;
+import org.mule.execution.MessageProcessorExecutionTemplate;
 import org.mule.modules.interceptor.processors.AbstractMessageProcessorInterceptor;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
 import org.mule.munit.common.MunitUtils;
-
-import net.sf.cglib.proxy.MethodProxy;
+import org.mule.processor.AbstractInterceptingMessageProcessorBase;
 
 /**
  * <p>
@@ -23,13 +26,11 @@ import net.sf.cglib.proxy.MethodProxy;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorInterceptor
-{
+public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorInterceptor {
     private String fileName;
     private String lineNumber;
 
-    public Object process(Object obj, Object[] args, MethodProxy proxy) throws Throwable
-    {
+    public Object process(Object obj, Object[] args, MethodProxy proxy) throws Throwable {
         MuleEvent event = (MuleEvent) args[0];
 
         MockedMessageProcessorManager manager = getMockedMessageProcessorManager(event.getMuleContext());
@@ -39,20 +40,20 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
 
         registerCall(manager, messageProcessorCall);
         MessageProcessorBehavior behavior = manager.getBetterMatchingBehavior(messageProcessorCall);
-        if (behavior != null)
-        {
-            if (behavior.getExceptionToThrow() != null)
-            {
+        if (behavior != null) {
+            if (behavior.getExceptionToThrow() != null) {
                 runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
                 throw behavior.getExceptionToThrow();
             }
 
-            if ( behavior.getMuleMessageTransformer() != null ){
+            if (behavior.getMuleMessageTransformer() != null) {
                 event.setMessage(behavior.getMuleMessageTransformer().transform(event.getMessage()));
             }
 
             runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
-            return event;
+//            return event;
+
+            return handleInterceptinMessageProcessors(obj, event);
         }
 
 
@@ -61,29 +62,50 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         return o;
     }
 
-    protected Object invokeSuper(Object obj, Object[] args, MethodProxy proxy) throws Throwable
-    {
+    protected Object handleInterceptinMessageProcessors(Object obj, MuleEvent event) throws MessagingException {
+        if (AbstractInterceptingMessageProcessorBase.class.isAssignableFrom(obj.getClass())) {
+            return processNext(obj, event);
+        } else {
+            return event;
+        }
+    }
+
+    protected Object processNext(Object obj, MuleEvent event) throws MessagingException {
+
+        AbstractInterceptingMessageProcessorBase intercepting = (AbstractInterceptingMessageProcessorBase) obj;
+        MessageProcessor next = intercepting.getListener();
+
+        MessageProcessorExecutionTemplate messageProcessorExecutorWithoutNotifications = MessageProcessorExecutionTemplate.createExceptionTransformerExecutionTemplate();
+        MessageProcessorExecutionTemplate messageProcessorExecutorWithNotifications = MessageProcessorExecutionTemplate.createExecutionTemplate();
+        MessageProcessorExecutionTemplate executionTemplateToUse = (!(next instanceof MessageProcessorChain)) ? messageProcessorExecutorWithNotifications : messageProcessorExecutorWithoutNotifications;
+
+        try {
+            return executionTemplateToUse.execute(next, event);
+        } catch (MessagingException e) {
+            event.getSession().setValid(false);
+            throw e;
+        }
+
+    }
+
+    protected Object invokeSuper(Object obj, Object[] args, MethodProxy proxy) throws Throwable {
         return proxy.invokeSuper(obj, args);
     }
 
 
-    private void registerCall(MockedMessageProcessorManager manager, MunitMessageProcessorCall messageProcessorCall)
-    {
+    private void registerCall(MockedMessageProcessorManager manager, MunitMessageProcessorCall messageProcessorCall) {
         manager.addCall(messageProcessorCall);
     }
 
-    private void runSpyAssertion(SpyAssertion spyAssertion, MuleEvent event)
-    {
-        if (spyAssertion == null)
-        {
+    private void runSpyAssertion(SpyAssertion spyAssertion, MuleEvent event) {
+        if (spyAssertion == null) {
             return;
         }
 
         MunitUtils.verifyAssertions(event, spyAssertion.getMessageProcessors());
     }
 
-    private MunitMessageProcessorCall buildCall(MuleEvent event)
-    {
+    private MunitMessageProcessorCall buildCall(MuleEvent event) {
         MunitMessageProcessorCall call = new MunitMessageProcessorCall(id);
         call.setAttributes(getAttributes(event));
         call.setFlowConstruct(event.getFlowConstruct());
@@ -93,24 +115,20 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
     }
 
 
-    protected MockedMessageProcessorManager getMockedMessageProcessorManager(MuleContext muleContext)
-    {
+    protected MockedMessageProcessorManager getMockedMessageProcessorManager(MuleContext muleContext) {
         return ((MockedMessageProcessorManager) muleContext.getRegistry().lookupObject(MockedMessageProcessorManager.ID));
     }
 
 
-    public String getFileName()
-    {
+    public String getFileName() {
         return fileName;
     }
 
-    public void setFileName(String fileName)
-    {
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
-    public void setLineNumber(String lineNumber)
-    {
+    public void setLineNumber(String lineNumber) {
         this.lineNumber = lineNumber;
     }
 }
