@@ -7,7 +7,7 @@
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
-    <db:mysql-config name="MySQL_Configuration" host="localhost" port="3306" user="root" database="hydra_local" doc:name="MySQL Configuration"/>
+    <db:mysql-config name="MySQL_Configuration" host="localhost" port="3306" user="root" database="fake_db" doc:name="MySQL Configuration"/>
 
 
     <flow name="db-connectorSelectFlow" doc:name="db-connectorSelectFlow">
