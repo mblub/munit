@@ -53,7 +53,7 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
 
             runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
 
-            return handleInterceptinMessageProcessors(obj, event);
+            return handleInterceptingMessageProcessors(obj, event);
         }
 
 
@@ -62,7 +62,7 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         return o;
     }
 
-    protected Object handleInterceptinMessageProcessors(Object obj, MuleEvent event) throws Throwable {
+    protected Object handleInterceptingMessageProcessors(Object obj, MuleEvent event) throws Throwable {
         if (AbstractInterceptingMessageProcessorBase.class.isAssignableFrom(obj.getClass())) {
             return processNext(obj, event);
         } else {
