@@ -6,17 +6,18 @@
  */
 package org.mule.munit.common.mp;
 
+import net.sf.cglib.asm.Type;
+import net.sf.cglib.core.Signature;
 import net.sf.cglib.proxy.MethodProxy;
-import org.mule.api.MessagingException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.processor.MessageProcessor;
-import org.mule.api.processor.MessageProcessorChain;
-import org.mule.execution.MessageProcessorExecutionTemplate;
 import org.mule.modules.interceptor.processors.AbstractMessageProcessorInterceptor;
 import org.mule.modules.interceptor.processors.MessageProcessorBehavior;
 import org.mule.munit.common.MunitUtils;
 import org.mule.processor.AbstractInterceptingMessageProcessorBase;
+
+import java.lang.reflect.Method;
 
 /**
  * <p>
@@ -51,7 +52,6 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
             }
 
             runSpyAssertion(manager.getBetterMatchingAfterSpyAssertion(messageProcessorCall), event);
-//            return event;
 
             return handleInterceptinMessageProcessors(obj, event);
         }
@@ -62,7 +62,7 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         return o;
     }
 
-    protected Object handleInterceptinMessageProcessors(Object obj, MuleEvent event) throws MessagingException {
+    protected Object handleInterceptinMessageProcessors(Object obj, MuleEvent event) throws Throwable {
         if (AbstractInterceptingMessageProcessorBase.class.isAssignableFrom(obj.getClass())) {
             return processNext(obj, event);
         } else {
@@ -70,20 +70,22 @@ public class MunitMessageProcessorInterceptor extends AbstractMessageProcessorIn
         }
     }
 
-    protected Object processNext(Object obj, MuleEvent event) throws MessagingException {
+    protected Object processNext(Object obj, MuleEvent event) throws Throwable {
 
-        AbstractInterceptingMessageProcessorBase intercepting = (AbstractInterceptingMessageProcessorBase) obj;
-        MessageProcessor next = intercepting.getListener();
+        String methodName = "processNext";
+        Class returnType = MuleEvent.class;
+        Class argumentType = MuleEvent.class;
 
-        MessageProcessorExecutionTemplate messageProcessorExecutorWithoutNotifications = MessageProcessorExecutionTemplate.createExceptionTransformerExecutionTemplate();
-        MessageProcessorExecutionTemplate messageProcessorExecutorWithNotifications = MessageProcessorExecutionTemplate.createExecutionTemplate();
-        MessageProcessorExecutionTemplate executionTemplateToUse = (!(next instanceof MessageProcessorChain)) ? messageProcessorExecutorWithNotifications : messageProcessorExecutorWithoutNotifications;
-
-        try {
-            return executionTemplateToUse.execute(next, event);
-        } catch (MessagingException e) {
-            event.getSession().setValid(false);
-            throw e;
+        Type[] argumentTypes = {Type.getType(argumentType)};
+        Signature signature = new Signature(methodName, Type.getType(returnType), argumentTypes);
+        MethodProxy methodProxy = MethodProxy.find(obj.getClass(), signature);
+        if (methodProxy != null) {
+            Object[] args = {event};
+            return methodProxy.invoke(obj, args);
+        } else {
+            Method method = AbstractInterceptingMessageProcessorBase.class.getDeclaredMethod(methodName, argumentType);
+            method.setAccessible(true);
+            return method.invoke(obj, event);
         }
 
     }

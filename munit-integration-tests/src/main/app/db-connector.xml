@@ -8,10 +8,37 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
     <db:mysql-config name="MySQL_Configuration" host="localhost" port="3306" user="root" database="hydra_local" doc:name="MySQL Configuration"/>
-    <flow name="db-connector-testFlow1" doc:name="db-connector-testFlow1">
+
+
+    <flow name="db-connectorSelectFlow" doc:name="db-connectorSelectFlow">
         <db:select config-ref="MySQL_Configuration" doc:name="Database">
             <db:parameterized-query><![CDATA[SELECT * FROM hydra_local.users;]]></db:parameterized-query>
         </db:select>
+        <echo-component doc:name="Echo"/>
+    </flow>
+
+
+    <flow name="db-connectorInsertFlow" doc:name="db-connectorInsertFlow">
+        <db:insert config-ref="MySQL_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[INSERT INTO users (company, email, first_name, last_name, password, phone, sfdc_id)
+VALUES ('a_company', 'a_email@fakemail.com', 'first_name', 'last_name', 'fake_password', '123456', '123abc');]]></db:parameterized-query>
+        </db:insert>
+        <echo-component doc:name="Echo"/>
+    </flow>
+
+
+    <flow name="db-connectorUpdateFlow" doc:name="db-connectorUpdateFlow">
+        <db:update config-ref="MySQL_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[UPDATE  users SET email='updated@email.com' WHERE company ='a_company';]]></db:parameterized-query>
+        </db:update>
+        <echo-component doc:name="Echo"/>
+    </flow>
+
+
+    <flow name="db-connectorDeleteFlow" doc:name="db-connectorDeleteFlow">
+        <db:delete config-ref="MySQL_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[DELETE FROM users WHERE email='updated@email.com';]]></db:parameterized-query>
+        </db:delete>
         <echo-component doc:name="Echo"/>
     </flow>
 </mule>
