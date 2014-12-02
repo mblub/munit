@@ -1,6 +1,7 @@
 package org.mule.munit.runner;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.appender.RollingFileAppender;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.DefaultConfiguration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.apache.logging.log4j.core.LoggerContext;
 
 import java.io.Serializable;
 import java.util.zip.Deflater;
@@ -24,9 +26,13 @@ public class MunitLoggerConfigurer {
     private static final String PATTERN_LAYOUT = "%-5p %d [%t] %c: %m%n";
 
     public static void configureFileLogger(String filePath, String fileName) {
-        Configuration logConfiguration = new DefaultConfiguration();
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        Configuration logConfiguration = ctx.getConfiguration();
+
         RollingFileAppender appender = createRollingFileAppender(String.format(filePath, fileName), "'.'%d{yyyy-MM-dd}", "defaultFileAppender", new DefaultConfiguration());
         doAddAppender(logConfiguration, appender);
+
+        ctx.updateLoggers();
     }
 
     private static RollingFileAppender createRollingFileAppender(String logFilePath, String filePattern, String appenderName, Configuration configuration) {
