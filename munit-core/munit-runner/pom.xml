@@ -11,10 +11,10 @@
     <packaging>jar</packaging>
     <name>Munit runner Module</name>
 
- 	<properties>
+    <properties>
         <licensePath>../../LICENSE_HEADER.txt</licensePath>
     </properties>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -60,6 +60,8 @@
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-spring-config</artifactId>
         </dependency>
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

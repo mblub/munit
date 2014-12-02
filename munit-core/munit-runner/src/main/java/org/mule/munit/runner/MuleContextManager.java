@@ -6,6 +6,20 @@
  */
 package org.mule.munit.runner;
 
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.appender.RollingFileAppender;
+import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.RolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.TimeBasedTriggeringPolicy;
+import org.apache.logging.log4j.core.appender.rolling.TriggeringPolicy;
+import org.apache.logging.log4j.core.config.AbstractConfiguration;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.DefaultConfiguration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.config.ConfigurationBuilder;
@@ -27,15 +41,12 @@ import org.mule.util.ClassUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
+import java.util.zip.Deflater;
 
 
 /**
@@ -44,56 +55,45 @@ import org.apache.log4j.SimpleLayout;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class MuleContextManager
-{
+public class MuleContextManager {
 
     public static final String CLASSNAME_ANNOTATIONS_CONFIG_BUILDER = "org.mule.org.mule.munit.config.AnnotationsConfigurationBuilder";
 
     private MockingConfiguration configuration;
     private Collection<MunitPlugin> plugins;
 
-    public MuleContextManager(MockingConfiguration configuration)
-    {
+    public MuleContextManager(MockingConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    public MuleContext startMule(String resources) throws Exception
-    {
+    public MuleContext startMule(String resources) throws Exception {
         MuleContext context = createMule(resources);
         return startMule(context);
     }
 
-    public MuleContext startMule(MuleContext context) throws MuleException
-    {
+    public MuleContext startMule(MuleContext context) throws MuleException {
         context.start();
         startPlugins();
 
         return context;
     }
 
-    public void killMule(MuleContext muleContext)
-    {
-        try
-        {
-            if (muleContext != null && !muleContext.isStopped())
-            {
+    public void killMule(MuleContext muleContext) {
+        try {
+            if (muleContext != null && !muleContext.isStopped()) {
                 muleContext.stop();
                 stopPlugins();
             }
-        }
-        catch (Throwable e1)
-        {
+        } catch (Throwable e1) {
 
         }
-        if (muleContext != null && !muleContext.isDisposed())
-        {
+        if (muleContext != null && !muleContext.isDisposed()) {
             muleContext.dispose();
             disposePlugins();
         }
     }
 
-    public MuleContext createMule(String resources) throws Exception
-    {
+    public MuleContext createMule(String resources) throws Exception {
         defineLogOutput(resources);
 
         MuleContext context;
@@ -102,8 +102,7 @@ public class MuleContextManager
         List<ConfigurationBuilder> builders = new ArrayList<ConfigurationBuilder>();
         builders.add(new SimpleConfigurationBuilder(properties()));
         if (ClassUtils.isClassOnPath(CLASSNAME_ANNOTATIONS_CONFIG_BUILDER,
-                                     getClass()))
-        {
+                getClass())) {
             builders.add((ConfigurationBuilder) ClassUtils.instanciateClass(
                     CLASSNAME_ANNOTATIONS_CONFIG_BUILDER, ClassUtils.NO_ARGS,
                     getClass()));
@@ -124,71 +123,55 @@ public class MuleContextManager
         return context;
     }
 
-    private Properties properties()
-    {
+    private Properties properties() {
         Properties properties = configuration == null ? null : configuration.getStartUpProperties();
-        if (properties == null)
-        {
+        if (properties == null) {
             properties = new Properties();
         }
-        if (properties.get(MuleProperties.APP_HOME_DIRECTORY_PROPERTY) == null)
-        {
+        if (properties.get(MuleProperties.APP_HOME_DIRECTORY_PROPERTY) == null) {
             properties.setProperty(MuleProperties.APP_HOME_DIRECTORY_PROPERTY, new File(getClass().getResource("/").getPath()).getAbsolutePath());
         }
         return properties;
     }
 
-    private void defineLogOutput(String resources) throws IOException
-    {
+    private void defineLogOutput(String resources) throws IOException {
         String path = System.getProperty(DefaultOutputHandler.OUTPUT_FOLDER_PROPERTY);
-        if (path != null)
-        {
+        if (path != null) {
             String name = resources.replace(".xml", "");
-            Logger logger = Logger.getRootLogger();
-            logger.removeAllAppenders();
-            logger.addAppender(new FileAppender(new SimpleLayout(), String.format(path, name)));
-            logger.setLevel(Level.INFO);
+            MunitLoggerConfigurer.configureFileLogger(path,name);
+
         }
     }
 
-    protected ConfigurationBuilder getBuilder(String resources) throws Exception
-    {
+
+    protected ConfigurationBuilder getBuilder(String resources) throws Exception {
         return new MunitSpringXmlConfigurationBuilder(resources, configuration);
     }
 
-    protected void configureMuleContext(MuleContextBuilder contextBuilder)
-    {
+    protected void configureMuleContext(MuleContextBuilder contextBuilder) {
         contextBuilder.setWorkListener(new TestingWorkListener());
     }
 
-    private void startPlugins() throws MuleException
-    {
-        for (MunitPlugin plugin : plugins)
-        {
+    private void startPlugins() throws MuleException {
+        for (MunitPlugin plugin : plugins) {
             plugin.start();
         }
     }
 
-    private void disposePlugins()
-    {
-        for (MunitPlugin plugin : plugins)
-        {
+    private void disposePlugins() {
+        for (MunitPlugin plugin : plugins) {
             plugin.dispose();
         }
     }
 
-    private void stopPlugins() throws MuleException
-    {
-        for (MunitPlugin plugin : plugins)
-        {
+    private void stopPlugins() throws MuleException {
+        for (MunitPlugin plugin : plugins) {
             plugin.stop();
         }
     }
 
-    private void initialisePlugins() throws InitialisationException
-    {
-        for (MunitPlugin plugin : plugins)
-        {
+    private void initialisePlugins() throws InitialisationException {
+        for (MunitPlugin plugin : plugins) {
             plugin.initialise();
         }
     }

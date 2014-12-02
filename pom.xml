@@ -11,7 +11,7 @@
     <name>The Munit Project</name>
 
     <properties>
-        <mule.version>3.5.0</mule.version>
+        <mule.version>3.6.0-M2</mule.version>
         <mule.devkit.version>3.5.0</mule.devkit.version>
         <interceptor.api.version>3.5-M3-SNAPSHOT</interceptor.api.version>
         <junit.version>4.8.2</junit.version>
@@ -106,6 +106,8 @@
                 <version>${mule.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -131,11 +133,11 @@
                 <groupId>org.mule.modules</groupId>
                 <version>${interceptor.api.version}</version>
             </dependency>
-			<dependency>
-				<groupId>commons-cli</groupId>
-				<artifactId>commons-cli</artifactId>
-				<version>1.1</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-cli</groupId>
+                <artifactId>commons-cli</artifactId>
+                <version>1.1</version>
+            </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>

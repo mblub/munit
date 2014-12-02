@@ -14,6 +14,7 @@ import org.mule.api.config.MuleProperties;
 import org.mule.api.endpoint.EndpointMessageProcessorChainFactory;
 import org.mule.api.endpoint.EndpointURI;
 import org.mule.api.endpoint.OutboundEndpoint;
+import org.mule.api.exception.MessagingExceptionHandler;
 import org.mule.api.expression.ExpressionManager;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.api.retry.RetryPolicyTemplate;
@@ -36,207 +37,174 @@ import java.util.Map;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class MockOutboundEndpoint implements OutboundEndpoint
-{
+public class MockOutboundEndpoint implements OutboundEndpoint {
 
     private OutboundEndpoint realEndpoint;
 
-    public MockOutboundEndpoint(OutboundEndpoint realEndpoint)
-    {
+    public MockOutboundEndpoint(OutboundEndpoint realEndpoint) {
         this.realEndpoint = realEndpoint;
     }
 
     @Override
-    public List<String> getResponseProperties()
-    {
+    public List<String> getResponseProperties() {
         return realEndpoint.getResponseProperties();
     }
 
     @Override
-    public EndpointURI getEndpointURI()
-    {
+    public EndpointURI getEndpointURI() {
         return realEndpoint.getEndpointURI();
     }
 
     @Override
-    public String getAddress()
-    {
+    public String getAddress() {
         return realEndpoint.getAddress();
     }
 
     @Override
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return realEndpoint.getEncoding();
     }
 
     @Override
-    public Connector getConnector()
-    {
+    public Connector getConnector() {
         return realEndpoint.getConnector();
     }
 
     @Override
-    public List<Transformer> getTransformers()
-    {
+    public List<Transformer> getTransformers() {
         return realEndpoint.getTransformers();
     }
 
     @Override
-    public List<Transformer> getResponseTransformers()
-    {
+    public List<Transformer> getResponseTransformers() {
         return realEndpoint.getResponseTransformers();
     }
 
     @Override
-    public Map getProperties()
-    {
+    public Map getProperties() {
         return realEndpoint.getProperties();
     }
 
     @Override
-    public Object getProperty(Object key)
-    {
+    public Object getProperty(Object key) {
         return realEndpoint.getProperty(key);
     }
 
     @Override
-    public String getProtocol()
-    {
+    public String getProtocol() {
         return realEndpoint.getProtocol();
     }
 
     @Override
-    public boolean isReadOnly()
-    {
+    public boolean isReadOnly() {
         return realEndpoint.isReadOnly();
     }
 
     @Override
-    public TransactionConfig getTransactionConfig()
-    {
+    public TransactionConfig getTransactionConfig() {
         return realEndpoint.getTransactionConfig();
     }
 
     @Override
-    public Filter getFilter()
-    {
+    public Filter getFilter() {
         return realEndpoint.getFilter();
     }
 
     @Override
-    public boolean isDeleteUnacceptedMessages()
-    {
+    public boolean isDeleteUnacceptedMessages() {
         return realEndpoint.isDeleteUnacceptedMessages();
     }
 
     @Override
-    public EndpointSecurityFilter getSecurityFilter()
-    {
+    public EndpointSecurityFilter getSecurityFilter() {
         return realEndpoint.getSecurityFilter();
     }
 
     @Override
-    public EndpointMessageProcessorChainFactory getMessageProcessorsFactory()
-    {
+    public EndpointMessageProcessorChainFactory getMessageProcessorsFactory() {
         return realEndpoint.getMessageProcessorsFactory();
     }
 
     @Override
-    public List<MessageProcessor> getMessageProcessors()
-    {
+    public List<MessageProcessor> getMessageProcessors() {
         return realEndpoint.getMessageProcessors();
     }
 
     @Override
-    public List<MessageProcessor> getResponseMessageProcessors()
-    {
+    public List<MessageProcessor> getResponseMessageProcessors() {
         return realEndpoint.getResponseMessageProcessors();
     }
 
     @Override
-    public MessageExchangePattern getExchangePattern()
-    {
+    public MessageExchangePattern getExchangePattern() {
         return realEndpoint.getExchangePattern();
     }
 
     @Override
-    public int getResponseTimeout()
-    {
+    public int getResponseTimeout() {
         return realEndpoint.getResponseTimeout();
     }
 
     @Override
-    public String getInitialState()
-    {
+    public String getInitialState() {
         return realEndpoint.getInitialState();
     }
 
     @Override
-    public MuleContext getMuleContext()
-    {
+    public MuleContext getMuleContext() {
         return realEndpoint.getMuleContext();
     }
 
     @Override
-    public RetryPolicyTemplate getRetryPolicyTemplate()
-    {
+    public RetryPolicyTemplate getRetryPolicyTemplate() {
         return realEndpoint.getRetryPolicyTemplate();
     }
 
     @Override
-    public String getEndpointBuilderName()
-    {
+    public String getEndpointBuilderName() {
         return realEndpoint.getEndpointBuilderName();
     }
 
     @Override
-    public boolean isProtocolSupported(String protocol)
-    {
+    public boolean isProtocolSupported(String protocol) {
         return realEndpoint.isProtocolSupported(protocol);
     }
 
     @Override
-    public String getMimeType()
-    {
+    public String getMimeType() {
         return realEndpoint.getMimeType();
     }
 
     @Override
-    public AbstractRedeliveryPolicy getRedeliveryPolicy()
-    {
+    public AbstractRedeliveryPolicy getRedeliveryPolicy() {
         return realEndpoint.getRedeliveryPolicy();
     }
 
     @Override
-    public boolean isDisableTransportTransformer()
-    {
+    public boolean isDisableTransportTransformer() {
         return realEndpoint.isDisableTransportTransformer();
     }
 
     @Override
-    public MuleEvent process(MuleEvent event) throws MuleException
-    {
+    public MuleEvent process(MuleEvent event) throws MuleException {
         MockEndpointManager manager = (MockEndpointManager) getEndpointManager(event);
 
         String address = realAddressAsExpression();
         ExpressionManager expressionManager = event.getMuleContext().getExpressionManager();
-        if (expressionManager.isValidExpression(address))
-        {
+        if (expressionManager.isValidExpression(address)) {
             String realAddress = (String) expressionManager.evaluate(address, event);
             OutboundBehavior behavior = manager.getBehaviorFor(realAddress);
 
-            if (behavior == null)
-            {
+            if (behavior == null) {
                 return realEndpoint.process(event);
             }
 
-            if (behavior.getException() !=null ){
+            if (behavior.getException() != null) {
                 throw behavior.getException();
             }
 
             MunitUtils.verifyAssertions(event, behavior.getAssertions());
-            if ( behavior.getMuleMessageTransformer() != null ){
+            if (behavior.getMuleMessageTransformer() != null) {
                 event.setMessage(behavior.getMuleMessageTransformer().transform(event.getMessage()));
             }
         }
@@ -244,19 +212,27 @@ public class MockOutboundEndpoint implements OutboundEndpoint
         return event;
     }
 
-    private String realAddressAsExpression()
-    {
+    private String realAddressAsExpression() {
         return "#[string:" + realEndpoint.getAddress() + "]";
     }
 
-    private Object getEndpointManager(MuleEvent event)
-    {
+    private Object getEndpointManager(MuleEvent event) {
         return event.getMuleContext().getRegistry().lookupObject(MuleProperties.OBJECT_MULE_ENDPOINT_FACTORY);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return realEndpoint.getName();
     }
+
+    @Override
+    public boolean isDynamic() {
+        return realEndpoint.isDynamic();
+    }
+
+    @Override
+    public void setMessagingExceptionHandler(MessagingExceptionHandler var1) {
+        realEndpoint.setMessagingExceptionHandler(var1);
+    }
+
 }
