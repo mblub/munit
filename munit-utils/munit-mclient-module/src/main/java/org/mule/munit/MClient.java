@@ -6,6 +6,7 @@
  */
 package org.mule.munit;
 
+import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleMessage;
 import org.mule.api.NestedProcessor;
@@ -14,9 +15,13 @@ import org.mule.api.annotations.Configurable;
 import org.mule.api.annotations.Module;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.param.Optional;
+import org.mule.api.client.AbstractBaseOptionsBuilder;
+import org.mule.api.client.OperationOptions;
+import org.mule.api.client.SimpleOptionsBuilder;
 import org.mule.api.context.MuleContextAware;
 import org.mule.api.schedule.Scheduler;
 import org.mule.api.schedule.SchedulerFactoryPostProcessor;
+import org.mule.module.http.api.client.HttpRequestOptionsBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +34,10 @@ import java.util.Map;
  */
 @Module(name = "mclient", schemaVersion = "1.0", minMuleVersion = "3.5.0", friendlyName = "Mule Client")
 @Category(name = "org.mule.tooling.category.munit.utils", description = "Munit tools")
-public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
-{
+public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor {
+
+    public static final String HTTP_METHOD = "http.method";
+    public static final String HTTP_FOLLOWS_REDIRECT = "http.follows.redirect";
 
     private MuleContext muleContext;
 
@@ -50,6 +57,23 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
     private MunitPollManager pollManager;
 
 
+    private AbstractBaseOptionsBuilder getOptionsBuilder(String path, Map<String, Object> parameters) {
+        if (path.startsWith("http") || path.startsWith("https")) {
+            HttpRequestOptionsBuilder options = HttpRequestOptionsBuilder.newOptions();
+            if (parameters != null) {
+                options = parameters.get(HTTP_METHOD) != null ? options.method((String) parameters.get(HTTP_METHOD)) : options.method("GET");
+
+                if (parameters.get(HTTP_FOLLOWS_REDIRECT) != null) {
+                    options = "true".equals(parameters.get(HTTP_FOLLOWS_REDIRECT)) ? options.enableFollowsRedirect() : options.disableFollowsRedirect();
+                }
+            }
+
+            return options;
+        } else {
+            return SimpleOptionsBuilder.newOptions();
+        }
+    }
+
     /**
      * <p>Do a real call to your inbound flows.</p>
      * <p/>
@@ -64,16 +88,17 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
      */
     @Processor
     public Object call(String path, @Optional Map<String, Object> parameters, @Optional Object payload,
-                       @Optional List<NestedProcessor> responseProcessing) throws Exception
-    {
+                       @Optional List<NestedProcessor> responseProcessing) throws Exception {
 
-        MuleMessage response = muleContext.getClient().send(path, payload, parameters);
+        AbstractBaseOptionsBuilder options = getOptionsBuilder(path, parameters);
+        DefaultMuleMessage message = new DefaultMuleMessage(payload, parameters, muleContext);
+
+        //This cast is a hack
+        MuleMessage response = muleContext.getClient().send(path, message, (OperationOptions) options.build());
 
         Object processedResponse = response;
-        if (responseProcessing != null)
-        {
-            for (NestedProcessor processor : responseProcessing)
-            {
+        if (responseProcessing != null) {
+            for (NestedProcessor processor : responseProcessing) {
                 processedResponse = processor.process(processedResponse);
             }
 
@@ -94,10 +119,11 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
      * @throws Exception an Exception
      */
     @Processor
-    public void dispatch(String path, @Optional Map<String, Object> parameters, @Optional Object payload) throws Exception
-    {
+    public void dispatch(String path, @Optional Map<String, Object> parameters, @Optional Object payload) throws Exception {
+        AbstractBaseOptionsBuilder options = getOptionsBuilder(path, parameters);
+        DefaultMuleMessage message = new DefaultMuleMessage(payload, parameters, muleContext);
 
-        muleContext.getClient().dispatch(path, payload, parameters);
+        muleContext.getClient().dispatch(path, message, (OperationOptions) options.build());
     }
 
     /**
@@ -112,16 +138,13 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
      * @throws Exception an Exception
      */
     @Processor
-    public Object request(String url, Long timeout, @Optional List<NestedProcessor> responseProcessing) throws Exception
-    {
+    public Object request(String url, Long timeout, @Optional List<NestedProcessor> responseProcessing) throws Exception {
 
         MuleMessage response = muleContext.getClient().request(url, timeout);
 
         Object processedResponse = response;
-        if (responseProcessing != null)
-        {
-            for (NestedProcessor processor : responseProcessing)
-            {
+        if (responseProcessing != null) {
+            for (NestedProcessor processor : responseProcessing) {
                 processedResponse = processor.process(processedResponse);
             }
 
@@ -146,16 +169,20 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
     @Processor
     public Object send(String url, Object payload, @Optional Long timeout,
                        @Optional Map<String, Object> messageProperties,
-                       @Optional List<NestedProcessor> responseProcessing) throws Exception
-    {
+                       @Optional List<NestedProcessor> responseProcessing) throws Exception {
 
-        MuleMessage response = muleContext.getClient().send(url, payload, messageProperties, timeout);
+
+        AbstractBaseOptionsBuilder options = getOptionsBuilder(url, messageProperties);
+        options = ((HttpRequestOptionsBuilder)options).responseTimeout(timeout);
+
+        DefaultMuleMessage message = new DefaultMuleMessage(payload, messageProperties, muleContext);
+
+        //This cast is a hack
+        MuleMessage response = muleContext.getClient().send(url, message, (OperationOptions) options.build());
 
         Object processedResponse = response;
-        if (responseProcessing != null)
-        {
-            for (NestedProcessor processor : responseProcessing)
-            {
+        if (responseProcessing != null) {
+            for (NestedProcessor processor : responseProcessing) {
                 processedResponse = processor.process(processedResponse);
             }
 
@@ -173,35 +200,30 @@ public class MClient implements MuleContextAware, SchedulerFactoryPostProcessor
      * @throws Exception an Exception
      */
     @Processor
-    public void schedulePoll(String ofFlow) throws Exception
-    {
+    public void schedulePoll(String ofFlow) throws Exception {
 
         pollManager.schedulePoll(ofFlow);
     }
 
     @Override
-    public Scheduler process(Object o, Scheduler scheduler)
-    {
-        if (stopPollsByDefault ) {
-           return MunitPollManager.postProcessSchedulerFactory(o, scheduler);
+    public Scheduler process(Object o, Scheduler scheduler) {
+        if (stopPollsByDefault) {
+            return MunitPollManager.postProcessSchedulerFactory(o, scheduler);
         }
         return scheduler;
     }
 
     @Override
-    public void setMuleContext(MuleContext context)
-    {
+    public void setMuleContext(MuleContext context) {
         this.muleContext = context;
         this.pollManager = new MunitPollManager(context);
     }
 
-    public void setStopPollsByDefault(Boolean stopPollsByDefault)
-    {
+    public void setStopPollsByDefault(Boolean stopPollsByDefault) {
         this.stopPollsByDefault = stopPollsByDefault;
     }
 
-    public Boolean getStopPollsByDefault()
-    {
+    public Boolean getStopPollsByDefault() {
         return stopPollsByDefault;
     }
 }

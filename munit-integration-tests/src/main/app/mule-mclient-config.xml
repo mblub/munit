@@ -14,7 +14,7 @@
         http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
-    <flow name="someSimpleFlow">
+      <flow name="someSimpleFlow">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10443" path="inbound-up-test">
             <object-to-string-transformer/>
         </http:inbound-endpoint>

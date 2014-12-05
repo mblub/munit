@@ -27,7 +27,10 @@
     <munit:test name="testingMClientCallWithSimpleFlow"
                 description="We want to validate that calling a real flow using MClient works without problems for a simple flow that has only a logger">
 
-        <mclient:call path="http://localhost:10443/inbound-up-test" payload-ref="#[string:hello]">
+        <mclient:call path="http://localhost:10443/inbound-up-test" payload-ref="#['hello']">
+            <mclient:parameters>
+                <mclient:parameter key="http.method">POST</mclient:parameter>
+            </mclient:parameters>
             <mclient:response-processing>
                 <object-to-string-transformer/>
             </mclient:response-processing>
@@ -41,7 +44,11 @@
                 description="We want to validate that the call using MClient works without problems for a call to a complex flow">
 
         <mclient:call path="http://localhost:10443/inbound-up-test2"
-                      payload-ref="#[getResource('testFile.xml').asStream()]">
+                      payload-ref="#[getResource('testFile.xml').asString()]">
+
+            <mclient:parameters>
+                <mclient:parameter key="http.method">POST</mclient:parameter>
+            </mclient:parameters>
             <mclient:response-processing>
                 <object-to-string-transformer/>
             </mclient:response-processing>
