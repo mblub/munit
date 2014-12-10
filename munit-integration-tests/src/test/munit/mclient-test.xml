@@ -21,13 +21,13 @@
     </spring:beans>
 
     <munit:config mock-inbounds="false" mock-connectors="false"/>
-    <mock:config/>
-    <mclient:config stopPollsByDefault="false"/>
+    <mock:config name="mock"/>
+    <mclient:config name="mclient" stopPollsByDefault="false"/>
 
     <munit:test name="testingMClientCallWithSimpleFlow"
                 description="We want to validate that calling a real flow using MClient works without problems for a simple flow that has only a logger">
 
-        <mclient:call config-ref="" path="http://localhost:10443/inbound-up-test" payload-ref="#['hello']">
+        <mclient:call config-ref="mclient" path="http://localhost:10443/inbound-up-test" payload-ref="#['hello']">
             <mclient:parameters>
                 <mclient:parameter key="http.method">POST</mclient:parameter>
             </mclient:parameters>
@@ -43,7 +43,7 @@
     <munit:test name="testingMClientCallWithComplexFlow"
                 description="We want to validate that the call using MClient works without problems for a call to a complex flow">
 
-        <mclient:call config-ref="" path="http://localhost:10443/inbound-up-test2"
+        <mclient:call config-ref="mclient" path="http://localhost:10443/inbound-up-test2"
                       payload-ref="#[getResource('testFile.xml').asString()]">
 
             <mclient:parameters>

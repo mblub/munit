@@ -5,18 +5,20 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
     <munit:config/>
+    <mock:config name="mock"/>
+
     <spring:beans>
         <spring:import resource="spy-and-for-each.xml"/>
     </spring:beans>
 
     <munit:test name="spy-and-for-each-assertions" description="Munit assertions">
-        <mock:when messageProcessor="jira:create-issue">
+        <mock:when config-ref="mock" messageProcessor="jira:create-issue">
             <mock:with-attributes>
                 <mock:with-attribute whereValue-ref="#[string:test-project]" name="project"/>
             </mock:with-attributes>
             <mock:then-return payload-ref="#['Mocked Jira']"/>
         </mock:when>
-        <mock:spy messageProcessor="jira:create-issue">
+        <mock:spy config-ref="mock" messageProcessor="jira:create-issue">
             <mock:with-attributes>
                 <mock:with-attribute whereValue-ref="#[string:test-project]" name="project"/>
             </mock:with-attributes>
