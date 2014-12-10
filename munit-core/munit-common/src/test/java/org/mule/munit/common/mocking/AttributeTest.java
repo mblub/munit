@@ -20,6 +20,7 @@ public class AttributeTest
 
     public static final String NAME = "theName";
     private static final String NAMESPACE = "theNamespace";
+    private static final String VALUE = "value";
 
     @Test
     public void withoutNamespaceIdIsName()
@@ -31,5 +32,18 @@ public class AttributeTest
     public void withNamespaceIdIsNamespacePlusName()
     {
         assertEquals(NAMESPACE +":"+NAME, attribute(NAME).ofNamespace(NAMESPACE).getId());
+    }
+
+    @Test
+    public void withValueDoesntChangeId()
+    {
+        assertEquals(NAME, attribute(NAME).withValue(VALUE).getId());
+        assertEquals(NAMESPACE +":"+NAME, attribute(NAME).ofNamespace(NAMESPACE).withValue(VALUE).getId());
+    }
+
+    @Test
+    public void getValue()
+    {
+        assertEquals(VALUE, attribute(NAME).withValue(VALUE).getValue());
     }
 }
