@@ -13,7 +13,7 @@
     <properties>
         <mule.version>3.6.0-M3-SNAPSHOT</mule.version>
         <mule.devkit.version>3.6.0-M3-SNAPSHOT</mule.devkit.version>
-        <interceptor.api.version>3.5-M3-SNAPSHOT</interceptor.api.version>
+        <interceptor.api.version>3.6.0-SNAPSHOT</interceptor.api.version>
 
         <maven.javadoc.skip>true</maven.javadoc.skip>
 
