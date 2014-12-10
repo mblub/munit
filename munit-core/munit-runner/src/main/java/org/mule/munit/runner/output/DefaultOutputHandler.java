@@ -19,17 +19,14 @@ import java.util.List;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class DefaultOutputHandler implements TestOutputHandler
-{
+public class DefaultOutputHandler implements TestOutputHandler {
 
     public static String OUTPUT_FOLDER_PROPERTY = "munit.output.folder";
 
     private List<OutputPrinter> printers = new ArrayList<OutputPrinter>();
 
-    public DefaultOutputHandler()
-    {
-        if (System.getProperty(OUTPUT_FOLDER_PROPERTY) != null)
-        {
+    public DefaultOutputHandler() {
+        if (System.getProperty(OUTPUT_FOLDER_PROPERTY) != null) {
 
             printers.add(new LogPrinter());
         }
@@ -38,8 +35,7 @@ public class DefaultOutputHandler implements TestOutputHandler
     }
 
     @Override
-    public void printDescription(String name, String description)
-    {
+    public void printDescription(String name, String description) {
         String text = "Running " + name;
 
         this.print(text);
@@ -47,18 +43,19 @@ public class DefaultOutputHandler implements TestOutputHandler
     }
 
     @Override
-    public void printTestName(String suiteName)
-    {
+    public void printTestName(String suiteName) {
         String title = StringUtils.repeat("=", 40 + FilenameUtils.getName(suiteName).length());
         this.print(title);
         this.print("===========  Running  " + FilenameUtils.getName(suiteName) + "  test ===========");
         this.print(title);
     }
 
-    private void print(String text)
-    {
-        for (OutputPrinter printer : printers)
-        {
+    public List<OutputPrinter> getPrinters() {
+        return this.printers;
+    }
+
+    private void print(String text) {
+        for (OutputPrinter printer : printers) {
             printer.print(text);
         }
     }

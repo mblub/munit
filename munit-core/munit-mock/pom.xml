@@ -201,16 +201,16 @@
                     <instrumentation>
                         <excludes>
                             <!-- Exclude devkit generated -->
-                            <exclude>org/mule/munit/config/*</exclude>
-                            <exclude>org/mule/munit/processors/*</exclude>
-                            <exclude>org/mule/munit/transformers/*</exclude>
                             <exclude>org/mule/munit/adapters/*</exclude>
-                            <exclude>org/mule/munit/process/*</exclude>
                             <exclude>org/mule/munit/agents/*</exclude>
-                            <exclude>org/mule/munit/holders/*</exclude>
                             <exclude>org/mule/munit/basic/*</exclude>
-                            <exclude>org/mule/munit/oauth/*</exclude>
+                            <exclude>org/mule/munit/config/*</exclude>
                             <exclude>org/mule/munit/connection/*</exclude>
+                            <exclude>org/mule/munit/holders/*</exclude>
+                            <exclude>org/mule/munit/process/*</exclude>
+                            <exclude>org/mule/munit/processors/*</exclude>
+                            <exclude>org/mule/munit/oauth/*</exclude>
+                            <exclude>org/mule/munit/transformers/*</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
