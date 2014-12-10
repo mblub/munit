@@ -41,7 +41,7 @@
      We are testing here that the Message processor can be mocked with an expected value to return.">
 
 
-        <mock:when messageProcessor="echo-component">
+        <mock:when config-ref="" messageProcessor="echo-component">
             <mock:then-return payload-ref="#[string:expectedPayload]"/>
         </mock:when>
 
@@ -57,7 +57,7 @@
                 description="
         The payload must not change when to return is not defined">
 
-        <mock:when messageProcessor="jira:create-group"/>
+        <mock:when config-ref="" messageProcessor="jira:create-group"/>
 
         <munit:set payload-ref="#[string: Hello world!]"/>
 
@@ -72,7 +72,7 @@
                 description="
         Apply transformer to message processor">
 
-        <mock:when messageProcessor="jira:create-group" thenApplyTransformer-ref="propertyTransformer"/>
+        <mock:when config-ref="" messageProcessor="jira:create-group" thenApplyTransformer-ref="propertyTransformer"/>
 
         <munit:set payload-ref="#[string: Hello world!]"/>
 
@@ -95,7 +95,7 @@
     <munit:test name="testMpWithParameters" description="
     If the Message Processor is not mocked then do not change its behavior">
 
-        <mock:when messageProcessor="jira:create-group">
+        <mock:when config-ref="" messageProcessor="jira:create-group">
             <mock:with-attributes>
                 <mock:with-attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
                 <mock:with-attribute name="userName" whereValue-ref='#[anyString()]'/>
@@ -107,15 +107,15 @@
 
         <flow-ref name="callingJira"/>
 
-        <mock:verify-call messageProcessor="jira:create-group" atLeast="1">
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" atLeast="1">
             <mock:attributes>
                 <mock:attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
                 <mock:attribute name="userName" whereValue-ref='#[anyString()]'/>
             </mock:attributes>
         </mock:verify-call>
 
-        <mock:verify-call messageProcessor="jira:create-group" times="1"/>
-        <mock:verify-call messageProcessor="jira:create-group" atMost="1"/>
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" times="1"/>
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" atMost="1"/>
         <munit:assert-that payloadIs-ref="#[string:expectedPayload]"/>
     </munit:test>
 
@@ -123,7 +123,7 @@
     <munit:test name="testMpWithParametersAndSpy" description="
     If the Message Processor is not mocked then do not change its behavior">
 
-        <mock:when messageProcessor="jira:create-group">
+        <mock:when config-ref="" messageProcessor="jira:create-group">
             <mock:with-attributes>
                 <mock:with-attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
                 <mock:with-attribute name="userName" whereValue-ref='#[anyString()]'/>
@@ -135,7 +135,7 @@
             </mock:then-return>
         </mock:when>
 
-        <mock:spy messageProcessor="jira:create-group">
+        <mock:spy config-ref="" messageProcessor="jira:create-group">
 
             <mock:assertions-before-call>
                 <munit:assert-not-null/>
@@ -156,15 +156,15 @@
 
         <flow-ref name="callingJira"/>
 
-        <mock:verify-call messageProcessor="jira:create-group" atLeast="1">
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" atLeast="1">
             <mock:attributes>
                 <mock:attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
                 <mock:attribute name="userName" whereValue-ref='#[anyString()]'/>
             </mock:attributes>
         </mock:verify-call>
 
-        <mock:verify-call messageProcessor="jira:create-group" times="1"/>
-        <mock:verify-call messageProcessor="jira:create-group" atMost="1"/>
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" times="1"/>
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" atMost="1"/>
         <munit:assert-that payloadIs-ref="#[string:expectedPayload]"/>
         <munit:assert-on-equals expected-ref="#[string:beforeCallValue]" value-ref="#[beforeCallKey]"/>
         <munit:assert-on-equals expected-ref="#[string:afterCallValue]" value-ref="#[afterCallKey]"/>
@@ -174,7 +174,7 @@
     <munit:test name="testMpWithParametersAndSpyWithFail" description="
     If the Message Processor is not mocked then do not change its behavior">
 
-        <mock:when messageProcessor="jira:create-group">
+        <mock:when config-ref="" messageProcessor="jira:create-group">
             <mock:with-attributes>
                 <mock:with-attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
                 <mock:with-attribute name="userName" whereValue-ref='#[anyString()]'/>
@@ -186,7 +186,7 @@
             </mock:then-return>
         </mock:when>
 
-        <mock:spy messageProcessor="jira:create-group">
+        <mock:spy config-ref="" messageProcessor="jira:create-group">
 
             <mock:with-attributes>
                 <mock:with-attribute name="groupName" whereValue-ref="#[string:notAGroupName]"/>
@@ -212,15 +212,15 @@
 
         <flow-ref name="callingJira"/>
 
-        <mock:verify-call messageProcessor="jira:create-group" atLeast="1">
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" atLeast="1">
             <mock:attributes>
                 <mock:attribute name="groupName" whereValue-ref="#[string:someGroupName]"/>
                 <mock:attribute name="userName" whereValue-ref='#[anyString()]'/>
             </mock:attributes>
         </mock:verify-call>
 
-        <mock:verify-call messageProcessor="jira:create-group" times="1"/>
-        <mock:verify-call messageProcessor="jira:create-group" atMost="1"/>
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" times="1"/>
+        <mock:verify-call config-ref="" messageProcessor="jira:create-group" atMost="1"/>
         <munit:assert-that payloadIs-ref="#[string:expectedPayload]"/>
         <munit:assert-on-equals expected-ref="#[null]" value-ref="#[flowVars['beforeCallKey']]"/>
         <munit:assert-on-equals expected-ref="#[null]" value-ref="#[flowVars['afterCallKey']]"/>
@@ -231,7 +231,7 @@
 
         <munit:set payload-ref="#[string:value]"/>
 
-        <mock:spy messageProcessor="set-variable">
+        <mock:spy config-ref="" messageProcessor="set-variable">
         	<mock:with-attributes>
         		<mock:with-attribute name="variableName" whereValue-ref="#['myvar1']"/>
         	</mock:with-attributes>
@@ -243,7 +243,7 @@
             </mock:assertions-after-call>
         </mock:spy>
 
-        <mock:spy messageProcessor="set-variable">
+        <mock:spy  config-ref="" messageProcessor="set-variable">
         	<mock:with-attributes>
         		<mock:with-attribute name="variableName" whereValue-ref="#['myvar2']"/>
         	</mock:with-attributes>
@@ -263,9 +263,9 @@
                 description="
         This is the demo test">
 
-        <mock:outbound-endpoint address="jdbc://lookupJob" returnPayload-ref='#[resultOfScript("mockJdbcOutbound")]'/>
+        <mock:outbound-endpoint config-ref="" address="jdbc://lookupJob" returnPayload-ref='#[resultOfScript("mockJdbcOutbound")]'/>
 
-        <mock:when messageProcessor="jira:create-group">
+        <mock:when config-ref="" messageProcessor="jira:create-group">
             <mock:with-attributes>
                 <mock:with-attribute name="groupName" whereValue-ref="#[anyString()]"/>
                 <mock:with-attribute name="userName" whereValue-ref='#[anyString()]'/>
@@ -286,7 +286,7 @@
                 description="
         mockingEndpointWithTransformer">
 
-        <mock:outbound-endpoint address="http://localhost:10443/test" thenApplyTransformer-ref="propertyTransformer"/>
+        <mock:outbound-endpoint  config-ref="" address="http://localhost:10443/test" thenApplyTransformer-ref="propertyTransformer"/>
 
         <munit:set payload-ref="#[string: Hello world!]"/>
 
@@ -298,13 +298,13 @@
 
     <munit:test name="testingMockTrowsException" description="Test if a mock can throw an exception"
                 expectExceptionThatSatisfies="java.lang.Exception">
-        <mock:throw-an exception-ref='#[new java.lang.Exception()]' whenCalling="jira:create-group"/>
+        <mock:throw-an config-ref="" exception-ref='#[new java.lang.Exception()]' whenCalling="jira:create-group"/>
 
         <flow-ref name="callingJira"/>
     </munit:test>
 
     <munit:test name="spy_test" description="This test checks if spy is working properly">
-        <mock:spy messageProcessor="set-variable">
+        <mock:spy config-ref="" messageProcessor="set-variable">
             <mock:assertions-before-call>
                 <munit:assert-not-null/>
             </mock:assertions-before-call>
@@ -318,7 +318,7 @@
     </munit:test>
 
     <munit:test name="mockingFlowsTest" description="This test shows how to mock a flow">
-        <mock:when messageProcessor="flow">
+        <mock:when config-ref="" messageProcessor="flow">
             <mock:with-attributes>
                 <mock:with-attribute name="name" whereValue-ref="callingJira"/>
             </mock:with-attributes>
@@ -350,7 +350,7 @@
     </munit:test>-->
 
     <munit:test name="mockingByDocName" description="This test shows how to mock with a doc name">
-        <mock:when messageProcessor="jira:create-group">
+        <mock:when config-ref="" messageProcessor="jira:create-group">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue-ref="#[string:jiraMp]"/>
             </mock:with-attributes>
@@ -367,7 +367,7 @@
     </munit:test>
 
     <munit:test name="mockingByRegex" description="This test shows how to mock with a Regex">
-        <mock:when messageProcessor=".*:create-group">
+        <mock:when config-ref="" messageProcessor=".*:create-group">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue-ref="#[string:jiraMp]"/>
             </mock:with-attributes>
@@ -384,7 +384,7 @@
     </munit:test>
 
     <munit:test name="mockingByRegexAndMatcher" description="This test shows how to mock with a Regex">
-        <mock:when messageProcessor=".*:create-group">
+        <mock:when config-ref="" messageProcessor=".*:create-group">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue-ref="#[matchRegex('.*jira.*')]"/>
             </mock:with-attributes>
