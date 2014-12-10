@@ -13,16 +13,17 @@
     <properties>
         <mule.version>3.6.0-M3-SNAPSHOT</mule.version>
         <mule.devkit.version>3.6.0-M3-SNAPSHOT</mule.devkit.version>
-        <!--<mule.devkit.version>3.5.0</mule.devkit.version>-->
-
         <interceptor.api.version>3.5-M3-SNAPSHOT</interceptor.api.version>
+
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+
+        <jdk5Name>J2SE-1.6</jdk5Name>
+        <jdk.version>1.7</jdk.version>
+
         <junit.version>4.8.2</junit.version>
         <mockito.version>1.8.2</mockito.version>
         <eclipsePluginVersion>2.5</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
-        <jdk5Name>J2SE-1.6</jdk5Name>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-        <jdk.version>1.6</jdk.version>
         <licensePath>LICENSE_HEADER.txt</licensePath>
     </properties>
 
@@ -31,7 +32,6 @@
         <module>munit-utils</module>
         <module>munit-maven-tools</module>
         <module>munit-integration-tests</module>
-
     </modules>
 
 

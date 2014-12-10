@@ -16,10 +16,12 @@
 
     <properties>
         <mule.version>3.6.0-M3-SNAPSHOT</mule.version>
+
         <mule.morphia.version>1.0-SNAPSHOT</mule.morphia.version>
         <mule.loggly.version>1.0</mule.loggly.version>
         <eclipsePluginVersion>3.3.0</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
+
         <jdk5Name>J2SE-1.6</jdk5Name>
         <jdk.version>1.7</jdk.version>
     </properties>
