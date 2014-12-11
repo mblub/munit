@@ -9,7 +9,7 @@ package org.mule.munit;
 import org.mule.munit.runner.java.AbstractMuleSuite;
 
 
-public class DbConnectorlTest extends AbstractMuleSuite
+public class DbConnectorTest extends AbstractMuleSuite
 {
 
     @Override
