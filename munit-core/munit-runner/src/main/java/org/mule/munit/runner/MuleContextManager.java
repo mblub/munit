@@ -7,19 +7,6 @@
 package org.mule.munit.runner;
 
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.Layout;
-import org.apache.logging.log4j.core.appender.RollingFileAppender;
-import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
-import org.apache.logging.log4j.core.appender.rolling.RolloverStrategy;
-import org.apache.logging.log4j.core.appender.rolling.TimeBasedTriggeringPolicy;
-import org.apache.logging.log4j.core.appender.rolling.TriggeringPolicy;
-import org.apache.logging.log4j.core.config.AbstractConfiguration;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.DefaultConfiguration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.config.ConfigurationBuilder;
@@ -27,6 +14,7 @@ import org.mule.api.config.MuleProperties;
 import org.mule.api.context.MuleContextBuilder;
 import org.mule.api.context.notification.MessageProcessorNotificationListener;
 import org.mule.api.lifecycle.InitialisationException;
+import org.mule.config.AnnotationsConfigurationBuilder;
 import org.mule.config.DefaultMuleConfiguration;
 import org.mule.config.builders.SimpleConfigurationBuilder;
 import org.mule.context.DefaultMuleContextBuilder;
@@ -41,12 +29,10 @@ import org.mule.util.ClassUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-import java.util.zip.Deflater;
 
 
 /**
@@ -55,9 +41,10 @@ import java.util.zip.Deflater;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class MuleContextManager {
 
-    public static final String CLASSNAME_ANNOTATIONS_CONFIG_BUILDER = "org.mule.org.mule.munit.config.AnnotationsConfigurationBuilder";
+public class MuleContextManager {
+    public static final String CLASSNAME_ANNOTATIONS_CONFIG_BUILDER = AnnotationsConfigurationBuilder.class.getCanonicalName();
+
 
     private MockingConfiguration configuration;
     private Collection<MunitPlugin> plugins;
@@ -138,7 +125,7 @@ public class MuleContextManager {
         String path = System.getProperty(DefaultOutputHandler.OUTPUT_FOLDER_PROPERTY);
         if (path != null) {
             String name = resources.replace(".xml", "");
-            MunitLoggerConfigurer.configureFileLogger(path,name);
+            MunitLoggerConfigurer.configureFileLogger(path, name);
 
         }
     }

@@ -15,7 +15,7 @@
         http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
 
     <munit:config/>
-    <mock:config/>
+    <mock:config name="Mock_config"/>
 
     <!--<spring:beans>-->
         <!--<spring:import resource="enricher-config.xml"/>-->

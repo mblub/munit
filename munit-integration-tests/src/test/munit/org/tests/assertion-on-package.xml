@@ -15,7 +15,7 @@
 
 
     <munit:config/>
-    <mock:config/>
+    <mock:config name="mock"/>
 
     <spring:beans>
         <spring:import resource="classpath:mule-config.xml"/>

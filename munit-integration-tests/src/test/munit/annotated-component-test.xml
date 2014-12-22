@@ -13,22 +13,18 @@
             http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
             http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd
             http://www.mulesoft.org/schema/mule/mclient http://www.mulesoft.org/schema/mule/mclient/current/mule-mclient.xsd             ">
-             <!--http://www.mulesoft.org/schema/mule/synchronize http://www.mulesoft.org/schema/mule/synchronize/current/mule-synchronize.xsd-->
 
-    <munit:config  mock-connectors="false" mock-inbounds="false"/>
-    <mclient:config name="Mule_client" stopPollsByDefault="true"/>
 
+
+    <munit:config name="munit_config"/>
     <spring:beans>
-        <spring:import resource="poll-config.xml"/>
+        <spring:import resource="annotated-component.xml"/>
     </spring:beans>
 
-    <script:script name="mockTaskList" engine="groovy"><![CDATA[
+    <munit:test name="annotatedComponent-Test-Flow" description="Test">
+        <flow-ref name="annotatedComponentFlow"/>
+        <munit:assert-true condition="#['the new payload'.equals(payload)]"/>
+    </munit:test>
 
-            List<String> lists = new ArrayList<String>();
-            lists.add("task1");
-
-			return lists;
-		]]>
-    </script:script>
 
 </mule>

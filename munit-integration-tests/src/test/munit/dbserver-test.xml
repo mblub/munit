@@ -19,7 +19,7 @@
     </spring:beans>
 
     <munit:config mock-inbounds="false" mock-connectors="false"/>
-    <mock:config/>
+    <mock:config name="Mock_config"/>
 
 
     <dbserver:config name="configCSV"
