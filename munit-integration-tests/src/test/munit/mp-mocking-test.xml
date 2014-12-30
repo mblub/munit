@@ -325,21 +325,6 @@
 
     </munit:test>
 
-    <!--<munit:test name="mockingSubFlowsTest" description="This test shows how to mock a sub flow">
-        <mock:when messageProcessor="sub-flow">
-            <mock:with-attributes>
-                <mock:with-attribute name="name" whereValue-ref="#[contains('callingJiraSubFlow')]"/>
-            </mock:with-attributes>
-            <mock:then-return payload-ref="#[string:The Flow is mocked]"/>
-        </mock:when>
-
-        <munit:set payload-ref="#[string:Hello world!]"/>
-
-        <flow-ref name="callingSubFlow"/>
-
-        <munit:assert-that payloadIs-ref="#[string:The Flow is mocked]"/>
-
-    </munit:test>-->
 
     <munit:test name="mockingByDocName" description="This test shows how to mock with a doc name">
         <mock:when config-ref="mock" messageProcessor="jira:create-group">

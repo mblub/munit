@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:mock="http://www.mulesoft.org/schema/mule/mock"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.2/mule.xsd
+        http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+        http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+
+
+    <spring:beans>
+        <spring:import resource="flow-and-subflows.xml"/>
+    </spring:beans>
+
+    <munit:config/>
+    <mock:config name="mock"/>
+
+    <munit:test  name="testFlowRefToAFlow" description="Validate the mocking of the flow.">
+        <mock:when messageProcessor="flow">
+            <mock:with-attributes>
+                <mock:with-attribute name="name" whereValue-ref="#['aFlow']"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#['mocked_payload']"/>
+        </mock:when>
+
+        <flow-ref name="entry-point-1"/>
+
+        <munit:assert-that payloadIs-ref="#['mocked_payload']"/>
+    </munit:test>
+
+    <munit:test name="testFlowRefToASubFlow" description="Validate the mocking of the sub-flow.">
+        <mock:when messageProcessor="sub-flow">
+            <mock:with-attributes>
+                <mock:with-attribute name="id" whereValue-ref="#[matchContains('aSubFlow')]"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#['mocked_payload']"/>
+        </mock:when>
+
+        <flow-ref name="entry-point-2"/>
+
+        <munit:assert-that payloadIs-ref="#['mocked_payload']"/>
+
+    </munit:test>
+
+</mule>
