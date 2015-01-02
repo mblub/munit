@@ -23,8 +23,7 @@ import org.mule.munit.runner.output.TestOutputHandler;
  * @author Mulesoft Inc.
  * @since 3.3.2
  */
-public class MunitSuiteRunner
-{
+public class MunitSuiteRunner {
 
     private MuleContext muleContext;
     private MunitSuite suite;
@@ -32,52 +31,46 @@ public class MunitSuiteRunner
     private MuleContextManager muleContextManager = new MuleContextManager(null);
 
 
-    public MunitSuiteRunner(String resources)
-    {
+    public MunitSuiteRunner(String resources) {
 
-        try
-        {
+        this(resources, null);
+    }
+
+    public MunitSuiteRunner(String resources, String testToRunName) {
+        try {
             muleContext = muleContextManager.startMule(resources);
 
-            suite = new MunitSuiteBuilder(muleContext, handler).build(resources);
+            suite = new MunitSuiteBuilder(muleContext, handler).build(resources, testToRunName);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             muleContextManager.killMule(muleContext);
             throw new RuntimeException(e);
         }
-
     }
 
-    public SuiteResult run()
-    {
-        return new MunitRunner<SuiteResult>(handler, muleContextManager, muleContext)
-        {
+    public SuiteResult run() {
+        return new MunitRunner<SuiteResult>(handler, muleContextManager, muleContext) {
 
             @Override
-            protected SuiteResult runSuite() throws Exception
-            {
+            protected SuiteResult runSuite() throws Exception {
                 return suite.run();
             }
 
             @Override
-            protected String getSuiteName()
-            {
+            protected String getSuiteName() {
                 return suite.getName();
             }
         }.run();
     }
 
-    public void setNotificationListener(NotificationListener notificationListener)
-    {
+    public void setNotificationListener(NotificationListener notificationListener) {
         this.suite.setNotificationListener(notificationListener);
     }
 
 
-    public int getNumberOfTests()
-    {
+    public int getNumberOfTests() {
         return suite.getNumberOfTests();
     }
+
 
 }
