@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>munit</artifactId>
         <groupId>org.mule</groupId>
@@ -15,7 +14,7 @@
     <description>Integration Test for Munit Project</description>
 
     <properties>
-        <mule.version>3.6.0-M3-SNAPSHOT</mule.version>
+        <mule.version>3.6.0</mule.version>
 
         <mule.morphia.version>1.0-SNAPSHOT</mule.morphia.version>
         <mule.loggly.version>1.0</mule.loggly.version>
@@ -42,10 +41,7 @@
     </repositories>
 
     <build>
-        <!-- Use a newer version of the install plugin than what your Maven uses
-            by default. The older version failed to install the project if there was
-            no target/classes folder. Since we use mule packaging on the project we actually
-            create and attach the zip that must be installed. -->
+        
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -53,8 +49,7 @@
                     <artifactId>maven-install-plugin</artifactId>
                     <version>2.3.1</version>
                 </plugin>
-                <!--This plugin's configuration is used to store Eclipse m2e settings
-                    only. It has no influence on the Maven build itself. -->
+                
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -80,7 +75,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -136,7 +131,7 @@
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <version>${eclipsePluginVersion}</version>
                 <configuration>
-                    <!-- by default download all sources when generating project files -->
+                    
                     <downloadSources>true</downloadSources>
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER/${vmtype}/${jdk5Name}
@@ -191,7 +186,7 @@
         </testResources>
     </build>
 
-    <!-- plugins for creating site reports -->
+    
     <reporting>
         <plugins>
             <plugin>
@@ -264,7 +259,7 @@
 
     </reporting>
 
-    <!-- Mule Dependencies -->
+    
     <dependencies>
 
         <dependency>
@@ -273,7 +268,7 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Xml configuration -->
+        
         <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-spring-config</artifactId>
@@ -286,7 +281,7 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Mule Transports -->
+        
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-file</artifactId>
@@ -307,7 +302,7 @@
         </dependency>
 
 
-        <!-- Mule Modules -->
+        
         <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-http</artifactId>
@@ -450,11 +445,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.mule.modules</groupId>-->
-        <!--<artifactId>mule-module-morphia</artifactId>-->
-        <!--<version>${mule.morphia.version}</version>-->
-        <!--</dependency>-->
+        
+        
+        
+        
+        
 
         <dependency>
             <groupId>org.mule.modules</groupId>
