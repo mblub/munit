@@ -174,12 +174,12 @@
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="mock-inbounds" use="optional" type="xs:boolean" default="true">
+                    <xs:attribute name="mock-inbounds" use="optional" type="mule:substitutableBoolean" default="true">
                         <xs:annotation>
                             <xs:documentation>Defines f the inbounds are mocked or not</xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="mock-connectors" use="optional" type="xs:boolean" default="true">
+                    <xs:attribute name="mock-connectors" use="optional" type="mule:substitutableBoolean" default="true">
                         <xs:annotation>
                             <xs:documentation>Defines if the app connectors for outbound/inbound endpoints have to be
                                 mocked. If they are then all
@@ -609,7 +609,7 @@
                         <xs:documentation>Description message to be shown in case of failure.</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="ignore" use="optional" type="xs:boolean" default="false">
+                <xs:attribute name="ignore" use="optional" type="mule:substitutableBoolean" default="false">
                     <xs:annotation>
                         <xs:documentation>Defines if the test must be ignored.</xs:documentation>
                     </xs:annotation>
