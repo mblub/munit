@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>munit</artifactId>
         <groupId>org.mule</groupId>
@@ -41,7 +42,7 @@
     </repositories>
 
     <build>
-        
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -49,7 +50,7 @@
                     <artifactId>maven-install-plugin</artifactId>
                     <version>2.3.1</version>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -75,7 +76,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -131,7 +132,7 @@
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <version>${eclipsePluginVersion}</version>
                 <configuration>
-                    
+
                     <downloadSources>true</downloadSources>
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER/${vmtype}/${jdk5Name}
@@ -186,7 +187,7 @@
         </testResources>
     </build>
 
-    
+
     <reporting>
         <plugins>
             <plugin>
@@ -259,7 +260,7 @@
 
     </reporting>
 
-    
+
     <dependencies>
 
         <dependency>
@@ -268,7 +269,7 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-spring-config</artifactId>
@@ -281,7 +282,7 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-file</artifactId>
@@ -302,7 +303,6 @@
         </dependency>
 
 
-        
         <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-http</artifactId>
@@ -342,6 +342,13 @@
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-ftp</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-ws</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -445,11 +452,6 @@
             <scope>provided</scope>
         </dependency>
 
-        
-        
-        
-        
-        
 
         <dependency>
             <groupId>org.mule.modules</groupId>

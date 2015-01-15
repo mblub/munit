@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" version="EE-3.6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+    <munit:config doc:name="Munit configuration"/>
+    <mock:config name="mock_ws-consumer" doc:name="Mock configuration"/>
+    <spring:beans>
+        <spring:import resource="classpath*:ws-consumer.xml"/>
+    </spring:beans>
+    
+    <munit:test name="ws-consumerTestFlow" description="Test">
+        <mock:when config-ref="mock_ws-consumer" doc:name="Mock" messageProcessor="ws:consumer">
+            <mock:with-attributes>
+                <mock:with-attribute whereValue-ref="#['GetAlerts']" name="operation"/>
+            </mock:with-attributes>
+            <mock:then-return payload-ref="#['the_payload']"></mock:then-return>
+        </mock:when>
+        
+        <flow-ref name="ws-consumerFlow" doc:name="Flow-ref to ws-consumerFlow"/>
+        
+        <munit:assert-that message="The returned payload is wrong." payloadIs-ref="#['the_payload']" doc:name="Assert Payload"/>
+    </munit:test>
+    
+</mule>

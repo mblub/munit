@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:mock="http://www.mulesoft.org/schema/mule/mock"
+      xmlns:script="http://www.mulesoft.org/schema/mule/scripting"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xsi:schemaLocation="
+	  	http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.2/mule.xsd
+        http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+        http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+
+    <context:property-placeholder location="test.properties"/>
+
+    
+    <munit:config/>
+    <mock:config name="Mock_config"/>
+
+    <spring:beans>
+        <spring:import resource="mule-config.xml"/>
+
+    </spring:beans>
+
+
+    <munit:test name="testingPlaceHolderIgnoreTestFlow" ignore="${test.ignore}"
+                description="This test should be ignored.">
+        <munit:fail message="Failled test due to test not ingored" />
+    </munit:test>
+
+    <munit:test name="testingPlaceHolderAssertTrueTestFlow" description="This test should not fail.">
+        <munit:assert-true condition="#[${test.assert.true}]" message="the placeholder value should be true"/>
+    </munit:test>
+
+    <munit:test name="testingPlaceHolderAssertFalseTestFlow" description="This test should not fail.">
+        <munit:assert-false condition="#[${test.assert.false}]" message="the placeholder value should be false"/>
+    </munit:test>
+
+    <munit:test name="testingPlaceHolderAssertThatTestFlow" description="This test should not fail.">
+        <munit:set payload-ref="#['real_payload']"/>
+
+        <munit:assert-that payloadIs-ref="#['${test.expected.equals.payload}']" message="the placeholder value should be real_payload"/>
+    </munit:test>
+
+    <munit:test name="testingPlaceHolderAssertEqualsTestFlow" description="This test should not fail.">
+        <munit:assert-on-equals message="the placeholders should  be real_payload" expected-ref="#['${test.expected.equals.payload}']" value-ref="#['${test.expected.equals.payload}']" />
+    </munit:test>
+
+
+</mule>
